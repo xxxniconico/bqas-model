@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.hermes/
+.pytest_cache/
+bqas.egg-info/
+bqas/data/cache/
+uv.lock
+*.egg-info/
+dist/
