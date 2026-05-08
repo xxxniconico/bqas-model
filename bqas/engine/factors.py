@@ -7,6 +7,7 @@
 import math
 from statistics import mean, median, stdev
 from ..data.schema import FinancialData, IncomeStatement, BalanceSheet, CashFlowStatement, DailyQuote
+from .beneish import compute_beneish_m_score
 
 
 # ═══════════════════════════════════════════════════════════
@@ -433,10 +434,22 @@ def compute_all_factors(data: FinancialData, industry_group: str = "其他") -> 
     g_audit = factor_audit_governance(data)
     factors["gov"] = {"dividend": g_div, "audit": g_audit}
 
+    # ── P3: Beneish M-Score 财务造假检测 ──
+    beneish = compute_beneish_m_score(data)
+    factors["beneish"] = beneish
+
     gov_raw = (
         g_div.get("score", 0) * 0.08 +
         g_audit.get("score", 0) * 0.07
     )
+    
+    # M-Score penalty: cap governance if manipulation detected
+    if beneish.get("likely_manipulator"):
+        factors["beneish_penalty"] = "likely_manipulator"
+        gov_raw = min(gov_raw, 0.3)  # cap at 0.3/1.5 = 20% of gov max
+    elif beneish.get("possible_manipulator"):
+        factors["beneish_penalty"] = "possible_manipulator"
+        gov_raw = min(gov_raw, 0.9)  # cap at 0.9/1.5 = 60% of gov max
 
     # 加权汇总
     # 各维度满分为：quality=35, value=30, health=20, gov=15
