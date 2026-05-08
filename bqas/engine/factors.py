@@ -9,6 +9,46 @@ from statistics import mean, median, stdev
 from ..data.schema import FinancialData, IncomeStatement, BalanceSheet, CashFlowStatement, DailyQuote
 from .beneish import compute_beneish_m_score
 
+# ── Industry PB median cache (computed from quotes table) ──
+_industry_pb_cache: dict = {}
+
+def _get_industry_pb_median(industry_group: str) -> float:
+    """Get industry median PB from quotes table. Lazy-loads and caches."""
+    global _industry_pb_cache
+    if not _industry_pb_cache:
+        import sqlite3
+        from pathlib import Path
+        db_path = Path(__file__).parent.parent / "data" / "cache" / "bqas.db"
+        try:
+            conn = sqlite3.connect(str(db_path))
+            # Get latest PB for each stock in each industry
+            rows = conn.execute("""
+                SELECT si.industry_sw, q.pb
+                FROM quotes q
+                JOIN stock_info si ON q.code = si.code
+                WHERE q.trade_date = (SELECT MAX(trade_date) FROM quotes)
+                  AND q.pb > 0 AND q.pb < 100
+                  AND si.industry_sw IS NOT NULL AND si.industry_sw != ''
+            """).fetchall()
+            conn.close()
+            
+            # Group by industry_group (mapped from industry_sw)
+            from .industry import get_industry_group as _get_group
+            by_group = {}
+            for ind_sw, pb in rows:
+                grp = _get_group(ind_sw)
+                if grp not in by_group:
+                    by_group[grp] = []
+                by_group[grp].append(pb)
+            
+            from statistics import median as _median
+            for grp, pbs in by_group.items():
+                _industry_pb_cache[grp] = _median(pbs)
+        except Exception:
+            pass
+    
+    return _industry_pb_cache.get(industry_group, None)
+
 
 # ═══════════════════════════════════════════════════════════
 #  维度 I：企业质量 (Quality) — 35%
@@ -36,7 +76,27 @@ def factor_roe_stability(income: list[IncomeStatement], balance: list[BalanceShe
 
     roe_5y = mean(pairs)
     score = min(roe_5y, 0.30) / 0.30 * 10
-    return {"score": round(score, 1), "roe_5y": round(roe_5y, 4), "years_available": len(pairs)}
+
+    # DuPont decomposition (latest year with real data)
+    dupont = {}
+    if income and balance:
+        real_income = [i for i in sorted(income, key=lambda x: x.report_year) if i.revenue > 0]
+        real_balance = [b for b in sorted(balance, key=lambda x: x.report_year) if b.total_assets > 0]
+        if real_income and real_balance:
+            latest_inc = real_income[-1]
+            latest_bal = real_balance[-1]
+            if latest_inc.revenue > 0 and latest_bal.total_assets > 0 and latest_bal.equity > 0:
+                net_margin = latest_inc.net_income / latest_inc.revenue
+                asset_turnover = latest_inc.revenue / latest_bal.total_assets
+                equity_mult = latest_bal.total_assets / latest_bal.equity
+                dupont = {
+                    "net_margin": round(net_margin, 4),
+                    "asset_turnover": round(asset_turnover, 4),
+                    "equity_multiplier": round(equity_mult, 2),
+                    "roe_reconstructed": round(net_margin * asset_turnover * equity_mult, 4),
+                }
+    return {"score": round(score, 1), "roe_5y": round(roe_5y, 4),
+            "years_available": len(pairs), "dupont": dupont}
 
 
 def factor_roic(income: list[IncomeStatement], balance: list[BalanceSheet], years: int = 5) -> dict:
@@ -408,7 +468,9 @@ def compute_all_factors(data: FinancialData, industry_group: str = "其他") -> 
     # 维度 II：估值
     v_ev_oe = factor_ev_operating_earnings(data.quotes, data.balance, data.income, industry_group)
     v_fcf_y = factor_fcf_yield(data.quotes, data.cashflow)
-    v_pb = factor_pb_industry_adj(data.quotes, industry_group)
+    # Compute industry PB median from quotes if not cached
+    industry_pb_median = _get_industry_pb_median(industry_group)
+    v_pb = factor_pb_industry_adj(data.quotes, industry_group, industry_pb_median)
     factors["value"] = {"ev_oe": v_ev_oe, "fcf_yield": v_fcf_y, "pb_adj": v_pb}
 
     value_raw = (

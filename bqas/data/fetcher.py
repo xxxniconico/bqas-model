@@ -445,7 +445,18 @@ def fetch_financials(code: str, years: int = 5) -> FinancialData:
 
     conn.close()
 
-    return FinancialData(info=info, income=income_list, balance=balance_list, cashflow=cashflow_list)
+    # Check financial fraud penalty table
+    fraud_conn = _get_conn()
+    fraud_row = fraud_conn.execute(
+        "SELECT 1 FROM financial_fraud WHERE code=?", (code,)
+    ).fetchone()
+    has_fraud = fraud_row is not None
+    fraud_conn.close()
+
+    return FinancialData(
+        info=info, income=income_list, balance=balance_list, cashflow=cashflow_list,
+        has_financial_fraud_penalty=has_fraud,
+    )
 
 
 def fetch_quotes(code: str, start: str = "2020-01-01") -> list[DailyQuote]:

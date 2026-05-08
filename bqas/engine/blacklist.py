@@ -100,4 +100,10 @@ def check_blacklist(data: FinancialData) -> tuple[bool, str, dict]:
         return FAIL(f"大股东质押 {data.pledge_ratio:.0%} > 70%", checks)
     checks["pledge_ratio"] = (True, "")
 
+    # ── 10. 财务造假处罚（5年内）──
+    if data.has_financial_fraud_penalty:
+        checks["financial_fraud"] = (False, "5年内有财务造假处罚记录")
+        return FAIL("5年内有财务造假处罚记录", checks)
+    checks["financial_fraud"] = (True, "")
+
     return True, "", checks

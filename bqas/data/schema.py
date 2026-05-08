@@ -74,6 +74,7 @@ class FinancialData(BaseModel):
     audit_opinion: str = ""         # 最新审计意见
     pledge_ratio: float = 0.0       # 大股东质押比例
     dividend_yield: float = 0.0     # 股息率
+    has_financial_fraud_penalty: bool = False  # 5年内财务造假处罚
 
 
 class BlacklistResult(BaseModel):
