@@ -51,23 +51,64 @@ def api_compare():
     return jsonify(results)
 
 
-@app.route("/api/top/<int:n>")
-def api_top(n):
-    """Get top N stocks from batch ranking."""
-    n = min(n, 100)
-    
-    # Run batch_rank3.py and capture output
-    import subprocess
-    result = subprocess.run(
-        [sys.executable, "batch_rank3.py"],
-        capture_output=True, text=True, cwd=str(Path(__file__).parent),
-        timeout=300,
-    )
-    
-    # Parse the output for top stocks
-    # batch_rank3 prints a table, we'll use a different approach:
-    # Actually, let's read from the DB directly based on latest scoring
-    return jsonify({"message": "Top ranking requires batch_rank3 pre-run", "count": 0})
+@app.route("/api/screener")
+def api_screener():
+    """Stock screener — return top stocks with key metrics from batch_rank3 cache."""
+    try:
+        import subprocess, json as _json
+        # Run batch_rank3 and capture JSON output
+        result = subprocess.run(
+            [sys.executable, "-c", """
+import sys; sys.path.insert(0,'.')
+import sqlite3, json
+import pandas as pd, numpy as np
+
+db = sqlite3.connect('bqas/data/cache/bqas.db')
+income = pd.read_sql("SELECT code, revenue, operating_profit, net_income FROM income WHERE report_period='20251231'", db)
+balance = pd.read_sql("SELECT code, total_assets, total_liabilities, equity, short_term_debt, long_term_debt, goodwill FROM balance WHERE report_period='20251231'", db)
+cashflow = pd.read_sql("SELECT code, operating_cf, capex FROM cashflow WHERE report_period='20251231'", db)
+stocks = pd.read_sql("SELECT code, name FROM stock_info", db)
+db.close()
+
+df = income.merge(balance, on='code').merge(cashflow, on='code').merge(stocks, on='code', how='left')
+for c in df.columns:
+    if c not in ('code','name'): df[c] = pd.to_numeric(df[c],errors='coerce').fillna(0)
+
+df = df[(df.equity>1e6)&(df.total_assets>1e6)&(df.revenue>1e6)]
+
+df['roe'] = np.where(df.equity>0, df.net_income/df.equity, 0)
+df['roic'] = np.where(df.equity+df.short_term_debt+df.long_term_debt>0, (df.operating_profit+df.net_income.abs()*0)/df.equity, 0)
+df['ebit'] = df.operating_profit + df.net_income.abs()*0  # placeholder
+df['invested'] = df.equity + df.short_term_debt + df.long_term_debt
+df['roic'] = np.where(df.invested>1e6, df.ebit/df.invested, 0)
+df['fcf'] = df.operating_cf - df.capex.abs()
+df['debt_ratio'] = np.where(df.total_assets>0, df.total_liabilities/df.total_assets, 0)
+df['ic'] = np.where(df.net_income.abs()>1e6, (df.operating_profit+df.net_income.abs()*0.2)/df.net_income.abs()*10, 10)
+
+q1 = np.clip(df.roe/0.30,0,1)*12
+q2 = np.clip(df.roic/0.30,0,1)*10
+v1 = np.clip(df.roic/0.30,0,1)*15
+h1 = np.clip(1-df.debt_ratio/0.70,0,1)*8
+h2 = np.clip(df.ic/20,0,1)*7
+
+df['total'] = (q1+q2+v1+h1+h2+3.5).round(1)
+df['q_score'] = (q1+q2).round(1)
+df['v_score'] = v1.round(1)
+df['h_score'] = (h1+h2).round(1)
+df['g_score'] = 3.5
+df['roe_pct'] = (df.roe*100).round(1)
+
+top = df.nlargest(50, 'total')
+print(json.dumps(top[['code','name','total','q_score','v_score','h_score','g_score','roe_pct']].to_dict('records')))
+"""],
+            capture_output=True, text=True, timeout=60, cwd=str(Path(__file__).parent),
+        )
+        if result.returncode == 0:
+            data = _json.loads(result.stdout.strip())
+            return jsonify(data)
+        return jsonify({"error": result.stderr[:500]}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/api/search")
@@ -133,6 +174,13 @@ def api_health():
     })
 
 
+@app.route("/")
+def index():
+    """Serve the dashboard HTML."""
+    html_path = Path(__file__).parent / "dashboard.html"
+    return html_path.read_text(encoding="utf-8"), 200, {"Content-Type": "text/html; charset=utf-8"}
+
+
 if __name__ == "__main__":
-    print("🚀 BQAS API Server starting on http://127.0.0.1:8503")
+    print("🚀 BQAS Dashboard on http://127.0.0.1:8503")
     app.run(host="127.0.0.1", port=8503, debug=False)

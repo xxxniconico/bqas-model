@@ -1,479 +1,481 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BQAS · 巴菲特量化选股</title>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BQAS · 巴菲特量化选股系统</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ═══════ Sentry Dark Theme ═══════ */
 :root {
-  --bg: #1f1633;
-  --bg2: #150f23;
-  --border: #362d59;
-  --accent: #6a5fc1;
-  --btn-bg: #79628c;
-  --btn-border: #584674;
-  --lime: #c2ef4e;
-  --coral: #ffb287;
-  --pink: #fa7faa;
-  --text: #ffffff;
-  --text2: #e5e7eb;
-  --muted: #8b8ba0;
-  --radius: 8px;
-  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --bg: #08090a; --bg2: #0f1011; --bg3: #191a1b; --bg4: #1e1f21;
+  --text: #f7f8f8; --text2: #a1a5b0; --text3: #6b6f7b;
+  --accent: #5e6ad2; --accent2: #7170ff;
+  --green: #10b981; --amber: #f59e0b; --red: #ef4444; --pink: #ec4899;
+  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.10);
+  --radius: 6px; --radius-lg: 10px;
+  --font: 'Inter',system-ui,sans-serif; --mono: 'JetBrains Mono',monospace;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Rubik',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-.header {
-  background:var(--bg2); border-bottom:1px solid var(--border);
-  padding:16px 24px; display:flex; align-items:center; gap:16px;
-  position:sticky; top:0; z-index:100; backdrop-filter:blur(18px);
-}
-.header h1 { font-size:1.25rem; font-weight:600; letter-spacing:-0.5px; }
-.header .tag { font-size:0.7rem; color:var(--lime); text-transform:uppercase; letter-spacing:1px; }
-.container { max-width:1280px; margin:0 auto; padding:24px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+a{color:var(--accent2);text-decoration:none}
+::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-/* Search */
-.search-wrap { display:flex; gap:8px; margin-bottom:24px; }
-.search-wrap input {
-  flex:1; padding:12px 16px; border-radius:var(--radius); border:1px solid var(--border);
-  background:var(--bg2); color:var(--text); font-size:1rem; font-family:inherit;
-}
-.search-wrap input:focus { outline:none; border-color:var(--accent); }
-.search-wrap button {
-  padding:12px 24px; border-radius:var(--radius); border:1px solid var(--btn-border);
-  background:var(--btn-bg); color:var(--text); cursor:pointer; font-family:inherit;
-  font-weight:600; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);
-}
-.search-wrap button:hover { background:var(--accent); }
-.search-results {
-  position:absolute; background:var(--bg2); border:1px solid var(--border);
-  border-radius:var(--radius); max-height:240px; overflow-y:auto; z-index:50;
-  display:none; width:calc(100% - 48px);
-}
-.search-results.show { display:block; }
-.search-results div {
-  padding:10px 16px; cursor:pointer; border-bottom:1px solid var(--border);
-  display:flex; justify-content:space-between;
-}
-.search-results div:hover { background:rgba(106,95,193,0.15); }
-.search-results .code { color:var(--lime); font-family:'JetBrains Mono',monospace; font-size:0.85rem; }
+/* ═══ Sidebar ═══ */
+.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;padding:8px}
+.sidebar-logo{padding:12px 8px 16px;font-weight:700;font-size:1.1rem;display:flex;align-items:center;gap:8px;color:var(--accent2)}
+.sidebar-logo span{font-weight:400;color:var(--text3);font-size:0.7rem;margin-left:auto}
+.sidebar-section{margin-bottom:4px}
+.sidebar-title{padding:8px;font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-weight:600}
+.sidebar-item{padding:8px 10px;font-size:0.82rem;cursor:pointer;border-radius:4px;color:var(--text2);display:flex;align-items:center;gap:8px;transition:all 0.15s}
+.sidebar-item:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.sidebar-item.active{background:rgba(94,106,210,0.12);color:var(--accent2)}
+.sidebar-item .icon{font-size:1.1rem;width:20px;text-align:center}
+.sidebar-item .badge{font-size:0.65rem;background:var(--accent);color:#fff;padding:1px 6px;border-radius:8px;margin-left:auto}
+.watchlist-item{font-size:0.78rem;padding:5px 10px;cursor:pointer;display:flex;justify-content:space-between;color:var(--text2)}
+.watchlist-item:hover{color:var(--text)}
+.watchlist-item .score{font-family:var(--mono);font-size:0.7rem}
 
-/* Panels */
-.panels { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.card {
-  background:rgba(31,22,51,0.85); border:1px solid var(--border);
-  border-radius:12px; padding:20px; box-shadow:var(--shadow);
+/* ═══ Main ═══ */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.header{height:40px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;flex-shrink:0}
+.header-title{font-weight:600;font-size:0.85rem;margin-right:16px}
+.header-nav{display:flex;gap:4px;margin-right:auto}
+.header-nav button{padding:4px 12px;border-radius:4px;border:none;background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font);font-size:0.78rem;transition:all 0.15s}
+.header-nav button:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.header-nav button.active{background:rgba(94,106,210,0.12);color:var(--accent2)}
+.header-search{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:4px 10px;font-size:0.78rem;color:var(--text3);cursor:pointer;min-width:200px}
+.header-search kbd{background:var(--bg4);border:1px solid var(--border2);border-radius:3px;padding:1px 5px;font-family:var(--mono);font-size:0.65rem;color:var(--text3)}
+.content{padding:20px;overflow-y:auto;flex:1}
+.content-inner{max-width:1200px;margin:0 auto}
+
+/* ═══ Score Header ═══ */
+.score-header{display:flex;gap:24px;align-items:center;margin-bottom:20px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.score-ring-wrap{flex-shrink:0}
+.score-ring-wrap svg{width:120px;height:120px}
+.score-info{flex:1}
+.score-name{font-size:1.5rem;font-weight:600}
+.score-meta{color:var(--text2);font-size:0.8rem;margin-top:4px}
+.score-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.tag{padding:3px 10px;border-radius:12px;font-size:0.7rem;font-weight:600}
+.tag-pass{background:rgba(16,185,129,0.12);color:var(--green)}
+.tag-warn{background:rgba(245,158,11,0.12);color:var(--amber)}
+.tag-fail{background:rgba(239,68,68,0.12);color:var(--red)}
+.score-key-metrics{display:flex;gap:24px;margin-top:8px}
+.metric{text-align:center}
+.metric .val{font-family:var(--mono);font-size:1.2rem;font-weight:600}
+.metric .lab{font-size:0.65rem;color:var(--text3);text-transform:uppercase}
+
+/* ═══ Grid ═══ */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
+.card h3{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px;font-weight:600}
+.card-sm{padding:12px}
+
+/* ═══ Dim Cards ═══ */
+.dim-card{text-align:center}
+.dim-card .dim-val{font-size:1.8rem;font-weight:700;font-family:var(--mono)}
+.dim-card .dim-max{font-size:0.7rem;color:var(--text3);display:block}
+.dim-card .dim-bar-wrap{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:6px;overflow:hidden}
+.dim-card .dim-bar{height:100%;border-radius:2px;transition:width 0.6s}
+.c-q{color:var(--green)} .c-v{color:var(--accent2)} .c-h{color:var(--amber)} .c-g{color:var(--pink)}
+.bg-q{background:var(--green)} .bg-v{background:var(--accent2)} .bg-h{background:var(--amber)} .bg-g{background:var(--pink)}
+
+/* ═══ Factor Bars ═══ */
+.factor-row{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:0.8rem}
+.factor-row:last-child{border:none}
+.factor-label{width:100px;color:var(--text2)}
+.factor-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.factor-bar{height:100%;border-radius:3px;transition:width 0.5s}
+.factor-score{width:50px;text-align:right;font-family:var(--mono);font-size:0.85rem;font-weight:500}
+
+/* ═══ DuPont ═══ */
+.dupont-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px 0}
+.dupont-box{text-align:center;padding:10px 14px;background:var(--bg3);border-radius:6px;min-width:70px}
+.dupont-box .dv{font-family:var(--mono);font-size:1.1rem;font-weight:600}
+.dupont-box .dl{font-size:0.6rem;color:var(--text3);text-transform:uppercase}
+.dupont-op{color:var(--text3);font-size:1.2rem}
+
+/* ═══ M-Score ═══ */
+.mscore-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-weight:600;font-size:0.85rem}
+.mscore-dot{width:8px;height:8px;border-radius:50%}
+
+/* ═══ Screener Table ═══ */
+.screener-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.screener-table th{text-align:left;padding:10px 12px;color:var(--text3);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border2);font-weight:600;cursor:pointer;user-select:none}
+.screener-table th:hover{color:var(--text)}
+.screener-table td{padding:8px 12px;border-bottom:1px solid var(--border);font-family:var(--mono)}
+.screener-table tbody tr{cursor:pointer;transition:background 0.1s}
+.screener-table tbody tr:hover{background:rgba(94,106,210,0.06)}
+.screener-table .name-cell{font-family:var(--font)}
+.screener-table .rank{color:var(--text3);font-size:0.7rem}
+
+/* ═══ Modal ═══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);width:520px;max-height:60vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.modal-input{padding:16px;border-bottom:1px solid var(--border)}
+.modal-input input{width:100%;background:transparent;border:none;color:var(--text);font-size:1rem;font-family:var(--font);outline:none}
+.modal-results .modal-item{padding:10px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem;border-bottom:1px solid var(--border)}
+.modal-results .modal-item:hover{background:rgba(94,106,210,0.08)}
+.modal-results .modal-item.selected{background:rgba(94,106,210,0.15)}
+.modal-item .shortcut{font-size:0.65rem;color:var(--text3);background:var(--bg3);padding:2px 6px;border-radius:3px}
+.hidden{display:none!important}
+
+/* ═══ Comparison ═══ */
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.compare-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
+.compare-card .stock-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.compare-card .stock-score{font-family:var(--mono);font-size:1.5rem;font-weight:700}
+.compare-card .stock-name{font-weight:500}
+.compare-dims{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.compare-dim{display:flex;align-items:center;gap:8px;font-size:0.75rem}
+.compare-dim .cd-bar{flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.compare-dim .cd-fill{height:100%;border-radius:2px}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .grid2,.grid4{grid-template-columns:1fr}
+  .score-header{flex-direction:column;text-align:center}
+  .score-key-metrics{justify-content:center}
+  .dupont-flow{font-size:0.8rem}
 }
-.card h3 { font-size:0.85rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
-.card h2 { font-size:1.5rem; font-weight:600; margin-bottom:4px; }
-
-/* Score ring */
-.score-ring {
-  display:flex; align-items:center; gap:20px;
-  padding:20px 0;
-}
-.score-big {
-  font-size:4rem; font-weight:700; line-height:1;
-  font-family:'JetBrains Mono',monospace;
-}
-.score-stars { font-size:1.5rem; }
-.rating-label { color:var(--muted); font-size:0.9rem; }
-
-/* Dimension bars */
-.dim-bars { display:flex; flex-direction:column; gap:8px; margin:12px 0; }
-.dim-row { display:flex; align-items:center; gap:12px; }
-.dim-label { width:60px; font-size:0.8rem; color:var(--muted); text-transform:uppercase; }
-.dim-bar-wrap { flex:1; height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
-.dim-bar { height:100%; border-radius:4px; transition:width 0.5s; }
-.dim-value { width:50px; text-align:right; font-size:0.85rem; font-family:'JetBrains Mono',monospace; }
-
-/* Colors per dimension */
-.q-bar { background:var(--lime); }
-.v-bar { background:var(--accent); }
-.h-bar { background:var(--coral); }
-.g-bar { background:var(--pink); }
-
-/* DuPont */
-.dupont { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:12px 0; }
-.dupont-item { text-align:center; }
-.dupont-item .val { font-size:1.4rem; font-weight:600; font-family:'JetBrains Mono',monospace; }
-.dupont-item .lab { font-size:0.7rem; color:var(--muted); text-transform:uppercase; }
-
-/* Flags */
-.flags { margin:12px 0; }
-.flag {
-  display:inline-block; padding:4px 10px; border-radius:12px;
-  font-size:0.75rem; font-weight:600; margin:2px 4px 2px 0;
-}
-.flag-red { background:rgba(250,127,170,0.2); color:var(--pink); }
-.flag-yellow { background:rgba(255,178,135,0.2); color:var(--coral); }
-.flag-green { background:rgba(194,239,78,0.15); color:var(--lime); }
-
-/* Blacklist */
-.blacklist-row { display:flex; align-items:center; gap:8px; padding:6px 0; font-size:0.82rem; }
-.blacklist-icon { font-size:1rem; width:20px; text-align:center; }
-.pass { color:var(--lime); }
-.fail { color:var(--pink); }
-
-/* Compare table */
-.compare-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-.compare-table th { text-align:left; color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; padding:8px 12px; border-bottom:1px solid var(--border); }
-.compare-table td { padding:10px 12px; border-bottom:1px solid var(--border); }
-.compare-table tr:hover td { background:rgba(106,95,193,0.05); }
-.compare-table .mono { font-family:'JetBrains Mono',monospace; }
-
-/* Loading */
-.loading { text-align:center; padding:40px; color:var(--muted); }
-.spinner {
-  display:inline-block; width:24px; height:24px; border:2px solid var(--border);
-  border-top-color:var(--accent); border-radius:50%; animation:spin 0.6s linear infinite;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
-
-/* Tabs */
-.tabs { display:flex; gap:0; margin-bottom:0; border-bottom:2px solid var(--border); }
-.tab {
-  padding:10px 20px; cursor:pointer; color:var(--muted); font-size:0.85rem;
-  font-weight:500; text-transform:uppercase; letter-spacing:0.5px; border:none;
-  background:none; font-family:inherit;
-}
-.tab.active { color:var(--text); border-bottom:2px solid var(--accent); margin-bottom:-2px; }
-.tab-content { display:none; }
-.tab-content.active { display:block; }
-
-/* Responsive */
-@media(max-width:768px) {
-  .panels { grid-template-columns:1fr; }
-  .header { padding:12px 16px; }
-  .container { padding:12px; }
-  .score-big { font-size:2.5rem; }
-}
-
-/* Compare section */
-.compare-input { display:flex; gap:8px; margin-bottom:12px; }
-.compare-input input { flex:1; padding:8px 12px; border-radius:6px; border:1px solid var(--border); background:var(--bg2); color:var(--text); }
-.compare-chips { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
-.chip {
-  display:flex; align-items:center; gap:4px; padding:4px 10px;
-  background:var(--accent); border-radius:16px; font-size:0.8rem;
-}
-.chip .remove { cursor:pointer; opacity:0.6; }
-.chip .remove:hover { opacity:1; }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>📊 BQAS</h1>
-  <span class="tag">Buffett Quantitative Analysis System</span>
-  <span style="margin-left:auto;font-size:0.75rem;color:var(--muted)" id="status">● ready</span>
-</div>
-
-<div class="container">
-  <!-- Search -->
-  <div style="position:relative">
-    <div class="search-wrap">
-      <input type="text" id="searchInput" placeholder="输入股票代码 或 名称搜索... (如 600519 或 茅台)" autocomplete="off">
-      <button onclick="score()">评分</button>
-      <button onclick="clearAll()" style="background:transparent;border-color:var(--border)">清除</button>
-    </div>
-    <div class="search-results" id="searchResults"></div>
+<!-- ═══ Sidebar ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">📊 BQAS<span>v2</span></div>
+  <div class="sidebar-section">
+    <div class="sidebar-item active" data-view="stock"><span class="icon">🔍</span>股票分析</div>
+    <div class="sidebar-item" data-view="screener"><span class="icon">📋</span>排行榜<span class="badge">Top 50</span></div>
+    <div class="sidebar-item" data-view="compare"><span class="icon">⚖️</span>多股对比</div>
   </div>
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('score')">评分拆解</button>
-    <button class="tab" onclick="switchTab('compare')">多股对比</button>
-    <button class="tab" onclick="switchTab('about')">关于</button>
+  <div class="sidebar-section">
+    <div class="sidebar-title">自选股</div>
+    <div id="watchlist" style="font-size:0.75rem;color:var(--text3);padding:8px 10px">点击 ☆ 添加</div>
   </div>
+  <div style="margin-top:auto;padding:8px;font-size:0.65rem;color:var(--text3);border-top:1px solid var(--border)">
+    10年财报 · 8年回测 · Spearman 0.87-0.91
+  </div>
+</aside>
 
-  <!-- Tab: Score -->
-  <div id="tab-score" class="tab-content active">
-    <div id="scoreContent">
-      <div class="loading"><div class="spinner"></div><p style="margin-top:12px">搜索股票开始分析…</p></div>
+<!-- ═══ Main ═══ -->
+<main class="main">
+  <header class="header">
+    <div class="header-nav">
+      <button class="active" data-view="stock">评分</button>
+      <button data-view="screener">排行榜</button>
+      <button data-view="compare">对比</button>
+    </div>
+    <div class="header-search" onclick="openPalette()">
+      🔍 搜索股票代码或名称...
+      <kbd>⌘K</kbd>
+    </div>
+  </header>
+
+  <div class="content" id="content">
+    <div class="content-inner" id="contentInner">
+      <!-- 默认：空白提示 -->
+      <div style="text-align:center;padding:80px 20px;color:var(--text3)">
+        <div style="font-size:4rem;margin-bottom:16px">📊</div>
+        <div style="font-size:1.1rem;font-weight:500;color:var(--text2);margin-bottom:8px">BQAS · 巴菲特量化选股系统</div>
+        <div style="font-size:0.85rem">按下 <kbd style="background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:0.75rem">⌘K</kbd> 搜索股票开始分析</div>
+      </div>
     </div>
   </div>
+</main>
 
-  <!-- Tab: Compare -->
-  <div id="tab-compare" class="tab-content">
-    <div class="compare-input">
-      <input type="text" id="compareInput" placeholder="输入代码添加到对比列表 (回车添加)">
-      <button onclick="addCompare()">添加</button>
-    </div>
-    <div class="compare-chips" id="compareChips"></div>
-    <button onclick="runCompare()" style="margin:8px 0 16px;padding:8px 20px;border-radius:var(--radius);border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--text);cursor:pointer;font-family:inherit;font-weight:600;">对比分析</button>
-    <div id="compareContent"></div>
-  </div>
-
-  <!-- Tab: About -->
-  <div id="tab-about" class="tab-content">
-    <div class="card" style="max-width:600px">
-      <h2>BQAS V2 · 巴菲特量化选股系统</h2>
-      <p style="color:var(--text2);margin-top:12px;line-height:1.6">
-        基于巴菲特定性方法论的多因子量化模型。四大维度：企业质量(35%)、估值水平(30%)、财务健康(20%)、治理与安全边际(15%)。<br><br>
-        10项一票否决 + 10因子评分 + Beneish M-Score 财务造假检测。<br><br>
-        数据：10年A股财报 (2016-2025)、61K月度行情数据。<br>
-        回测：8年 Spearman 稳定性 0.87-0.91。
-      </p>
-      <p style="color:var(--muted);margin-top:16px;font-size:0.8rem">
-        API: <code style="color:var(--lime)">localhost:8503</code> · 
-        设计: <span style="color:var(--accent)">Sentry Dark Theme</span>
-      </p>
-    </div>
+<!-- ═══ Command Palette ═══ -->
+<div class="modal-overlay hidden" id="palette" onclick="closePalette()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-input"><input type="text" id="paletteInput" placeholder="输入代码或名称..." autofocus></div>
+    <div class="modal-results" id="paletteResults"></div>
   </div>
 </div>
 
 <script>
-const API = 'http://127.0.0.1:8503';
-let charts = {};
-let compareList = [];
+const API = '';
+let currentStock = null;
+let watchlist = JSON.parse(localStorage.getItem('bqas_watchlist')||'[]');
 
-// ── Search ──
-document.getElementById('searchInput').addEventListener('input', async (e) => {
-  const q = e.target.value.trim();
-  if (q.length < 1) { document.getElementById('searchResults').classList.remove('show'); return; }
-  const resp = await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
-  const data = await resp.json();
-  const el = document.getElementById('searchResults');
-  el.innerHTML = data.map(s => `
-    <div onclick="selectStock('${s.code}','${s.name}')">
-      <span><span class="code">${s.code}</span> ${s.name}</span>
-      <span style="color:var(--muted);font-size:0.8rem">${s.industry||''}</span>
+// ═══ Navigation ═══
+document.querySelectorAll('[data-view]').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('[data-view]').forEach(e=>e.classList.remove('active'));
+    el.classList.add('active');
+  });
+});
+document.querySelectorAll('.sidebar-item[data-view]').forEach(el => {
+  el.addEventListener('click', function(){
+    document.querySelectorAll('.sidebar-item[data-view]').forEach(e=>e.classList.remove('active'));
+    this.classList.add('active');
+    if(this.dataset.view==='stock' && currentStock) renderStock(currentStock);
+    else if(this.dataset.view==='screener') loadScreener();
+    else if(this.dataset.view==='compare') showCompare();
+  });
+});
+document.querySelectorAll('.header-nav button[data-view]').forEach(el => {
+  el.addEventListener('click', function(){
+    document.querySelectorAll('.header-nav button[data-view]').forEach(e=>e.classList.remove('active'));
+    this.classList.add('active');
+    if(this.dataset.view==='stock' && currentStock) renderStock(currentStock);
+    else if(this.dataset.view==='screener') loadScreener();
+    else if(this.dataset.view==='compare') showCompare();
+  });
+});
+
+// ═══ Command Palette ═══
+function openPalette(){document.getElementById('palette').classList.remove('hidden');setTimeout(()=>document.getElementById('paletteInput').focus(),50)}
+function closePalette(){document.getElementById('palette').classList.add('hidden')}
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openPalette()}
+  if(e.key==='Escape')closePalette()
+});
+
+document.getElementById('paletteInput').addEventListener('input',async function(){
+  const q=this.value.trim();
+  if(q.length<1){document.getElementById('paletteResults').innerHTML='';return}
+  const r=await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
+  const data=await r.json();
+  document.getElementById('paletteResults').innerHTML=data.map(s=>`
+    <div class="modal-item" onclick="selectAndScore('${s.code}')">
+      <span><b>${s.code}</b> ${s.name}</span>
+      <span class="shortcut">↵</span>
     </div>
-  `).join('');
-  el.classList.add('show');
+  `).join('')||'<div style="padding:16px;color:var(--text3)">无结果</div>';
 });
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-wrap')) document.getElementById('searchResults').classList.remove('show');
-});
-
-document.getElementById('searchInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') score();
-});
-
-function selectStock(code, name) {
-  document.getElementById('searchInput').value = `${code} ${name}`;
-  document.getElementById('searchResults').classList.remove('show');
-  score();
-}
-
-// ── Score ──
-async function score() {
-  const val = document.getElementById('searchInput').value.trim();
-  const code = val.split(' ')[0].replace(/[^0-9]/g, '');
-  if (!code || code.length !== 6) return;
-
-  document.getElementById('scoreContent').innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:12px">分析中…</p></div>';
-  switchTab('score');
-
-  const resp = await fetch(`${API}/api/score/${code}`);
-  const data = await resp.json();
-
-  if (data.error) {
-    document.getElementById('scoreContent').innerHTML = `<div class="card"><p style="color:var(--pink)">❌ ${data.error}</p></div>`;
-    return;
+document.getElementById('paletteInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&this.value.trim().length>=6){
+    const code=this.value.trim().replace(/[^0-9]/g,'').slice(0,6);
+    if(code.length===6){selectAndScore(code);closePalette()}
   }
-  renderScore(data);
+});
+
+async function selectAndScore(code){closePalette();await score(code)}
+
+// ═══ Score ═══
+async function score(code){
+  document.getElementById('contentInner').innerHTML='<div style="text-align:center;padding:60px;color:var(--text3)"><div class="spinner" style="display:inline-block;width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.6s linear infinite"></div><p style="margin-top:12px">分析中…</p></div>';
+  const r=await fetch(`${API}/api/score/${code}`);const d=await r.json();
+  if(d.error){document.getElementById('contentInner').innerHTML=`<div style="color:var(--red);text-align:center;padding:40px">❌ ${d.error}</div>`;return}
+  currentStock=d;renderStock(d);
+  // Add to watchlist
+  if(!watchlist.find(w=>w.code===d.code)){watchlist.push({code:d.code,name:d.name});saveWatchlist()}
 }
 
-function renderScore(d) {
-  const total = d.total || 0;
-  const scores = d.scores || {};
-  const w = scores.weighted || {};
-  const beneish = d.beneish || {};
-  const checks = d.blacklist_checks || {};
-  const dupont = (scores.quality?.roe?.dupont) || {};
+function renderStock(d){
+  const w=d.scores?.weighted||{};
+  const beneish=d.beneish||{};
+  const dupont=d.scores?.quality?.roe?.dupont||{};
+  const checks=d.blacklist_checks||{};
+  const max={quality:35,value:30,health:20,gov:15};
+  const labels={quality:'企业质量',value:'估值水平',health:'财务健康',gov:'治理安全'};
+  const colors={quality:'c-q bg-q',value:'c-v bg-v',health:'c-h bg-h',gov:'c-g bg-g'};
+  const failedChecks=Object.entries(checks).filter(([,v])=>v===false||(typeof v==='string'&&v)).length;
+  
+  // Score ring SVG
+  const cx=60,cy=60,r=50,circ=2*Math.PI*r;
+  const segments=[
+    {pct:(w.quality||0)/max.quality*100,color:'#10b981'},
+    {pct:(w.value||0)/max.value*100,color:'#5e6ad2'},
+    {pct:(w.health||0)/max.health*100,color:'#f59e0b'},
+    {pct:(w.gov||0)/max.gov*100,color:'#ec4899'},
+  ].filter(s=>s.pct>0);
+  let offset=0;
+  let arcs='';
+  segments.forEach(s=>{
+    const len=s.pct/100*circ;
+    arcs+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="8" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})" stroke-linecap="round"/>`;
+    offset+=len;
+  });
+  const ringSvg=`<svg viewBox="0 0 120 120" width="120" height="120">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
+    ${arcs}
+    <text x="${cx}" y="${cy-4}" text-anchor="middle" fill="#f7f8f8" font-family="JetBrains Mono" font-size="22" font-weight="700">${(d.total||0).toFixed(0)}</text>
+    <text x="${cx}" y="${cy+14}" text-anchor="middle" fill="#6b6f7b" font-family="Inter" font-size="10">${d.rating||''}</text>
+  </svg>`;
 
-  const maxScores = { quality: 35, value: 30, health: 20, gov: 15 };
-  const dimColors = { quality: 'q-bar', value: 'v-bar', health: 'h-bar', gov: 'g-bar' };
-  const dimLabels = { quality: '企业质量', value: '估值水平', health: '财务健康', gov: '治理安全' };
+  const statusTag=d.passed_blacklist?'<span class="tag tag-pass">✓ 通过一票否决</span>':'<span class="tag tag-fail">⛔ '+d.blacklist_reason+'</span>';
+  const bStatus=beneish.likely_manipulator?['🔴 高度嫌疑','tag-fail','#ef4444']:beneish.possible_manipulator?['🟡 可能操纵','tag-warn','#f59e0b']:['🟢 无嫌疑','tag-pass','#10b981'];
 
-  let html = '<div class="panels">';
-
-  // Left: Score overview
-  html += `<div class="card">
-    <h3>总分</h3>
-    <div class="score-ring">
-      <div>
-        <div class="score-big" style="color:${total>=85?'var(--lime)':total>=65?'var(--accent)':total>=50?'var(--coral)':'var(--pink)'}">${total.toFixed(1)}</div>
-        <div class="score-stars">${d.rating||''}</div>
-        <div class="rating-label">${d.rating_label||''} · ${d.rating_advice||''}</div>
+  document.getElementById('contentInner').innerHTML=`
+  <div class="score-header">
+    <div class="score-ring-wrap">${ringSvg}</div>
+    <div class="score-info">
+      <div class="score-name">${d.name||d.code} <span style="font-family:var(--mono);color:var(--text3);font-size:0.9rem">${d.code}</span></div>
+      <div class="score-meta">${d.industry_group||'?'} · ${d.rating_label||''} · ${d.rating_advice||''}</div>
+      <div class="score-tags">${statusTag} <span class="tag ${bStatus[1]}">${bStatus[0]} M=${beneish.m_score?.toFixed(3)||'?'}</span></div>
+      <div class="score-key-metrics">
+        ${['quality','value','health','gov'].map(dim=>`
+          <div class="metric"><div class="val ${colors[dim].split(' ')[0]}">${(w[dim]||0).toFixed(0)}<span style="font-size:0.6em;color:var(--text3)">/${max[dim]}</span></div><div class="lab">${labels[dim]}</div></div>
+        `).join('')}
       </div>
     </div>
-    <div style="color:var(--muted);font-size:0.8rem">${d.name||''} · ${d.code||''} · ${d.industry_group||'?'}</div>
-    
-    <div class="dim-bars" style="margin-top:16px">`;
-  for (const [dim, max] of Object.entries(maxScores)) {
-    const val = w[dim] || 0;
-    const pct = Math.min(val / max * 100, 100);
-    html += `<div class="dim-row">
-      <div class="dim-label">${dimLabels[dim]}</div>
-      <div class="dim-bar-wrap"><div class="dim-bar ${dimColors[dim]}" style="width:${pct}%"></div></div>
-      <div class="dim-value">${val.toFixed(1)}/${max}</div>
-    </div>`;
-  }
-  html += `</div>`;
+  </div>
 
-  // Blacklist status
-  html += `<div style="margin-top:12px;font-size:0.8rem;color:${d.passed_blacklist?'var(--lime)':'var(--pink)'}">
-    ${d.passed_blacklist ? '✅ 通过' : '⛔ ' + (d.blacklist_reason || '否决')} 一票否决
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card">
+      <h3>杜邦拆解 (最新年)</h3>
+      ${dupont.net_margin!==undefined?`
+        <div class="dupont-flow">
+          <div class="dupont-box"><div class="dv" style="color:var(--green)">${(dupont.net_margin*100).toFixed(1)}%</div><div class="dl">净利率</div></div>
+          <div class="dupont-op">×</div>
+          <div class="dupont-box"><div class="dv" style="color:var(--accent2)">${dupont.asset_turnover.toFixed(2)}</div><div class="dl">周转率</div></div>
+          <div class="dupont-op">×</div>
+          <div class="dupont-box"><div class="dv" style="color:var(--amber)">${dupont.equity_multiplier.toFixed(1)}x</div><div class="dl">杠杆</div></div>
+          <div class="dupont-op">=</div>
+          <div class="dupont-box"><div class="dv" style="color:var(--text)">${(dupont.roe_reconstructed*100).toFixed(1)}%</div><div class="dl">ROE</div></div>
+        </div>
+      `:'<p style="color:var(--text3);padding:8px">数据不足</p>'}
+    </div>
+    <div class="card">
+      <h3>Beneish M-Score 造假检测</h3>
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
+        <span class="mscore-badge" style="background:${bStatus[2]}22;color:${bStatus[2]}">
+          <span class="mscore-dot" style="background:${bStatus[2]}"></span>
+          ${beneish.m_score?.toFixed(3)||'?'}
+        </span>
+        <span style="font-size:0.85rem">${beneish.likely_manipulator?'高度盈利操纵嫌疑':beneish.possible_manipulator?'可能盈利操纵':'财务数据无明显操纵迹象'}</span>
+      </div>
+      ${beneish.flags?.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">${beneish.flags.map(f=>`<span class="tag tag-warn">⚠ ${f}</span>`).join('')}</div>`:''}
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:10px;font-size:0.7rem;color:var(--text3)">
+        ${Object.entries(beneish.ratios||{}).map(([k,v])=>`<div><b>${k.toUpperCase()}</b>: ${v?.toFixed(2)||'?'}</div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:16px">
+    <div class="card">
+      <h3>因子明细</h3>
+      ${renderFactors(d)}
+    </div>
+    <div class="card">
+      <h3>一票否决清单</h3>
+      ${renderBlacklist(checks)}
+    </div>
   </div>`;
 
-  // Beneish
-  if (!beneish.missing_data) {
-    const bStatus = beneish.likely_manipulator ? '🔴 高度嫌疑' : beneish.possible_manipulator ? '🟡 可能操纵' : '🟢 无嫌疑';
-    html += `<div style="margin-top:8px;font-size:0.8rem">M-Score: <b>${beneish.m_score.toFixed(3)}</b> ${bStatus}</div>`;
-    if (beneish.flags?.length) {
-      html += '<div class="flags">';
-      beneish.flags.forEach(f => html += `<span class="flag flag-yellow">⚠ ${f}</span>`);
-      html += '</div>';
+  document.querySelectorAll('.sidebar-item[data-view="stock"]').forEach(e=>e.classList.add('active'));
+  document.querySelectorAll('.header-nav button[data-view="stock"]').forEach(e=>e.classList.add('active'));
+  document.querySelectorAll('[data-view]').forEach(e=>{if(e.dataset.view!=='stock')e.classList.remove('active')});
+}
+
+function renderFactors(d){
+  const s=d.scores||{};
+  const map={'quality':{roe:'ROE稳定性',roic:'ROIC超额',cfo:'CFO质量',gm:'毛利护城河'},'value':{ev_oe:'EV/OpE',fcf_yield:'FCF Yield',pb_adj:'PB调整'},'health':{leverage:'杠杆率',ic:'利息覆盖',asset_q:'资产质量'},'gov':{dividend:'股东回报',audit:'审计治理'}};
+  const cols={quality:'bg-q',value:'bg-v',health:'bg-h',gov:'bg-g'};
+  let h='';
+  for(const[dim,factors]of Object.entries(map)){
+    h+=`<div style="font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin:8px 0 4px">${dim}</div>`;
+    for(const[key,label]of Object.entries(factors)){
+      const f=s[dim]?.[key]||{};
+      const sc=f.score||0;
+      h+=`<div class="factor-row"><div class="factor-label">${label}</div><div class="factor-bar-wrap"><div class="factor-bar ${cols[dim]}" style="width:${sc*10}%"></div></div><div class="factor-score">${sc.toFixed(1)}</div></div>`;
     }
   }
+  return h;
+}
 
-  html += `</div>`;
-
-  // Right: DuPont + details
-  html += `<div class="card">
-    <h3>杜邦拆解 (最新年)</h3>`;
-  if (dupont.net_margin !== undefined) {
-    html += `<div class="dupont">
-      <div class="dupont-item"><div class="val">${(dupont.net_margin*100).toFixed(1)}%</div><div class="lab">净利率</div></div>
-      <div class="dupont-item"><div class="val">${dupont.asset_turnover.toFixed(2)}</div><div class="lab">周转率</div></div>
-      <div class="dupont-item"><div class="val">${dupont.equity_multiplier.toFixed(1)}x</div><div class="lab">杠杆乘数</div></div>
-    </div>
-    <div style="text-align:center;color:var(--muted);font-size:0.75rem;margin-bottom:12px">
-      ROE = ${(dupont.net_margin*100).toFixed(1)}% × ${dupont.asset_turnover.toFixed(2)} × ${dupont.equity_multiplier.toFixed(1)}x = <b style="color:var(--lime)">${(dupont.roe_reconstructed*100).toFixed(1)}%</b>
-    </div>`;
-  } else {
-    html += '<p style="color:var(--muted)">数据不足</p>';
-  }
-
-  // Factor details
-  html += `<h3>因子明细</h3>`;
-  const factorNames = {
-    quality: { roe:'ROE稳定性', roic:'ROIC超额', cfo:'CFO质量', gm:'毛利护城河' },
-    value: { ev_oe:'EV/OpE', fcf_yield:'FCF Yield', pb_adj:'PB调整' },
-    health: { leverage:'杠杆率', ic:'利息覆盖', asset_q:'资产质量' },
-    gov: { dividend:'股东回报', audit:'审计治理' },
-  };
-  for (const [dim, factors] of Object.entries(factorNames)) {
-    const dimScores = scores[dim] || {};
-    for (const [key, label] of Object.entries(factors)) {
-      const f = dimScores[key] || {};
-      if (f.score !== undefined) {
-        html += `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.82rem;border-bottom:1px solid var(--border)">
-          <span>${label}</span>
-          <span style="font-family:'JetBrains Mono',monospace;color:${f.score>=7?'var(--lime)':f.score>=4?'var(--coral)':'var(--pink)'}">${f.score.toFixed(1)}/10</span>
-        </div>`;
-      }
-    }
-  }
-
-  html += '</div></div>'; // end panels
-  
-  // Blacklist checks detail
-  html += `<div class="card" style="margin-top:16px"><h3>一票否决清单</h3>`;
-  const checkLabels = {
-    st_flag:'ST/*ST', listing_days:'上市≥3年', market_cap:'市值≥30亿',
-    avg_volume:'日均成交≥2000万', net_loss_3y:'无连续亏损', ocf_negative_3y:'OCF正常',
-    audit_opinion:'标准审计', goodwill_bomb:'商誉安全', pledge_ratio:'质押<70%',
-    financial_fraud:'无造假处罚'
-  };
-  for (const [key, label] of Object.entries(checkLabels)) {
-    const status = checks[key];
-    const passed = typeof status === 'string' ? !status : (status !== false);
-    html += `<div class="blacklist-row">
-      <span class="blacklist-icon ${passed?'pass':'fail'}">${passed?'✓':'✗'}</span>
+function renderBlacklist(checks){
+  const map={st_flag:'ST/*ST',listing_days:'上市≥3年',market_cap:'市值≥30亿',avg_volume:'日均成交≥2000万',net_loss_3y:'无连续亏损',ocf_negative_3y:'OCF正常',audit_opinion:'标准审计',goodwill_bomb:'商誉安全',pledge_ratio:'质押<70%',financial_fraud:'无造假处罚'};
+  return Object.entries(map).map(([k,label])=>{
+    const v=checks[k];
+    const ok=v===true||(typeof v==='string'&&!v)||(Array.isArray(v)&&v[0]);
+    return`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:0.8rem;border-bottom:1px solid var(--border)">
+      <span style="color:${ok?'var(--green)':'var(--red)'}">${ok?'✓':'✗'}</span>
       <span>${label}</span>
-      ${!passed && status ? `<span style="color:var(--pink);font-size:0.75rem">${typeof status==='string'?status:status[1]||''}</span>` : ''}
+      ${!ok?`<span style="color:var(--red);font-size:0.7rem;margin-left:auto">${typeof v==='string'?v:v?.[1]||''}</span>`:''}
     </div>`;
-  }
-  html += '</div>';
-
-  document.getElementById('scoreContent').innerHTML = html;
+  }).join('');
 }
 
-// ── Compare ──
-function addCompare() {
-  const val = document.getElementById('compareInput').value.trim();
-  const code = val.split(' ')[0].replace(/[^0-9]/g, '');
-  if (code && code.length === 6 && !compareList.includes(code)) {
-    compareList.push(code);
-    renderChips();
-  }
-  document.getElementById('compareInput').value = '';
+// ═══ Screener ═══
+async function loadScreener(){
+  document.getElementById('contentInner').innerHTML='<div style="text-align:center;padding:60px;color:var(--text3)"><div class="spinner" style="display:inline-block;width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.6s linear infinite"></div><p style="margin-top:12px">加载排行榜…</p></div>';
+  const r=await fetch(`${API}/api/screener`);const data=await r.json();
+  if(data.error){document.getElementById('contentInner').innerHTML=`<div style="color:var(--red);text-align:center;padding:40px">❌ ${data.error}</div>`;return}
+  renderScreener(data);
+  document.querySelectorAll('[data-view]').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('[data-view="screener"]').forEach(e=>e.classList.add('active'));
 }
 
-document.getElementById('compareInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') addCompare();
+function renderScreener(data){
+  document.getElementById('contentInner').innerHTML=`
+    <div style="font-size:1.2rem;font-weight:600;margin-bottom:16px">📋 排行榜 Top 50</div>
+    <table class="screener-table"><thead><tr>
+      <th>#</th><th style="width:80px">代码</th><th>名称</th><th>总分</th><th>质量</th><th>估值</th><th>健康</th><th>治理</th><th>ROE%</th>
+    </tr></thead><tbody>
+    ${data.map((s,i)=>`
+      <tr onclick="score('${s.code}')">
+        <td class="rank">${i+1}</td>
+        <td><b>${s.code}</b></td>
+        <td class="name-cell">${s.name||''}</td>
+        <td style="color:var(--accent2);font-weight:600">${s.total}</td>
+        <td style="color:var(--green)">${s.q_score}</td>
+        <td style="color:var(--accent2)">${s.v_score}</td>
+        <td style="color:var(--amber)">${s.h_score}</td>
+        <td>${s.g_score}</td>
+        <td>${s.roe_pct}%</td>
+      </tr>
+    `).join('')}
+    </tbody></table>`;
+}
+
+// ═══ Compare ═══
+function showCompare(){
+  const codes=watchlist.map(w=>w.code).slice(0,5);
+  if(codes.length<2){
+    document.getElementById('contentInner').innerHTML=`<div style="text-align:center;padding:60px;color:var(--text3)">需要至少2只自选股才能对比。在股票分析页搜索后会自动加入自选股。</div>`;
+    return;
+  }
+  document.getElementById('contentInner').innerHTML='<div style="text-align:center;padding:60px;color:var(--text3)"><div class="spinner" style="display:inline-block;width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.6s linear infinite"></div></div>';
+  fetch(`${API}/api/compare?codes=${codes.join(',')}`).then(r=>r.json()).then(data=>renderCompare(data));
+}
+
+function renderCompare(data){
+  const max={quality:35,value:30,health:20,gov:15};
+  document.getElementById('contentInner').innerHTML=`
+    <div style="font-size:1.2rem;font-weight:600;margin-bottom:16px">⚖️ 多股对比</div>
+    <div class="compare-grid">
+    ${data.map(d=>{
+      const w=d.scores?.weighted||{};
+      return`<div class="compare-card">
+        <div class="stock-header"><span class="stock-name">${d.code}<br><small style="color:var(--text3)">${d.name||''}</small></span><span class="stock-score" style="color:${d.total>=80?'var(--green)':d.total>=60?'var(--accent2)':d.total>=40?'var(--amber)':'var(--red)'}">${(d.total||0).toFixed(1)}</span></div>
+        <div class="compare-dims">
+        ${Object.entries(max).map(([dim,mx])=>{
+          const v=w[dim]||0;const pct=v/mx*100;
+          return`<div class="compare-dim"><span style="width:28px;font-size:0.7rem;color:var(--text3)">${dim[0].toUpperCase()}</span><div class="cd-bar"><div class="cd-fill" style="width:${pct}%;background:${dim==='quality'?'var(--green)':dim==='value'?'var(--accent2)':dim==='health'?'var(--amber)':'var(--pink)'}"></div></div><span style="font-family:var(--mono);font-size:0.7rem">${v.toFixed(0)}</span></div>`;
+        }).join('')}
+        </div>
+        <div style="font-size:0.7rem;color:var(--text3);margin-top:4px">
+          M-Score: <b>${d.beneish?.m_score?.toFixed(3)||'?'}</b> ·
+          ${d.passed_blacklist?'<span style="color:var(--green)">✓</span>':'<span style="color:var(--red)">⛔</span>'}
+        </div>
+      </div>`;
+    }).join('')}
+    </div>`;
+}
+
+// ═══ Watchlist ═══
+function saveWatchlist(){
+  localStorage.setItem('bqas_watchlist',JSON.stringify(watchlist));
+  const el=document.getElementById('watchlist');
+  el.innerHTML=watchlist.map((w,i)=>`
+    <div class="watchlist-item" onclick="score('${w.code}')">
+      <span>${w.code} ${w.name}</span>
+      <span style="cursor:pointer;color:var(--text3)" onclick="event.stopPropagation();watchlist.splice(${i},1);saveWatchlist()">✕</span>
+    </div>
+  `).join('')||'<span style="color:var(--text3)">点击 ☆ 添加</span>';
+}
+saveWatchlist();
+
+// ═══ Keyboard shortcuts ═══
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closePalette();
 });
 
-function renderChips() {
-  document.getElementById('compareChips').innerHTML = compareList.map((c,i) => `
-    <span class="chip">${c} <span class="remove" onclick="compareList.splice(${i},1);renderChips()">✕</span></span>
-  `).join('');
-}
-
-async function runCompare() {
-  if (compareList.length < 2) return;
-  const el = document.getElementById('compareContent');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-
-  const codes = compareList.join(',');
-  const resp = await fetch(`${API}/api/compare?codes=${codes}`);
-  const data = await resp.json();
-
-  let html = '<table class="compare-table"><thead><tr><th>指标</th>';
-  data.forEach(d => html += `<th>${d.code}<br><span style="font-size:0.7rem;color:var(--muted)">${d.name||''}</span></th>`);
-  html += '</tr></thead><tbody>';
-
-  const rows = [
-    ['总分', d => d.total?.toFixed(1)],
-    ['评级', d => d.rating],
-    ['企业质量', d => d.scores?.weighted?.quality?.toFixed(1)],
-    ['估值水平', d => d.scores?.weighted?.value?.toFixed(1)],
-    ['财务健康', d => d.scores?.weighted?.health?.toFixed(1)],
-    ['治理安全', d => d.scores?.weighted?.gov?.toFixed(1)],
-    ['M-Score', d => d.beneish?.m_score?.toFixed(3)],
-    ['一票否决', d => d.passed_blacklist ? '✅' : '⛔'],
-  ];
-  rows.forEach(([label, fn]) => {
-    html += `<tr><td>${label}</td>`;
-    data.forEach(d => {
-      const val = fn(d);
-      html += `<td class="mono">${val ?? '?'}</td>`;
-    });
-    html += '</tr>';
-  });
-  html += '</tbody></table>';
-  el.innerHTML = html;
-}
-
-// ── Tabs ──
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelector(`.tab:nth-child(${tab==='score'?1:tab==='compare'?2:3})`).classList.add('active');
-  document.getElementById(`tab-${tab}`).classList.add('active');
-}
-
-function clearAll() {
-  document.getElementById('searchInput').value = '';
-  document.getElementById('scoreContent').innerHTML = '<div class="loading"><p style="margin-top:12px">搜索股票开始分析…</p></div>';
-  compareList = [];
-  renderChips();
-  document.getElementById('compareContent').innerHTML = '';
-}
-
-// Init
-fetch(`${API}/api/health`).then(r=>r.json()).then(d => {
-  document.getElementById('status').innerHTML = `● ${d.stocks} stocks · ${d.periods} periods · ${d.quotes.toLocaleString()} quotes`;
-}).catch(() => {});
+@keyframes spin{to{transform:rotate(360deg)}}
 </script>
 </body>
 </html>
