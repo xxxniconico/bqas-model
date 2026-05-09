@@ -168,12 +168,13 @@ a{color:var(--accent2);text-decoration:none}
       <button data-view="screener">排行榜</button>
       <button data-view="compare">对比</button>
     </div>
-    <div class="header-search" onclick="openPalette()">
-      <input type="text" id="headerInput" placeholder="搜索代码或名称... (如 600519 回车)" 
+    <div class="header-search" style="position:relative">
+      <input type="text" id="headerInput" placeholder="搜索代码或名称..." 
              style="background:transparent;border:none;color:var(--text);font-size:0.8rem;font-family:var(--font);width:100%;outline:none;cursor:text"
-             onfocus="openPalette()"
              oninput="headerSearch()"
-             onkeydown="if(event.key==='Enter'){const v=this.value.trim().replace(/[^0-9]/g,'').slice(0,6);if(v.length===6){closePalette();score(v)}}">
+             onkeydown="if(event.key==='Enter'){const v=this.value.trim().replace(/[^0-9]/g,'').slice(0,6);if(v.length===6){score(v);hideDropdown()}}"
+             onfocus="headerSearch()">
+      <div id="searchDropdown" class="hidden" style="position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:0 0 var(--radius) var(--radius);max-height:240px;overflow-y:auto;z-index:100;margin-top:4px;box-shadow:0 12px 32px rgba(0,0,0,0.5)"></div>
     </div>
   </header>
 
@@ -189,18 +190,32 @@ a{color:var(--accent2);text-decoration:none}
   </div>
 </main>
 
-<!-- ═══ Command Palette ═══ -->
-<div class="modal-overlay hidden" id="palette" onclick="closePalette()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-input"><input type="text" id="paletteInput" placeholder="输入代码或名称..." autofocus></div>
-    <div class="modal-results" id="paletteResults"></div>
-  </div>
-</div>
+<!-- ═══ End body ═══ -->
 
 <script>
 const API = '';
 let currentStock = null;
 let watchlist = JSON.parse(localStorage.getItem('bqas_watchlist')||'[]');
+
+// ═══ Search Dropdown ═══
+function hideDropdown(){document.getElementById('searchDropdown').classList.add('hidden')}
+async function headerSearch(){
+  const q=document.getElementById('headerInput').value.trim();
+  const dd=document.getElementById('searchDropdown');
+  if(q.length<1){dd.classList.add('hidden');return}
+  const r=await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
+  const data=await r.json();
+  if(!data.length){dd.classList.add('hidden');return}
+  dd.innerHTML=data.map(s=>`
+    <div onclick="selectAndScore('${s.code}')" style="padding:8px 12px;cursor:pointer;font-size:0.82rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between">
+      <span><b style="color:var(--accent2)">${s.code}</b> ${s.name}</span>
+      <span style="color:var(--text3);font-size:0.7rem">${s.industry||''}</span>
+    </div>
+  `).join('');
+  dd.classList.remove('hidden');
+}
+async function selectAndScore(code){hideDropdown();document.getElementById('headerInput').value='';await score(code)}
+document.addEventListener('click',e=>{if(!e.target.closest('.header-search'))hideDropdown()});
 
 // ═══ Navigation ═══
 document.querySelectorAll('[data-view]').forEach(el => {
@@ -227,43 +242,6 @@ document.querySelectorAll('.header-nav button[data-view]').forEach(el => {
     else if(this.dataset.view==='compare') showCompare();
   });
 });
-
-// ═══ Command Palette ═══
-function openPalette(){document.getElementById('palette').classList.remove('hidden');setTimeout(()=>document.getElementById('paletteInput').focus(),50)}
-function closePalette(){document.getElementById('palette').classList.add('hidden')}
-function headerSearch(){
-  const q=document.getElementById('headerInput').value.trim();
-  if(q.length<1)return;
-  // Search and show results in palette
-  openPalette();
-  document.getElementById('paletteInput').value=q;
-  document.getElementById('paletteInput').dispatchEvent(new Event('input'));
-}
-document.addEventListener('keydown',e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openPalette();document.getElementById('paletteInput').focus()}
-  if(e.key==='Escape')closePalette()
-});
-
-document.getElementById('paletteInput').addEventListener('input',async function(){
-  const q=this.value.trim();
-  if(q.length<1){document.getElementById('paletteResults').innerHTML='';return}
-  const r=await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
-  const data=await r.json();
-  document.getElementById('paletteResults').innerHTML=data.map(s=>`
-    <div class="modal-item" onclick="selectAndScore('${s.code}')">
-      <span><b>${s.code}</b> ${s.name}</span>
-      <span class="shortcut">↵</span>
-    </div>
-  `).join('')||'<div style="padding:16px;color:var(--text3)">无结果</div>';
-});
-document.getElementById('paletteInput').addEventListener('keydown',function(e){
-  if(e.key==='Enter'&&this.value.trim().length>=6){
-    const code=this.value.trim().replace(/[^0-9]/g,'').slice(0,6);
-    if(code.length===6){selectAndScore(code);closePalette()}
-  }
-});
-
-async function selectAndScore(code){closePalette();await score(code)}
 
 // ═══ Score ═══
 async function score(code){
@@ -480,11 +458,6 @@ function saveWatchlist(){
   `).join('')||'<span style="color:var(--text3)">点击 ☆ 添加</span>';
 }
 saveWatchlist();
-
-// ═══ Keyboard shortcuts ═══
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape')closePalette();
-});
 
 @keyframes spin{to{transform:rotate(360deg)}}
 </script>
