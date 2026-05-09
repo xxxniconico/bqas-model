@@ -169,8 +169,11 @@ a{color:var(--accent2);text-decoration:none}
       <button data-view="compare">对比</button>
     </div>
     <div class="header-search" onclick="openPalette()">
-      🔍 搜索股票代码或名称...
-      <kbd>⌘K</kbd>
+      <input type="text" id="headerInput" placeholder="搜索代码或名称... (如 600519 回车)" 
+             style="background:transparent;border:none;color:var(--text);font-size:0.8rem;font-family:var(--font);width:100%;outline:none;cursor:text"
+             onfocus="openPalette()"
+             oninput="headerSearch()"
+             onkeydown="if(event.key==='Enter'){const v=this.value.trim().replace(/[^0-9]/g,'').slice(0,6);if(v.length===6){closePalette();score(v)}}">
     </div>
   </header>
 
@@ -228,8 +231,16 @@ document.querySelectorAll('.header-nav button[data-view]').forEach(el => {
 // ═══ Command Palette ═══
 function openPalette(){document.getElementById('palette').classList.remove('hidden');setTimeout(()=>document.getElementById('paletteInput').focus(),50)}
 function closePalette(){document.getElementById('palette').classList.add('hidden')}
+function headerSearch(){
+  const q=document.getElementById('headerInput').value.trim();
+  if(q.length<1)return;
+  // Search and show results in palette
+  openPalette();
+  document.getElementById('paletteInput').value=q;
+  document.getElementById('paletteInput').dispatchEvent(new Event('input'));
+}
 document.addEventListener('keydown',e=>{
-  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openPalette()}
+  if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();openPalette();document.getElementById('paletteInput').focus()}
   if(e.key==='Escape')closePalette()
 });
 
