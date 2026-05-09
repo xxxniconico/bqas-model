@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BQAS · 巴菲特量化选股</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+/* ═══════ Sentry Dark Theme ═══════ */
+:root {
+  --bg: #1f1633;
+  --bg2: #150f23;
+  --border: #362d59;
+  --accent: #6a5fc1;
+  --btn-bg: #79628c;
+  --btn-border: #584674;
+  --lime: #c2ef4e;
+  --coral: #ffb287;
+  --pink: #fa7faa;
+  --text: #ffffff;
+  --text2: #e5e7eb;
+  --muted: #8b8ba0;
+  --radius: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Rubik',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+.header {
+  background:var(--bg2); border-bottom:1px solid var(--border);
+  padding:16px 24px; display:flex; align-items:center; gap:16px;
+  position:sticky; top:0; z-index:100; backdrop-filter:blur(18px);
+}
+.header h1 { font-size:1.25rem; font-weight:600; letter-spacing:-0.5px; }
+.header .tag { font-size:0.7rem; color:var(--lime); text-transform:uppercase; letter-spacing:1px; }
+.container { max-width:1280px; margin:0 auto; padding:24px; }
+
+/* Search */
+.search-wrap { display:flex; gap:8px; margin-bottom:24px; }
+.search-wrap input {
+  flex:1; padding:12px 16px; border-radius:var(--radius); border:1px solid var(--border);
+  background:var(--bg2); color:var(--text); font-size:1rem; font-family:inherit;
+}
+.search-wrap input:focus { outline:none; border-color:var(--accent); }
+.search-wrap button {
+  padding:12px 24px; border-radius:var(--radius); border:1px solid var(--btn-border);
+  background:var(--btn-bg); color:var(--text); cursor:pointer; font-family:inherit;
+  font-weight:600; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.5px;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);
+}
+.search-wrap button:hover { background:var(--accent); }
+.search-results {
+  position:absolute; background:var(--bg2); border:1px solid var(--border);
+  border-radius:var(--radius); max-height:240px; overflow-y:auto; z-index:50;
+  display:none; width:calc(100% - 48px);
+}
+.search-results.show { display:block; }
+.search-results div {
+  padding:10px 16px; cursor:pointer; border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between;
+}
+.search-results div:hover { background:rgba(106,95,193,0.15); }
+.search-results .code { color:var(--lime); font-family:'JetBrains Mono',monospace; font-size:0.85rem; }
+
+/* Panels */
+.panels { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.card {
+  background:rgba(31,22,51,0.85); border:1px solid var(--border);
+  border-radius:12px; padding:20px; box-shadow:var(--shadow);
+}
+.card h3 { font-size:0.85rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; }
+.card h2 { font-size:1.5rem; font-weight:600; margin-bottom:4px; }
+
+/* Score ring */
+.score-ring {
+  display:flex; align-items:center; gap:20px;
+  padding:20px 0;
+}
+.score-big {
+  font-size:4rem; font-weight:700; line-height:1;
+  font-family:'JetBrains Mono',monospace;
+}
+.score-stars { font-size:1.5rem; }
+.rating-label { color:var(--muted); font-size:0.9rem; }
+
+/* Dimension bars */
+.dim-bars { display:flex; flex-direction:column; gap:8px; margin:12px 0; }
+.dim-row { display:flex; align-items:center; gap:12px; }
+.dim-label { width:60px; font-size:0.8rem; color:var(--muted); text-transform:uppercase; }
+.dim-bar-wrap { flex:1; height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
+.dim-bar { height:100%; border-radius:4px; transition:width 0.5s; }
+.dim-value { width:50px; text-align:right; font-size:0.85rem; font-family:'JetBrains Mono',monospace; }
+
+/* Colors per dimension */
+.q-bar { background:var(--lime); }
+.v-bar { background:var(--accent); }
+.h-bar { background:var(--coral); }
+.g-bar { background:var(--pink); }
+
+/* DuPont */
+.dupont { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:12px 0; }
+.dupont-item { text-align:center; }
+.dupont-item .val { font-size:1.4rem; font-weight:600; font-family:'JetBrains Mono',monospace; }
+.dupont-item .lab { font-size:0.7rem; color:var(--muted); text-transform:uppercase; }
+
+/* Flags */
+.flags { margin:12px 0; }
+.flag {
+  display:inline-block; padding:4px 10px; border-radius:12px;
+  font-size:0.75rem; font-weight:600; margin:2px 4px 2px 0;
+}
+.flag-red { background:rgba(250,127,170,0.2); color:var(--pink); }
+.flag-yellow { background:rgba(255,178,135,0.2); color:var(--coral); }
+.flag-green { background:rgba(194,239,78,0.15); color:var(--lime); }
+
+/* Blacklist */
+.blacklist-row { display:flex; align-items:center; gap:8px; padding:6px 0; font-size:0.82rem; }
+.blacklist-icon { font-size:1rem; width:20px; text-align:center; }
+.pass { color:var(--lime); }
+.fail { color:var(--pink); }
+
+/* Compare table */
+.compare-table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+.compare-table th { text-align:left; color:var(--muted); font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; padding:8px 12px; border-bottom:1px solid var(--border); }
+.compare-table td { padding:10px 12px; border-bottom:1px solid var(--border); }
+.compare-table tr:hover td { background:rgba(106,95,193,0.05); }
+.compare-table .mono { font-family:'JetBrains Mono',monospace; }
+
+/* Loading */
+.loading { text-align:center; padding:40px; color:var(--muted); }
+.spinner {
+  display:inline-block; width:24px; height:24px; border:2px solid var(--border);
+  border-top-color:var(--accent); border-radius:50%; animation:spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Tabs */
+.tabs { display:flex; gap:0; margin-bottom:0; border-bottom:2px solid var(--border); }
+.tab {
+  padding:10px 20px; cursor:pointer; color:var(--muted); font-size:0.85rem;
+  font-weight:500; text-transform:uppercase; letter-spacing:0.5px; border:none;
+  background:none; font-family:inherit;
+}
+.tab.active { color:var(--text); border-bottom:2px solid var(--accent); margin-bottom:-2px; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* Responsive */
+@media(max-width:768px) {
+  .panels { grid-template-columns:1fr; }
+  .header { padding:12px 16px; }
+  .container { padding:12px; }
+  .score-big { font-size:2.5rem; }
+}
+
+/* Compare section */
+.compare-input { display:flex; gap:8px; margin-bottom:12px; }
+.compare-input input { flex:1; padding:8px 12px; border-radius:6px; border:1px solid var(--border); background:var(--bg2); color:var(--text); }
+.compare-chips { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.chip {
+  display:flex; align-items:center; gap:4px; padding:4px 10px;
+  background:var(--accent); border-radius:16px; font-size:0.8rem;
+}
+.chip .remove { cursor:pointer; opacity:0.6; }
+.chip .remove:hover { opacity:1; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 BQAS</h1>
+  <span class="tag">Buffett Quantitative Analysis System</span>
+  <span style="margin-left:auto;font-size:0.75rem;color:var(--muted)" id="status">● ready</span>
+</div>
+
+<div class="container">
+  <!-- Search -->
+  <div style="position:relative">
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="输入股票代码 或 名称搜索... (如 600519 或 茅台)" autocomplete="off">
+      <button onclick="score()">评分</button>
+      <button onclick="clearAll()" style="background:transparent;border-color:var(--border)">清除</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('score')">评分拆解</button>
+    <button class="tab" onclick="switchTab('compare')">多股对比</button>
+    <button class="tab" onclick="switchTab('about')">关于</button>
+  </div>
+
+  <!-- Tab: Score -->
+  <div id="tab-score" class="tab-content active">
+    <div id="scoreContent">
+      <div class="loading"><div class="spinner"></div><p style="margin-top:12px">搜索股票开始分析…</p></div>
+    </div>
+  </div>
+
+  <!-- Tab: Compare -->
+  <div id="tab-compare" class="tab-content">
+    <div class="compare-input">
+      <input type="text" id="compareInput" placeholder="输入代码添加到对比列表 (回车添加)">
+      <button onclick="addCompare()">添加</button>
+    </div>
+    <div class="compare-chips" id="compareChips"></div>
+    <button onclick="runCompare()" style="margin:8px 0 16px;padding:8px 20px;border-radius:var(--radius);border:1px solid var(--btn-border);background:var(--btn-bg);color:var(--text);cursor:pointer;font-family:inherit;font-weight:600;">对比分析</button>
+    <div id="compareContent"></div>
+  </div>
+
+  <!-- Tab: About -->
+  <div id="tab-about" class="tab-content">
+    <div class="card" style="max-width:600px">
+      <h2>BQAS V2 · 巴菲特量化选股系统</h2>
+      <p style="color:var(--text2);margin-top:12px;line-height:1.6">
+        基于巴菲特定性方法论的多因子量化模型。四大维度：企业质量(35%)、估值水平(30%)、财务健康(20%)、治理与安全边际(15%)。<br><br>
+        10项一票否决 + 10因子评分 + Beneish M-Score 财务造假检测。<br><br>
+        数据：10年A股财报 (2016-2025)、61K月度行情数据。<br>
+        回测：8年 Spearman 稳定性 0.87-0.91。
+      </p>
+      <p style="color:var(--muted);margin-top:16px;font-size:0.8rem">
+        API: <code style="color:var(--lime)">localhost:8503</code> · 
+        设计: <span style="color:var(--accent)">Sentry Dark Theme</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://127.0.0.1:8503';
+let charts = {};
+let compareList = [];
+
+// ── Search ──
+document.getElementById('searchInput').addEventListener('input', async (e) => {
+  const q = e.target.value.trim();
+  if (q.length < 1) { document.getElementById('searchResults').classList.remove('show'); return; }
+  const resp = await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
+  const data = await resp.json();
+  const el = document.getElementById('searchResults');
+  el.innerHTML = data.map(s => `
+    <div onclick="selectStock('${s.code}','${s.name}')">
+      <span><span class="code">${s.code}</span> ${s.name}</span>
+      <span style="color:var(--muted);font-size:0.8rem">${s.industry||''}</span>
+    </div>
+  `).join('');
+  el.classList.add('show');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrap')) document.getElementById('searchResults').classList.remove('show');
+});
+
+document.getElementById('searchInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') score();
+});
+
+function selectStock(code, name) {
+  document.getElementById('searchInput').value = `${code} ${name}`;
+  document.getElementById('searchResults').classList.remove('show');
+  score();
+}
+
+// ── Score ──
+async function score() {
+  const val = document.getElementById('searchInput').value.trim();
+  const code = val.split(' ')[0].replace(/[^0-9]/g, '');
+  if (!code || code.length !== 6) return;
+
+  document.getElementById('scoreContent').innerHTML = '<div class="loading"><div class="spinner"></div><p style="margin-top:12px">分析中…</p></div>';
+  switchTab('score');
+
+  const resp = await fetch(`${API}/api/score/${code}`);
+  const data = await resp.json();
+
+  if (data.error) {
+    document.getElementById('scoreContent').innerHTML = `<div class="card"><p style="color:var(--pink)">❌ ${data.error}</p></div>`;
+    return;
+  }
+  renderScore(data);
+}
+
+function renderScore(d) {
+  const total = d.total || 0;
+  const scores = d.scores || {};
+  const w = scores.weighted || {};
+  const beneish = d.beneish || {};
+  const checks = d.blacklist_checks || {};
+  const dupont = (scores.quality?.roe?.dupont) || {};
+
+  const maxScores = { quality: 35, value: 30, health: 20, gov: 15 };
+  const dimColors = { quality: 'q-bar', value: 'v-bar', health: 'h-bar', gov: 'g-bar' };
+  const dimLabels = { quality: '企业质量', value: '估值水平', health: '财务健康', gov: '治理安全' };
+
+  let html = '<div class="panels">';
+
+  // Left: Score overview
+  html += `<div class="card">
+    <h3>总分</h3>
+    <div class="score-ring">
+      <div>
+        <div class="score-big" style="color:${total>=85?'var(--lime)':total>=65?'var(--accent)':total>=50?'var(--coral)':'var(--pink)'}">${total.toFixed(1)}</div>
+        <div class="score-stars">${d.rating||''}</div>
+        <div class="rating-label">${d.rating_label||''} · ${d.rating_advice||''}</div>
+      </div>
+    </div>
+    <div style="color:var(--muted);font-size:0.8rem">${d.name||''} · ${d.code||''} · ${d.industry_group||'?'}</div>
+    
+    <div class="dim-bars" style="margin-top:16px">`;
+  for (const [dim, max] of Object.entries(maxScores)) {
+    const val = w[dim] || 0;
+    const pct = Math.min(val / max * 100, 100);
+    html += `<div class="dim-row">
+      <div class="dim-label">${dimLabels[dim]}</div>
+      <div class="dim-bar-wrap"><div class="dim-bar ${dimColors[dim]}" style="width:${pct}%"></div></div>
+      <div class="dim-value">${val.toFixed(1)}/${max}</div>
+    </div>`;
+  }
+  html += `</div>`;
+
+  // Blacklist status
+  html += `<div style="margin-top:12px;font-size:0.8rem;color:${d.passed_blacklist?'var(--lime)':'var(--pink)'}">
+    ${d.passed_blacklist ? '✅ 通过' : '⛔ ' + (d.blacklist_reason || '否决')} 一票否决
+  </div>`;
+
+  // Beneish
+  if (!beneish.missing_data) {
+    const bStatus = beneish.likely_manipulator ? '🔴 高度嫌疑' : beneish.possible_manipulator ? '🟡 可能操纵' : '🟢 无嫌疑';
+    html += `<div style="margin-top:8px;font-size:0.8rem">M-Score: <b>${beneish.m_score.toFixed(3)}</b> ${bStatus}</div>`;
+    if (beneish.flags?.length) {
+      html += '<div class="flags">';
+      beneish.flags.forEach(f => html += `<span class="flag flag-yellow">⚠ ${f}</span>`);
+      html += '</div>';
+    }
+  }
+
+  html += `</div>`;
+
+  // Right: DuPont + details
+  html += `<div class="card">
+    <h3>杜邦拆解 (最新年)</h3>`;
+  if (dupont.net_margin !== undefined) {
+    html += `<div class="dupont">
+      <div class="dupont-item"><div class="val">${(dupont.net_margin*100).toFixed(1)}%</div><div class="lab">净利率</div></div>
+      <div class="dupont-item"><div class="val">${dupont.asset_turnover.toFixed(2)}</div><div class="lab">周转率</div></div>
+      <div class="dupont-item"><div class="val">${dupont.equity_multiplier.toFixed(1)}x</div><div class="lab">杠杆乘数</div></div>
+    </div>
+    <div style="text-align:center;color:var(--muted);font-size:0.75rem;margin-bottom:12px">
+      ROE = ${(dupont.net_margin*100).toFixed(1)}% × ${dupont.asset_turnover.toFixed(2)} × ${dupont.equity_multiplier.toFixed(1)}x = <b style="color:var(--lime)">${(dupont.roe_reconstructed*100).toFixed(1)}%</b>
+    </div>`;
+  } else {
+    html += '<p style="color:var(--muted)">数据不足</p>';
+  }
+
+  // Factor details
+  html += `<h3>因子明细</h3>`;
+  const factorNames = {
+    quality: { roe:'ROE稳定性', roic:'ROIC超额', cfo:'CFO质量', gm:'毛利护城河' },
+    value: { ev_oe:'EV/OpE', fcf_yield:'FCF Yield', pb_adj:'PB调整' },
+    health: { leverage:'杠杆率', ic:'利息覆盖', asset_q:'资产质量' },
+    gov: { dividend:'股东回报', audit:'审计治理' },
+  };
+  for (const [dim, factors] of Object.entries(factorNames)) {
+    const dimScores = scores[dim] || {};
+    for (const [key, label] of Object.entries(factors)) {
+      const f = dimScores[key] || {};
+      if (f.score !== undefined) {
+        html += `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:0.82rem;border-bottom:1px solid var(--border)">
+          <span>${label}</span>
+          <span style="font-family:'JetBrains Mono',monospace;color:${f.score>=7?'var(--lime)':f.score>=4?'var(--coral)':'var(--pink)'}">${f.score.toFixed(1)}/10</span>
+        </div>`;
+      }
+    }
+  }
+
+  html += '</div></div>'; // end panels
+  
+  // Blacklist checks detail
+  html += `<div class="card" style="margin-top:16px"><h3>一票否决清单</h3>`;
+  const checkLabels = {
+    st_flag:'ST/*ST', listing_days:'上市≥3年', market_cap:'市值≥30亿',
+    avg_volume:'日均成交≥2000万', net_loss_3y:'无连续亏损', ocf_negative_3y:'OCF正常',
+    audit_opinion:'标准审计', goodwill_bomb:'商誉安全', pledge_ratio:'质押<70%',
+    financial_fraud:'无造假处罚'
+  };
+  for (const [key, label] of Object.entries(checkLabels)) {
+    const status = checks[key];
+    const passed = typeof status === 'string' ? !status : (status !== false);
+    html += `<div class="blacklist-row">
+      <span class="blacklist-icon ${passed?'pass':'fail'}">${passed?'✓':'✗'}</span>
+      <span>${label}</span>
+      ${!passed && status ? `<span style="color:var(--pink);font-size:0.75rem">${typeof status==='string'?status:status[1]||''}</span>` : ''}
+    </div>`;
+  }
+  html += '</div>';
+
+  document.getElementById('scoreContent').innerHTML = html;
+}
+
+// ── Compare ──
+function addCompare() {
+  const val = document.getElementById('compareInput').value.trim();
+  const code = val.split(' ')[0].replace(/[^0-9]/g, '');
+  if (code && code.length === 6 && !compareList.includes(code)) {
+    compareList.push(code);
+    renderChips();
+  }
+  document.getElementById('compareInput').value = '';
+}
+
+document.getElementById('compareInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') addCompare();
+});
+
+function renderChips() {
+  document.getElementById('compareChips').innerHTML = compareList.map((c,i) => `
+    <span class="chip">${c} <span class="remove" onclick="compareList.splice(${i},1);renderChips()">✕</span></span>
+  `).join('');
+}
+
+async function runCompare() {
+  if (compareList.length < 2) return;
+  const el = document.getElementById('compareContent');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+
+  const codes = compareList.join(',');
+  const resp = await fetch(`${API}/api/compare?codes=${codes}`);
+  const data = await resp.json();
+
+  let html = '<table class="compare-table"><thead><tr><th>指标</th>';
+  data.forEach(d => html += `<th>${d.code}<br><span style="font-size:0.7rem;color:var(--muted)">${d.name||''}</span></th>`);
+  html += '</tr></thead><tbody>';
+
+  const rows = [
+    ['总分', d => d.total?.toFixed(1)],
+    ['评级', d => d.rating],
+    ['企业质量', d => d.scores?.weighted?.quality?.toFixed(1)],
+    ['估值水平', d => d.scores?.weighted?.value?.toFixed(1)],
+    ['财务健康', d => d.scores?.weighted?.health?.toFixed(1)],
+    ['治理安全', d => d.scores?.weighted?.gov?.toFixed(1)],
+    ['M-Score', d => d.beneish?.m_score?.toFixed(3)],
+    ['一票否决', d => d.passed_blacklist ? '✅' : '⛔'],
+  ];
+  rows.forEach(([label, fn]) => {
+    html += `<tr><td>${label}</td>`;
+    data.forEach(d => {
+      const val = fn(d);
+      html += `<td class="mono">${val ?? '?'}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+// ── Tabs ──
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab:nth-child(${tab==='score'?1:tab==='compare'?2:3})`).classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+function clearAll() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('scoreContent').innerHTML = '<div class="loading"><p style="margin-top:12px">搜索股票开始分析…</p></div>';
+  compareList = [];
+  renderChips();
+  document.getElementById('compareContent').innerHTML = '';
+}
+
+// Init
+fetch(`${API}/api/health`).then(r=>r.json()).then(d => {
+  document.getElementById('status').innerHTML = `● ${d.stocks} stocks · ${d.periods} periods · ${d.quotes.toLocaleString()} quotes`;
+}).catch(() => {});
+</script>
+</body>
+</html>
