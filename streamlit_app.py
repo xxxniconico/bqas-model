@@ -6,7 +6,6 @@ import streamlit as st
 
 st.set_page_config(page_title="BQAS 巴菲特量化", page_icon="📊", layout="wide")
 
-# Load dashboard and data
 html_path = Path(__file__).parent / "dashboard.html"
 data_path = Path(__file__).parent / "dashboard_data.json"
 
@@ -16,42 +15,41 @@ with open(html_path, encoding="utf-8") as f:
 with open(data_path) as f:
     data = json.load(f)
 
-# Inject data + fetch interceptor
 injection = f"""<script>
-window._BQAS_DATA = {json.dumps(data, ensure_ascii=False)};
+window._BQAS = {json.dumps(data, ensure_ascii=False)};
 (function(){{
-    const _fetch = window.fetch;
-    const D = window._BQAS_DATA;
+    var _fetch = window.fetch;
+    var D = window._BQAS;
     window.fetch = function(url, opts) {{
-        const u = String(url);
-        if (u.includes('/api/health'))
-            return Promise.resolve({{json:()=>Promise.resolve(D.health||{{status:'ok'}})}});
-        if (u.includes('/api/screener') || u.includes('/api/screener-global'))
-            return Promise.resolve({{json:()=>Promise.resolve(D.screener||[])}});
-        if (u.includes('/api/industry-summary') || u.includes('/api/industry-summary-global'))
-            return Promise.resolve({{json:()=>Promise.resolve(D.industry_summary||[])}});
-        if (u.includes('/api/search')) {{
-            const q = new URL(u,'http://x').searchParams.get('q')||'';
-            const results = (D.search_index||[]).filter(s=>
-                s.code.includes(q) || s.name.includes(q) || s.industry.includes(q)
-            );
-            return Promise.resolve({{json:()=>Promise.resolve(results)}});
+        var u = String(url);
+        if (u.indexOf('/api/health') >= 0)
+            return Promise.resolve({{json:function(){{return Promise.resolve(D.health||{{status:'ok'}});}}}});
+        if (u.indexOf('/api/screener') >= 0 || u.indexOf('/api/screener-global') >= 0)
+            return Promise.resolve({{json:function(){{return Promise.resolve(D.screener||[]);}}}});
+        if (u.indexOf('/api/industry-summary') >= 0 || u.indexOf('/api/industry-summary-global') >= 0)
+            return Promise.resolve({{json:function(){{return Promise.resolve(D.industry_summary||[]);}}}});
+        if (u.indexOf('/api/search') >= 0) {{
+            var q = (new URL(u,'http://x').searchParams.get('q')||'').toLowerCase();
+            var results = (D.search_index||[]).filter(function(s){{
+                return s.code.indexOf(q)>=0 || s.name.toLowerCase().indexOf(q)>=0 || s.industry.indexOf(q)>=0;
+            }});
+            return Promise.resolve({{json:function(){{return Promise.resolve(results);}}}});
         }}
-        if (u.includes('/api/compare')) {{
-            const codesStr = u.split('codes=')[1]?.split('&')[0]||'';
-            const codes = codesStr.split(',');
-            const results = (D.compare||[]).filter(s=>codes.includes(s.code));
-            return Promise.resolve({{json:()=>Promise.resolve(results)}});
+        if (u.indexOf('/api/compare') >= 0) {{
+            var codes = (u.split('codes=')[1]||'').split('&')[0].split(',');
+            var results = (D.compare||[]).filter(function(s){{return codes.indexOf(s.code)>=0;}});
+            return Promise.resolve({{json:function(){{return Promise.resolve(results);}}}});
         }}
-        if (u.includes('/api/score/') || u.includes('/api/score-global/')) {{
-            const code = u.split('/').pop().split('?')[0];
-            const stock = (D.screener||[]).find(s=>s.code===code);
-            return Promise.resolve({{json:()=>Promise.resolve(stock||{{error:'not found'}})}});
+        if (u.indexOf('/api/score/') >= 0 || u.indexOf('/api/score-global/') >= 0) {{
+            var code = u.split('/').pop().split('?')[0];
+            var full = (D.score_data||{{}})[code];
+            console.log('BQAS fetch intercepted: /api/score/'+code, full?'found':'not found');
+            return Promise.resolve({{json:function(){{return Promise.resolve(full||{{error:'未找到该股票数据'}});}}}});
         }}
-        if (u.includes('/api/stock-profile/')) {{
-            const code = u.split('/').pop();
-            const stock = (D.screener||[]).find(s=>s.code===code);
-            return Promise.resolve({{json:()=>Promise.resolve(stock||{{}})}});
+        if (u.indexOf('/api/stock-profile/') >= 0) {{
+            var code = u.split('/').pop();
+            var full = (D.score_data||{{}})[code];
+            return Promise.resolve({{json:function(){{return Promise.resolve(full||{{}});}}}});
         }}
         return _fetch.call(window, url, opts);
     }};

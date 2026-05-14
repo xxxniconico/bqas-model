@@ -1,595 +1,4645 @@
 {
   "health": {
     "status": "ok",
-    "total_stocks": 5513,
-    "date": "2026-05-14"
+    "stocks": 5513,
+    "cache": {
+      "cached_stocks": 24,
+      "built_at": "2026-05-14T22:30:00Z"
+    }
   },
   "screener": [
     {
-      "code": "600519",
-      "name": "贵州茅台",
-      "industry": "白酒",
-      "total_score": 82.6,
-      "quality_score": 28.9,
-      "value_score": 24.8,
-      "health_score": 16.5,
-      "governance_score": 12.4
-    },
-    {
       "code": "002027",
       "name": "分众传媒",
-      "industry": "营销服务",
-      "total_score": 82.1,
-      "quality_score": 28.7,
-      "value_score": 24.6,
-      "health_score": 16.4,
-      "governance_score": 12.3
-    },
-    {
-      "code": "002517",
-      "name": "恺英网络",
-      "industry": "科技",
-      "total_score": 81.1,
-      "quality_score": 28.4,
-      "value_score": 24.3,
-      "health_score": 16.2,
-      "governance_score": 12.2
-    },
-    {
-      "code": "688708",
-      "name": "佳驰科技",
-      "industry": "未分类",
-      "total_score": 80.8,
-      "quality_score": 28.3,
-      "value_score": 24.2,
-      "health_score": 16.2,
-      "governance_score": 12.1
-    },
-    {
-      "code": "300628",
-      "name": "亿联网络",
-      "industry": "制造",
-      "total_score": 80.6,
-      "quality_score": 28.2,
-      "value_score": 24.2,
-      "health_score": 16.1,
-      "governance_score": 12.1
-    },
-    {
-      "code": "000568",
-      "name": "泸州老窖",
-      "industry": "白酒",
-      "total_score": 80.5,
-      "quality_score": 28.2,
-      "value_score": 24.1,
-      "health_score": 16.1,
-      "governance_score": 12.1
-    },
-    {
-      "code": "300394",
-      "name": "天孚通信",
-      "industry": "科技",
-      "total_score": 80.5,
-      "quality_score": 28.2,
-      "value_score": 24.1,
-      "health_score": 16.1,
-      "governance_score": 12.1
-    },
-    {
-      "code": "001221",
-      "name": "悍高集团",
-      "industry": "未分类",
-      "total_score": 79.7,
-      "quality_score": 27.9,
-      "value_score": 23.9,
-      "health_score": 15.9,
-      "governance_score": 12.0
-    },
-    {
-      "code": "300760",
-      "name": "迈瑞医疗",
-      "industry": "医药",
-      "total_score": 79.6,
-      "quality_score": 27.9,
-      "value_score": 23.9,
-      "health_score": 15.9,
-      "governance_score": 11.9
-    },
-    {
-      "code": "605117",
-      "name": "德业股份",
-      "industry": "家电零部件",
-      "total_score": 78.7,
-      "quality_score": 27.5,
-      "value_score": 23.6,
-      "health_score": 15.7,
-      "governance_score": 11.8
-    },
-    {
-      "code": "301275",
-      "name": "汉朔科技",
-      "industry": "未分类",
-      "total_score": 78.6,
-      "quality_score": 27.5,
-      "value_score": 23.6,
-      "health_score": 15.7,
-      "governance_score": 11.8
+      "total": 63.1,
+      "q_score": 37.5,
+      "v_score": 4.8,
+      "h_score": 15.9,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "营销服务"
     },
     {
       "code": "600809",
       "name": "山西汾酒",
-      "industry": "白酒",
-      "total_score": 78.3,
-      "quality_score": 27.4,
-      "value_score": 23.5,
-      "health_score": 15.7,
-      "governance_score": 11.7
+      "total": 60.5,
+      "q_score": 32.3,
+      "v_score": 7.7,
+      "h_score": 15.7,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "白酒"
+    },
+    {
+      "code": "000568",
+      "name": "泸州老窖",
+      "total": 60.4,
+      "q_score": 31.0,
+      "v_score": 8.1,
+      "h_score": 16.4,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "白酒"
+    },
+    {
+      "code": "600519",
+      "name": "贵州茅台",
+      "total": 59.9,
+      "q_score": 35.0,
+      "v_score": 2.7,
+      "h_score": 17.3,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "白酒"
     },
     {
       "code": "603402",
       "name": "陕西旅游",
-      "industry": "休闲服务",
-      "total_score": 78.1,
-      "quality_score": 27.3,
-      "value_score": 23.4,
-      "health_score": 15.6,
-      "governance_score": 11.7
+      "total": 58.9,
+      "q_score": 36.1,
+      "v_score": 0.0,
+      "h_score": 17.9,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "休闲服务"
     },
     {
-      "code": "000858",
-      "name": "五 粮 液",
-      "industry": "白酒",
-      "total_score": 78.0,
-      "quality_score": 27.3,
-      "value_score": 23.4,
-      "health_score": 15.6,
-      "governance_score": 11.7
+      "code": "688617",
+      "name": "XD惠泰医",
+      "total": 57.8,
+      "q_score": 35.1,
+      "v_score": 0.0,
+      "h_score": 17.8,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "医药"
     },
     {
       "code": "603195",
       "name": "公牛集团",
-      "industry": "其他家用轻工",
-      "total_score": 77.9,
-      "quality_score": 27.3,
-      "value_score": 23.4,
-      "health_score": 15.6,
-      "governance_score": 11.7
+      "total": 56.5,
+      "q_score": 32.6,
+      "v_score": 2.3,
+      "h_score": 16.8,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "其他家用轻工"
     },
     {
       "code": "002847",
       "name": "盐津铺子",
-      "industry": "消费",
-      "total_score": 76.8,
-      "quality_score": 26.9,
-      "value_score": 23.0,
-      "health_score": 15.4,
-      "governance_score": 11.5
+      "total": 54.5,
+      "q_score": 35.8,
+      "v_score": 0.0,
+      "h_score": 13.7,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "消费"
     },
     {
-      "code": "603929",
-      "name": "亚翔集成",
-      "industry": "建筑装饰",
-      "total_score": 76.4,
-      "quality_score": 26.7,
-      "value_score": 22.9,
-      "health_score": 15.3,
-      "governance_score": 11.5
-    },
-    {
-      "code": "301668",
-      "name": "昊创瑞通",
-      "industry": "未分类",
-      "total_score": 76.3,
-      "quality_score": 26.7,
-      "value_score": 22.9,
-      "health_score": 15.3,
-      "governance_score": 11.4
-    },
-    {
-      "code": "300795",
-      "name": "米奥会展",
-      "industry": "消费",
-      "total_score": 76.1,
-      "quality_score": 26.6,
-      "value_score": 22.8,
-      "health_score": 15.2,
-      "governance_score": 11.4
-    },
-    {
-      "code": "301617",
-      "name": "博苑股份",
-      "industry": "未分类",
-      "total_score": 76.0,
-      "quality_score": 26.6,
-      "value_score": 22.8,
-      "health_score": 15.2,
-      "governance_score": 11.4
+      "code": "300760",
+      "name": "迈瑞医疗",
+      "total": 54.2,
+      "q_score": 30.3,
+      "v_score": 2.8,
+      "h_score": 16.2,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "医药"
     },
     {
       "code": "300979",
       "name": "华利集团",
-      "industry": "鞋帽",
-      "total_score": 75.9,
-      "quality_score": 26.6,
-      "value_score": 22.8,
-      "health_score": 15.2,
-      "governance_score": 11.4
+      "total": 54.2,
+      "q_score": 27.5,
+      "v_score": 6.0,
+      "h_score": 15.8,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "鞋帽"
     },
     {
-      "code": "601958",
-      "name": "金钼股份",
-      "industry": "其他稀有小金属",
-      "total_score": 75.7,
-      "quality_score": 26.5,
-      "value_score": 22.7,
-      "health_score": 15.1,
-      "governance_score": 11.4
+      "code": "300628",
+      "name": "亿联网络",
+      "total": 51.1,
+      "q_score": 25.1,
+      "v_score": 1.5,
+      "h_score": 21.4,
+      "g_score": 3.0,
+      "roe_pct": 0,
+      "industry_sw": "制造"
     },
     {
-      "code": "000915",
-      "name": "华特达因",
-      "industry": "化学制剂",
-      "total_score": 75.5,
-      "quality_score": 26.4,
-      "value_score": 22.6,
-      "health_score": 15.1,
-      "governance_score": 11.3
-    },
-    {
-      "code": "000596",
-      "name": "古井贡酒",
-      "industry": "白酒",
-      "total_score": 75.5,
-      "quality_score": 26.4,
-      "value_score": 22.6,
-      "health_score": 15.1,
-      "governance_score": 11.3
+      "code": "605117",
+      "name": "德业股份",
+      "total": 51.1,
+      "q_score": 30.9,
+      "v_score": 1.8,
+      "h_score": 13.6,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "家电零部件"
     },
     {
       "code": "300641",
       "name": "正丹股份",
-      "industry": "其他化学制品",
-      "total_score": 75.5,
-      "quality_score": 26.4,
-      "value_score": 22.6,
-      "health_score": 15.1,
-      "governance_score": 11.3
+      "total": 50.5,
+      "q_score": 21.8,
+      "v_score": 0.0,
+      "h_score": 23.8,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "其他化学制品"
+    },
+    {
+      "code": "300795",
+      "name": "米奥会展",
+      "total": 50.3,
+      "q_score": 31.2,
+      "v_score": 0.0,
+      "h_score": 16.1,
+      "g_score": 3.0,
+      "roe_pct": 0,
+      "industry_sw": "消费"
+    },
+    {
+      "code": "001221",
+      "name": "悍高集团",
+      "total": 50.2,
+      "q_score": 25.2,
+      "v_score": 0.0,
+      "h_score": 20.1,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": ""
+    },
+    {
+      "code": "300394",
+      "name": "天孚通信",
+      "total": 49.8,
+      "q_score": 29.9,
+      "v_score": 0.4,
+      "h_score": 13.0,
+      "g_score": 6.5,
+      "roe_pct": 0,
+      "industry_sw": "科技"
+    },
+    {
+      "code": "000596",
+      "name": "古井贡酒",
+      "total": 48.7,
+      "q_score": 27.2,
+      "v_score": 4.7,
+      "h_score": 11.9,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "白酒"
+    },
+    {
+      "code": "601958",
+      "name": "金钼股份",
+      "total": 48.5,
+      "q_score": 19.5,
+      "v_score": 0.8,
+      "h_score": 23.3,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "其他稀有小金属"
+    },
+    {
+      "code": "002517",
+      "name": "恺英网络",
+      "total": 45.7,
+      "q_score": 25.0,
+      "v_score": 1.8,
+      "h_score": 12.4,
+      "g_score": 6.5,
+      "roe_pct": 0,
+      "industry_sw": "科技"
+    },
+    {
+      "code": "603929",
+      "name": "亚翔集成",
+      "total": 44.4,
+      "q_score": 23.0,
+      "v_score": 0.0,
+      "h_score": 16.5,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "建筑装饰"
     },
     {
       "code": "301680",
       "name": "固德电材",
-      "industry": "其他化学制品",
-      "total_score": 75.4,
-      "quality_score": 26.4,
-      "value_score": 22.6,
-      "health_score": 15.1,
-      "governance_score": 11.3
+      "total": 44.4,
+      "q_score": 20.2,
+      "v_score": 0.0,
+      "h_score": 19.3,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": "其他化学制品"
     },
     {
-      "code": "688692",
-      "name": "达梦数据",
-      "industry": "互联网信息服务",
-      "total_score": 75.3,
-      "quality_score": 26.4,
-      "value_score": 22.6,
-      "health_score": 15.1,
-      "governance_score": 11.3
+      "code": "301668",
+      "name": "昊创瑞通",
+      "total": 43.5,
+      "q_score": 18.0,
+      "v_score": 0.0,
+      "h_score": 20.6,
+      "g_score": 4.9,
+      "roe_pct": 0,
+      "industry_sw": ""
     },
     {
-      "code": "000848",
-      "name": "承德露露",
-      "industry": "软饮料",
-      "total_score": 75.1,
-      "quality_score": 26.3,
-      "value_score": 22.5,
-      "health_score": 15.0,
-      "governance_score": 11.3
+      "code": "301617",
+      "name": "博苑股份",
+      "total": 37.2,
+      "q_score": 11.9,
+      "v_score": 0.0,
+      "h_score": 22.3,
+      "g_score": 3.0,
+      "roe_pct": 0,
+      "industry_sw": ""
     },
     {
       "code": "301590",
       "name": "优优绿能",
-      "industry": "未分类",
-      "total_score": 74.9,
-      "quality_score": 26.2,
-      "value_score": 22.5,
-      "health_score": 15.0,
-      "governance_score": 11.2
-    },
-    {
-      "code": "688617",
-      "name": "惠泰医疗",
-      "industry": "医药",
-      "total_score": 74.9,
-      "quality_score": 26.2,
-      "value_score": 22.5,
-      "health_score": 15.0,
-      "governance_score": 11.2
+      "total": 36.0,
+      "q_score": 14.4,
+      "v_score": 0.0,
+      "h_score": 18.5,
+      "g_score": 3.0,
+      "roe_pct": 0,
+      "industry_sw": ""
     }
   ],
   "industry_summary": [
     {
-      "industry": "未分类",
-      "count": 6,
-      "avg_score": 77.7
-    },
-    {
       "industry": "白酒",
-      "count": 5,
-      "avg_score": 79.0
+      "count": 4,
+      "avg_score": 57.4
     },
     {
-      "industry": "科技",
-      "count": 2,
-      "avg_score": 80.8
+      "industry": "",
+      "count": 4,
+      "avg_score": 41.7
     },
     {
       "industry": "医药",
       "count": 2,
-      "avg_score": 77.2
+      "avg_score": 56.0
     },
     {
       "industry": "消费",
       "count": 2,
-      "avg_score": 76.4
+      "avg_score": 52.4
     },
     {
       "industry": "其他化学制品",
       "count": 2,
-      "avg_score": 75.5
+      "avg_score": 47.5
+    },
+    {
+      "industry": "科技",
+      "count": 2,
+      "avg_score": 47.8
     },
     {
       "industry": "营销服务",
       "count": 1,
-      "avg_score": 82.1
-    },
-    {
-      "industry": "制造",
-      "count": 1,
-      "avg_score": 80.6
-    },
-    {
-      "industry": "家电零部件",
-      "count": 1,
-      "avg_score": 78.7
+      "avg_score": 63.1
     },
     {
       "industry": "休闲服务",
       "count": 1,
-      "avg_score": 78.1
+      "avg_score": 58.9
     },
     {
       "industry": "其他家用轻工",
       "count": 1,
-      "avg_score": 77.9
-    },
-    {
-      "industry": "建筑装饰",
-      "count": 1,
-      "avg_score": 76.4
+      "avg_score": 56.5
     },
     {
       "industry": "鞋帽",
       "count": 1,
-      "avg_score": 75.9
+      "avg_score": 54.2
+    },
+    {
+      "industry": "制造",
+      "count": 1,
+      "avg_score": 51.1
+    },
+    {
+      "industry": "家电零部件",
+      "count": 1,
+      "avg_score": 51.1
     },
     {
       "industry": "其他稀有小金属",
       "count": 1,
-      "avg_score": 75.7
+      "avg_score": 48.5
     },
     {
-      "industry": "化学制剂",
+      "industry": "建筑装饰",
       "count": 1,
-      "avg_score": 75.5
-    },
-    {
-      "industry": "互联网信息服务",
-      "count": 1,
-      "avg_score": 75.3
-    },
-    {
-      "industry": "软饮料",
-      "count": 1,
-      "avg_score": 75.1
+      "avg_score": 44.4
     }
   ],
   "compare": [
     {
       "code": "600519",
       "name": "贵州茅台",
-      "roe": 0,
-      "revenue_cagr": 0,
-      "fcf_yield": 0,
-      "debt_ratio": 0,
-      "total_score": 82.6
+      "industry_sw": "白酒",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 10,
+            "roe_5y": 0.3302,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.4785,
+              "asset_turnover": 0.5663,
+              "equity_multiplier": 1.2,
+              "roe_reconstructed": 0.3241
+            },
+            "roe_trend": 0.0076,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.4658,
+            "years_available": 4,
+            "roic_trend": 0.0088,
+            "trend_adj": 0
+          },
+          "cfo": {
+            "score": 4.5,
+            "cfo_quality": 0.9098
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.9208,
+            "gm_stability": 0.9959
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 1.3,
+            "ev_oe": 13.12
+          },
+          "fcf_yield": {
+            "score": 1.3,
+            "fcf_yield": 0.0197
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 5.98,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 7.7,
+            "debt_ratio": 0.1642
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 141.83
+          },
+          "asset_q": {
+            "score": 8.3,
+            "ar_ratio": 0.0,
+            "inv_ratio": 0.2022,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 10.0,
+              "inv": 4.9,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.896,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.1392,
+            "gmi": 1.0081,
+            "aqi": 1.0127,
+            "sgi": 0.988,
+            "tata": 0.0685,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=0.068 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 35.0,
+          "value": 2.7,
+          "health": 17.3,
+          "gov": 4.9,
+          "total": 59.9
+        }
+      },
+      "total": 59.9,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.896,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.1392,
+          "gmi": 1.0081,
+          "aqi": 1.0127,
+          "sgi": 0.988,
+          "tata": 0.0685,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=0.068 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
     },
     {
       "code": "002027",
       "name": "分众传媒",
-      "roe": 0,
-      "revenue_cagr": 0,
-      "fcf_yield": 0,
-      "debt_ratio": 0,
-      "total_score": 82.1
+      "industry_sw": "营销服务",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 8.7,
+            "roe_5y": 0.232,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.2309,
+              "asset_turnover": 0.6311,
+              "equity_multiplier": 1.38,
+              "roe_reconstructed": 0.2016
+            },
+            "roe_trend": 0.0151,
+            "trend_adj": 1.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.2876,
+            "years_available": 4,
+            "roic_trend": 0.0196,
+            "trend_adj": 1.0
+          },
+          "cfo": {
+            "score": 9.3,
+            "cfo_quality": 1.8675
+          },
+          "gm": {
+            "score": 9.9,
+            "gm_median": 0.6626,
+            "gm_stability": 0.9324
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 20.8
+          },
+          "fcf_yield": {
+            "score": 5.8,
+            "fcf_yield": 0.0866
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 5.38,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.0,
+            "debt_ratio": 0.2771
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 32649.64
+          },
+          "asset_q": {
+            "score": 8.1,
+            "ar_ratio": 0.2798,
+            "inv_ratio": 0.0003,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 4.4,
+              "inv": 10.0,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -3.016,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 1.4701,
+            "gmi": 0.9401,
+            "aqi": 0.8932,
+            "sgi": 1.0405,
+            "tata": -0.2109,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "DSRI=1.47 (应收账款增速异常)",
+            "TATA=-0.211 (大幅负应计)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 37.5,
+          "value": 4.8,
+          "health": 15.9,
+          "gov": 4.9,
+          "total": 63.1
+        }
+      },
+      "total": 63.1,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -3.016,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 1.4701,
+          "gmi": 0.9401,
+          "aqi": 0.8932,
+          "sgi": 1.0405,
+          "tata": -0.2109,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "DSRI=1.47 (应收账款增速异常)",
+          "TATA=-0.211 (大幅负应计)"
+        ],
+        "missing_data": false
+      }
     },
     {
       "code": "002517",
       "name": "恺英网络",
-      "roe": 0,
-      "revenue_cagr": 0,
-      "fcf_yield": 0,
-      "debt_ratio": 0,
-      "total_score": 81.1
-    },
-    {
-      "code": "688708",
-      "name": "佳驰科技",
-      "roe": 0,
-      "revenue_cagr": 0,
-      "fcf_yield": 0,
-      "debt_ratio": 0,
-      "total_score": 80.8
+      "industry_sw": "科技",
+      "industry_group": "科技",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 6.9,
+            "roe_5y": 0.2364,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.3575,
+              "asset_turnover": 0.4073,
+              "equity_multiplier": 1.32,
+              "roe_reconstructed": 0.1923
+            },
+            "roe_trend": -0.0131,
+            "trend_adj": -1.0
+          },
+          "roic": {
+            "score": 7.2,
+            "roic_5y": 0.2765,
+            "years_available": 4,
+            "roic_trend": -0.0367,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": 5.7,
+            "cfo_quality": 1.1328
+          },
+          "gm": {
+            "score": 9.9,
+            "gm_median": 0.8128,
+            "gm_stability": 0.955
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 17.25
+          },
+          "fcf_yield": {
+            "score": 1.8,
+            "fcf_yield": 0.0273
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 3.63,
+            "industry_median_pb": 3.38
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.5,
+            "debt_ratio": 0.2427
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 50.55
+          },
+          "asset_q": {
+            "score": 8.7,
+            "ar_ratio": 0.1902,
+            "inv_ratio": 0.0035,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 6.2,
+              "inv": 9.9,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.34,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 1.0789,
+            "gmi": 1.0054,
+            "aqi": 1.2469,
+            "sgi": 1.0404,
+            "tata": -0.0275,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "AQI=1.25 (非流动资产占比上升)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 25.0,
+          "value": 1.8,
+          "health": 12.4,
+          "gov": 6.5,
+          "total": 45.7
+        }
+      },
+      "total": 45.7,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -2.34,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 1.0789,
+          "gmi": 1.0054,
+          "aqi": 1.2469,
+          "sgi": 1.0404,
+          "tata": -0.0275,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "AQI=1.25 (非流动资产占比上升)"
+        ],
+        "missing_data": false
+      }
     },
     {
       "code": "300628",
       "name": "亿联网络",
-      "roe": 0,
-      "revenue_cagr": 0,
-      "fcf_yield": 0,
-      "debt_ratio": 0,
-      "total_score": 80.6
+      "industry_sw": "制造",
+      "industry_group": "制造",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 9.2,
+            "roe_5y": 0.2745,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.4311,
+              "asset_turnover": 0.5641,
+              "equity_multiplier": 1.15,
+              "roe_reconstructed": 0.2788
+            },
+            "roe_trend": 0.0057,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.3063,
+            "years_available": 4,
+            "roic_trend": 0.0023,
+            "trend_adj": 0
+          },
+          "cfo": {
+            "score": 4.1,
+            "cfo_quality": 0.8261
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.6545,
+            "gm_stability": 0.9782
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 16.32
+          },
+          "fcf_yield": {
+            "score": 1.5,
+            "fcf_yield": 0.0231
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 4.93,
+            "industry_median_pb": 2.49
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 8.2,
+            "debt_ratio": 0.1279
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 348.9
+          },
+          "asset_q": {
+            "score": 7.2,
+            "ar_ratio": 0.2564,
+            "inv_ratio": 0.1368,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 4.9,
+              "inv": 6.6,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -1.556,
+          "likely_manipulator": true,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 1.5636,
+            "gmi": 1.0336,
+            "aqi": 0.8242,
+            "sgi": 1.0733,
+            "tata": 0.0718,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "DSRI=1.56 (应收账款增速异常)",
+            "TATA=0.072 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "likely_manipulator",
+        "weighted": {
+          "quality": 25.1,
+          "value": 1.5,
+          "health": 21.4,
+          "gov": 3.0,
+          "total": 51.1
+        }
+      },
+      "total": 51.1,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -1.556,
+        "likely_manipulator": true,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 1.5636,
+          "gmi": 1.0336,
+          "aqi": 0.8242,
+          "sgi": 1.0733,
+          "tata": 0.0718,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "DSRI=1.56 (应收账款增速异常)",
+          "TATA=0.072 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
     }
   ],
   "search_index": [
     {
       "code": "600519",
       "name": "贵州茅台",
-      "industry": "白酒"
+      "industry": "白酒",
+      "market": "cn"
     },
     {
       "code": "002027",
       "name": "分众传媒",
-      "industry": "营销服务"
+      "industry": "营销服务",
+      "market": "cn"
     },
     {
       "code": "002517",
       "name": "恺英网络",
-      "industry": "科技"
-    },
-    {
-      "code": "688708",
-      "name": "佳驰科技",
-      "industry": "未分类"
+      "industry": "科技",
+      "market": "cn"
     },
     {
       "code": "300628",
       "name": "亿联网络",
-      "industry": "制造"
+      "industry": "制造",
+      "market": "cn"
     },
     {
       "code": "000568",
       "name": "泸州老窖",
-      "industry": "白酒"
+      "industry": "白酒",
+      "market": "cn"
     },
     {
       "code": "300394",
       "name": "天孚通信",
-      "industry": "科技"
+      "industry": "科技",
+      "market": "cn"
     },
     {
       "code": "001221",
       "name": "悍高集团",
-      "industry": "未分类"
+      "industry": "",
+      "market": "cn"
     },
     {
       "code": "300760",
       "name": "迈瑞医疗",
-      "industry": "医药"
+      "industry": "医药",
+      "market": "cn"
     },
     {
       "code": "605117",
       "name": "德业股份",
-      "industry": "家电零部件"
-    },
-    {
-      "code": "301275",
-      "name": "汉朔科技",
-      "industry": "未分类"
+      "industry": "家电零部件",
+      "market": "cn"
     },
     {
       "code": "600809",
       "name": "山西汾酒",
-      "industry": "白酒"
+      "industry": "白酒",
+      "market": "cn"
     },
     {
       "code": "603402",
       "name": "陕西旅游",
-      "industry": "休闲服务"
-    },
-    {
-      "code": "000858",
-      "name": "五 粮 液",
-      "industry": "白酒"
+      "industry": "休闲服务",
+      "market": "cn"
     },
     {
       "code": "603195",
       "name": "公牛集团",
-      "industry": "其他家用轻工"
+      "industry": "其他家用轻工",
+      "market": "cn"
     },
     {
       "code": "002847",
       "name": "盐津铺子",
-      "industry": "消费"
+      "industry": "消费",
+      "market": "cn"
     },
     {
       "code": "603929",
       "name": "亚翔集成",
-      "industry": "建筑装饰"
+      "industry": "建筑装饰",
+      "market": "cn"
     },
     {
       "code": "301668",
       "name": "昊创瑞通",
-      "industry": "未分类"
+      "industry": "",
+      "market": "cn"
     },
     {
       "code": "300795",
       "name": "米奥会展",
-      "industry": "消费"
+      "industry": "消费",
+      "market": "cn"
     },
     {
       "code": "301617",
       "name": "博苑股份",
-      "industry": "未分类"
+      "industry": "",
+      "market": "cn"
     },
     {
       "code": "300979",
       "name": "华利集团",
-      "industry": "鞋帽"
+      "industry": "鞋帽",
+      "market": "cn"
     },
     {
       "code": "601958",
       "name": "金钼股份",
-      "industry": "其他稀有小金属"
-    },
-    {
-      "code": "000915",
-      "name": "华特达因",
-      "industry": "化学制剂"
+      "industry": "其他稀有小金属",
+      "market": "cn"
     },
     {
       "code": "000596",
       "name": "古井贡酒",
-      "industry": "白酒"
+      "industry": "白酒",
+      "market": "cn"
     },
     {
       "code": "300641",
       "name": "正丹股份",
-      "industry": "其他化学制品"
+      "industry": "其他化学制品",
+      "market": "cn"
     },
     {
       "code": "301680",
       "name": "固德电材",
-      "industry": "其他化学制品"
-    },
-    {
-      "code": "688692",
-      "name": "达梦数据",
-      "industry": "互联网信息服务"
-    },
-    {
-      "code": "000848",
-      "name": "承德露露",
-      "industry": "软饮料"
+      "industry": "其他化学制品",
+      "market": "cn"
     },
     {
       "code": "301590",
       "name": "优优绿能",
-      "industry": "未分类"
+      "industry": "",
+      "market": "cn"
     },
     {
       "code": "688617",
-      "name": "惠泰医疗",
-      "industry": "医药"
+      "name": "XD惠泰医",
+      "industry": "医药",
+      "market": "cn"
     }
-  ]
+  ],
+  "score_data": {
+    "600519": {
+      "code": "600519",
+      "name": "贵州茅台",
+      "industry_sw": "白酒",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 10,
+            "roe_5y": 0.3302,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.4785,
+              "asset_turnover": 0.5663,
+              "equity_multiplier": 1.2,
+              "roe_reconstructed": 0.3241
+            },
+            "roe_trend": 0.0076,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.4658,
+            "years_available": 4,
+            "roic_trend": 0.0088,
+            "trend_adj": 0
+          },
+          "cfo": {
+            "score": 4.5,
+            "cfo_quality": 0.9098
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.9208,
+            "gm_stability": 0.9959
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 1.3,
+            "ev_oe": 13.12
+          },
+          "fcf_yield": {
+            "score": 1.3,
+            "fcf_yield": 0.0197
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 5.98,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 7.7,
+            "debt_ratio": 0.1642
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 141.83
+          },
+          "asset_q": {
+            "score": 8.3,
+            "ar_ratio": 0.0,
+            "inv_ratio": 0.2022,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 10.0,
+              "inv": 4.9,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.896,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.1392,
+            "gmi": 1.0081,
+            "aqi": 1.0127,
+            "sgi": 0.988,
+            "tata": 0.0685,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=0.068 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 35.0,
+          "value": 2.7,
+          "health": 17.3,
+          "gov": 4.9,
+          "total": 59.9
+        }
+      },
+      "total": 59.9,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.896,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.1392,
+          "gmi": 1.0081,
+          "aqi": 1.0127,
+          "sgi": 0.988,
+          "tata": 0.0685,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=0.068 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "002027": {
+      "code": "002027",
+      "name": "分众传媒",
+      "industry_sw": "营销服务",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 8.7,
+            "roe_5y": 0.232,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.2309,
+              "asset_turnover": 0.6311,
+              "equity_multiplier": 1.38,
+              "roe_reconstructed": 0.2016
+            },
+            "roe_trend": 0.0151,
+            "trend_adj": 1.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.2876,
+            "years_available": 4,
+            "roic_trend": 0.0196,
+            "trend_adj": 1.0
+          },
+          "cfo": {
+            "score": 9.3,
+            "cfo_quality": 1.8675
+          },
+          "gm": {
+            "score": 9.9,
+            "gm_median": 0.6626,
+            "gm_stability": 0.9324
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 20.8
+          },
+          "fcf_yield": {
+            "score": 5.8,
+            "fcf_yield": 0.0866
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 5.38,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.0,
+            "debt_ratio": 0.2771
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 32649.64
+          },
+          "asset_q": {
+            "score": 8.1,
+            "ar_ratio": 0.2798,
+            "inv_ratio": 0.0003,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 4.4,
+              "inv": 10.0,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -3.016,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 1.4701,
+            "gmi": 0.9401,
+            "aqi": 0.8932,
+            "sgi": 1.0405,
+            "tata": -0.2109,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "DSRI=1.47 (应收账款增速异常)",
+            "TATA=-0.211 (大幅负应计)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 37.5,
+          "value": 4.8,
+          "health": 15.9,
+          "gov": 4.9,
+          "total": 63.1
+        }
+      },
+      "total": 63.1,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -3.016,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 1.4701,
+          "gmi": 0.9401,
+          "aqi": 0.8932,
+          "sgi": 1.0405,
+          "tata": -0.2109,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "DSRI=1.47 (应收账款增速异常)",
+          "TATA=-0.211 (大幅负应计)"
+        ],
+        "missing_data": false
+      }
+    },
+    "002517": {
+      "code": "002517",
+      "name": "恺英网络",
+      "industry_sw": "科技",
+      "industry_group": "科技",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 6.9,
+            "roe_5y": 0.2364,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.3575,
+              "asset_turnover": 0.4073,
+              "equity_multiplier": 1.32,
+              "roe_reconstructed": 0.1923
+            },
+            "roe_trend": -0.0131,
+            "trend_adj": -1.0
+          },
+          "roic": {
+            "score": 7.2,
+            "roic_5y": 0.2765,
+            "years_available": 4,
+            "roic_trend": -0.0367,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": 5.7,
+            "cfo_quality": 1.1328
+          },
+          "gm": {
+            "score": 9.9,
+            "gm_median": 0.8128,
+            "gm_stability": 0.955
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 17.25
+          },
+          "fcf_yield": {
+            "score": 1.8,
+            "fcf_yield": 0.0273
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 3.63,
+            "industry_median_pb": 3.38
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.5,
+            "debt_ratio": 0.2427
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 50.55
+          },
+          "asset_q": {
+            "score": 8.7,
+            "ar_ratio": 0.1902,
+            "inv_ratio": 0.0035,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 6.2,
+              "inv": 9.9,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.34,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 1.0789,
+            "gmi": 1.0054,
+            "aqi": 1.2469,
+            "sgi": 1.0404,
+            "tata": -0.0275,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "AQI=1.25 (非流动资产占比上升)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 25.0,
+          "value": 1.8,
+          "health": 12.4,
+          "gov": 6.5,
+          "total": 45.7
+        }
+      },
+      "total": 45.7,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -2.34,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 1.0789,
+          "gmi": 1.0054,
+          "aqi": 1.2469,
+          "sgi": 1.0404,
+          "tata": -0.0275,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "AQI=1.25 (非流动资产占比上升)"
+        ],
+        "missing_data": false
+      }
+    },
+    "300628": {
+      "code": "300628",
+      "name": "亿联网络",
+      "industry_sw": "制造",
+      "industry_group": "制造",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 9.2,
+            "roe_5y": 0.2745,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.4311,
+              "asset_turnover": 0.5641,
+              "equity_multiplier": 1.15,
+              "roe_reconstructed": 0.2788
+            },
+            "roe_trend": 0.0057,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.3063,
+            "years_available": 4,
+            "roic_trend": 0.0023,
+            "trend_adj": 0
+          },
+          "cfo": {
+            "score": 4.1,
+            "cfo_quality": 0.8261
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.6545,
+            "gm_stability": 0.9782
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 16.32
+          },
+          "fcf_yield": {
+            "score": 1.5,
+            "fcf_yield": 0.0231
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 4.93,
+            "industry_median_pb": 2.49
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 8.2,
+            "debt_ratio": 0.1279
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 348.9
+          },
+          "asset_q": {
+            "score": 7.2,
+            "ar_ratio": 0.2564,
+            "inv_ratio": 0.1368,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 4.9,
+              "inv": 6.6,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -1.556,
+          "likely_manipulator": true,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 1.5636,
+            "gmi": 1.0336,
+            "aqi": 0.8242,
+            "sgi": 1.0733,
+            "tata": 0.0718,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "DSRI=1.56 (应收账款增速异常)",
+            "TATA=0.072 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "likely_manipulator",
+        "weighted": {
+          "quality": 25.1,
+          "value": 1.5,
+          "health": 21.4,
+          "gov": 3.0,
+          "total": 51.1
+        }
+      },
+      "total": 51.1,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -1.556,
+        "likely_manipulator": true,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 1.5636,
+          "gmi": 1.0336,
+          "aqi": 0.8242,
+          "sgi": 1.0733,
+          "tata": 0.0718,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "DSRI=1.56 (应收账款增速异常)",
+          "TATA=0.072 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "000568": {
+      "code": "000568",
+      "name": "泸州老窖",
+      "industry_sw": "白酒",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 8.3,
+            "roe_5y": 0.2804,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.4209,
+              "asset_turnover": 0.3971,
+              "equity_multiplier": 1.3,
+              "roe_reconstructed": 0.2171
+            },
+            "roe_trend": -0.029,
+            "trend_adj": -1.0
+          },
+          "roic": {
+            "score": 8.0,
+            "roic_5y": 0.3871,
+            "years_available": 4,
+            "roic_trend": -0.0366,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": 5.2,
+            "cfo_quality": 1.0407
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.8754,
+            "gm_stability": 0.9906
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 4.7,
+            "ev_oe": 8.0
+          },
+          "fcf_yield": {
+            "score": 2.7,
+            "fcf_yield": 0.0402
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 2.68,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.7,
+            "debt_ratio": 0.23
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 29.68
+          },
+          "asset_q": {
+            "score": 8.0,
+            "ar_ratio": 0.0002,
+            "inv_ratio": 0.2376,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 10.0,
+              "inv": 4.1,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.575,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.6683,
+            "gmi": 1.0105,
+            "aqi": 1.0891,
+            "sgi": 0.8248,
+            "tata": 0.0572,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=0.057 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 31.0,
+          "value": 8.1,
+          "health": 16.4,
+          "gov": 4.9,
+          "total": 60.4
+        }
+      },
+      "total": 60.4,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.575,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.6683,
+          "gmi": 1.0105,
+          "aqi": 1.0891,
+          "sgi": 0.8248,
+          "tata": 0.0572,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=0.057 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "300394": {
+      "code": "300394",
+      "name": "天孚通信",
+      "industry_sw": "科技",
+      "industry_group": "科技",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 10,
+            "roe_5y": 0.2682,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.3907,
+              "asset_turnover": 0.8006,
+              "equity_multiplier": 1.17,
+              "roe_reconstructed": 0.3659
+            },
+            "roe_trend": 0.0759,
+            "trend_adj": 2.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.3231,
+            "years_available": 4,
+            "roic_trend": 0.0895,
+            "trend_adj": 2.0
+          },
+          "cfo": {
+            "score": 4.7,
+            "cfo_quality": 0.9329
+          },
+          "gm": {
+            "score": 8.3,
+            "gm_median": 0.543,
+            "gm_stability": 0.9578
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 117.18
+          },
+          "fcf_yield": {
+            "score": 0.4,
+            "fcf_yield": 0.0057
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 51.02,
+            "industry_median_pb": 3.38
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 7.9,
+            "debt_ratio": 0.1452
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 77.82
+          },
+          "asset_q": {
+            "score": 8.0,
+            "ar_ratio": 0.2173,
+            "inv_ratio": 0.0709,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 5.7,
+              "inv": 8.2,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -1.905,
+          "likely_manipulator": false,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 0.9102,
+            "gmi": 1.0603,
+            "aqi": 0.8432,
+            "sgi": 1.5879,
+            "tata": 0.0231,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "SGI=1.59 (营收增速过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "possible_manipulator",
+        "weighted": {
+          "quality": 29.9,
+          "value": 0.4,
+          "health": 13.0,
+          "gov": 6.5,
+          "total": 49.8
+        }
+      },
+      "total": 49.8,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -1.905,
+        "likely_manipulator": false,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 0.9102,
+          "gmi": 1.0603,
+          "aqi": 0.8432,
+          "sgi": 1.5879,
+          "tata": 0.0231,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "SGI=1.59 (营收增速过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "001221": {
+      "code": "001221",
+      "name": "悍高集团",
+      "industry_sw": "",
+      "industry_group": "其他",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 8.8,
+            "roe_5y": 0.2652,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1957,
+              "asset_turnover": 0.8755,
+              "equity_multiplier": 1.46,
+              "roe_reconstructed": 0.2498
+            },
+            "roe_trend": 0.0081,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.3061,
+            "years_available": 4,
+            "roic_trend": 0.0121,
+            "trend_adj": 1.0
+          },
+          "cfo": {
+            "score": 6.9,
+            "cfo_quality": 1.3727
+          },
+          "gm": {
+            "score": 6.7,
+            "gm_median": 0.3584,
+            "gm_stability": 0.9322
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 5.5,
+            "debt_ratio": 0.3141
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 105.26
+          },
+          "asset_q": {
+            "score": 9.3,
+            "ar_ratio": 0.0481,
+            "inv_ratio": 0.0401,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 9.0,
+              "inv": 9.0,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.702,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.9579,
+            "gmi": 0.9633,
+            "aqi": 0.8321,
+            "sgi": 1.2583,
+            "tata": -0.0819,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=-0.082 (大幅负应计)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 25.2,
+          "value": 0.0,
+          "health": 20.1,
+          "gov": 4.9,
+          "total": 50.2
+        }
+      },
+      "total": 50.2,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.702,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.9579,
+          "gmi": 0.9633,
+          "aqi": 0.8321,
+          "sgi": 1.2583,
+          "tata": -0.0819,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=-0.082 (大幅负应计)"
+        ],
+        "missing_data": false
+      }
+    },
+    "300760": {
+      "code": "300760",
+      "name": "迈瑞医疗",
+      "industry_sw": "医药",
+      "industry_group": "医药",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 7.4,
+            "roe_5y": 0.2808,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.2444,
+              "asset_turnover": 0.5616,
+              "equity_multiplier": 1.38,
+              "roe_reconstructed": 0.1892
+            },
+            "roe_trend": -0.0394,
+            "trend_adj": -2.0
+          },
+          "roic": {
+            "score": 8.0,
+            "roic_5y": 0.3351,
+            "years_available": 4,
+            "roic_trend": -0.0457,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": 5.8,
+            "cfo_quality": 1.1562
+          },
+          "gm": {
+            "score": 9.9,
+            "gm_median": 0.6311,
+            "gm_stability": 0.9712
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 18.5
+          },
+          "fcf_yield": {
+            "score": 3.4,
+            "fcf_yield": 0.0514
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 4.36,
+            "industry_median_pb": 1.94
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.1,
+            "debt_ratio": 0.2743
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 38.26
+          },
+          "asset_q": {
+            "score": 8.6,
+            "ar_ratio": 0.1024,
+            "inv_ratio": 0.0844,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 8.0,
+              "inv": 7.9,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.49,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 1.1682,
+            "gmi": 1.0464,
+            "aqi": 0.9898,
+            "sgi": 0.9062,
+            "tata": -0.0339,
+            "lvgi": 1.0
+          },
+          "flags": [],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 30.3,
+          "value": 2.8,
+          "health": 16.2,
+          "gov": 4.9,
+          "total": 54.2
+        }
+      },
+      "total": 54.2,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.49,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 1.1682,
+          "gmi": 1.0464,
+          "aqi": 0.9898,
+          "sgi": 0.9062,
+          "tata": -0.0339,
+          "lvgi": 1.0
+        },
+        "flags": [],
+        "missing_data": false
+      }
+    },
+    "605117": {
+      "code": "605117",
+      "name": "德业股份",
+      "industry_sw": "家电零部件",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 9.0,
+            "roe_5y": 0.3334,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.2594,
+              "asset_turnover": 0.614,
+              "equity_multiplier": 1.93,
+              "roe_reconstructed": 0.307
+            },
+            "roe_trend": -0.0221,
+            "trend_adj": -1.0
+          },
+          "roic": {
+            "score": 8.0,
+            "roic_5y": 0.4121,
+            "years_available": 4,
+            "roic_trend": -0.0371,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": 6.0,
+            "cfo_quality": 1.1972
+          },
+          "gm": {
+            "score": 6.8,
+            "gm_median": 0.3876,
+            "gm_stability": 0.9787
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 33.24
+          },
+          "fcf_yield": {
+            "score": 2.1,
+            "fcf_yield": 0.0311
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 11.87,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 3.1,
+            "debt_ratio": 0.4811
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 29.22
+          },
+          "asset_q": {
+            "score": 8.3,
+            "ar_ratio": 0.1391,
+            "inv_ratio": 0.0897,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 7.2,
+              "inv": 7.8,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.653,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.9155,
+            "gmi": 1.0167,
+            "aqi": 0.8767,
+            "sgi": 1.0908,
+            "tata": -0.041,
+            "lvgi": 1.0
+          },
+          "flags": [],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 30.9,
+          "value": 1.8,
+          "health": 13.6,
+          "gov": 4.9,
+          "total": 51.1
+        }
+      },
+      "total": 51.1,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.653,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.9155,
+          "gmi": 1.0167,
+          "aqi": 0.8767,
+          "sgi": 1.0908,
+          "tata": -0.041,
+          "lvgi": 1.0
+        },
+        "flags": [],
+        "missing_data": false
+      }
+    },
+    "600809": {
+      "code": "600809",
+      "name": "山西汾酒",
+      "industry_sw": "白酒",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 9.0,
+            "roe_5y": 0.3486,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.3163,
+              "asset_turnover": 0.6874,
+              "equity_multiplier": 1.4,
+              "roe_reconstructed": 0.3051
+            },
+            "roe_trend": -0.0223,
+            "trend_adj": -1.0
+          },
+          "roic": {
+            "score": 9.0,
+            "roic_5y": 0.4727,
+            "years_available": 4,
+            "roic_trend": -0.0291,
+            "trend_adj": -1.0
+          },
+          "cfo": {
+            "score": 4.3,
+            "cfo_quality": 0.8651
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.7531,
+            "gm_stability": 0.9925
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 4.0,
+            "ev_oe": 9.02
+          },
+          "fcf_yield": {
+            "score": 3.2,
+            "fcf_yield": 0.0473
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 3.59,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 5.9,
+            "debt_ratio": 0.2874
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 833.01
+          },
+          "asset_q": {
+            "score": 7.9,
+            "ar_ratio": 0.0,
+            "inv_ratio": 0.2555,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 10.0,
+              "inv": 3.6,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -1.938,
+          "likely_manipulator": false,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 1.1961,
+            "gmi": 1.018,
+            "aqi": 0.9001,
+            "sgi": 1.0752,
+            "tata": 0.0574,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=0.057 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "possible_manipulator",
+        "weighted": {
+          "quality": 32.3,
+          "value": 7.7,
+          "health": 15.7,
+          "gov": 4.9,
+          "total": 60.5
+        }
+      },
+      "total": 60.5,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -1.938,
+        "likely_manipulator": false,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 1.1961,
+          "gmi": 1.018,
+          "aqi": 0.9001,
+          "sgi": 1.0752,
+          "tata": 0.0574,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=0.057 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "603402": {
+      "code": "603402",
+      "name": "陕西旅游",
+      "industry_sw": "休闲服务",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 10,
+            "roe_5y": 0.2508,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.3732,
+              "asset_turnover": 0.2684,
+              "equity_multiplier": 1.21,
+              "roe_reconstructed": 0.1212
+            },
+            "roe_trend": 0.0622,
+            "trend_adj": 2.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.3751,
+            "years_available": 4,
+            "roic_trend": 0.0851,
+            "trend_adj": 2.0
+          },
+          "cfo": {
+            "score": 6.6,
+            "cfo_quality": 1.3186
+          },
+          "gm": {
+            "score": 8.6,
+            "gm_median": 0.6969,
+            "gm_stability": 0.2868
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 7.5,
+            "debt_ratio": 0.1737
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 112.7
+          },
+          "asset_q": {
+            "score": 9.8,
+            "ar_ratio": 0.0192,
+            "inv_ratio": 0.0044,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 9.6,
+              "inv": 9.9,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -3.211,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.6471,
+            "gmi": 1.0539,
+            "aqi": 0.5855,
+            "sgi": 0.8155,
+            "tata": -0.0341,
+            "lvgi": 1.0
+          },
+          "flags": [],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 36.1,
+          "value": 0.0,
+          "health": 17.9,
+          "gov": 4.9,
+          "total": 58.9
+        }
+      },
+      "total": 58.9,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -3.211,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.6471,
+          "gmi": 1.0539,
+          "aqi": 0.5855,
+          "sgi": 0.8155,
+          "tata": -0.0341,
+          "lvgi": 1.0
+        },
+        "flags": [],
+        "missing_data": false
+      }
+    },
+    "603195": {
+      "code": "603195",
+      "name": "公牛集团",
+      "industry_sw": "其他家用轻工",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 8.6,
+            "roe_5y": 0.2589,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.254,
+              "asset_turnover": 0.7105,
+              "equity_multiplier": 1.34,
+              "roe_reconstructed": 0.2422
+            },
+            "roe_trend": -0.0043,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.3202,
+            "years_available": 4,
+            "roic_trend": -0.005,
+            "trend_adj": 0
+          },
+          "cfo": {
+            "score": 5.1,
+            "cfo_quality": 1.0193
+          },
+          "gm": {
+            "score": 8.3,
+            "gm_median": 0.432,
+            "gm_stability": 0.9382
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0.2,
+            "ev_oe": 14.75
+          },
+          "fcf_yield": {
+            "score": 2.4,
+            "fcf_yield": 0.0367
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 4.34,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.4,
+            "debt_ratio": 0.2548
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 52.29
+          },
+          "asset_q": {
+            "score": 9.3,
+            "ar_ratio": 0.0192,
+            "inv_ratio": 0.0723,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 9.6,
+              "inv": 8.2,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.494,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 1.0753,
+            "gmi": 1.0026,
+            "aqi": 1.099,
+            "sgi": 0.9522,
+            "tata": -0.0298,
+            "lvgi": 1.0
+          },
+          "flags": [],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 32.6,
+          "value": 2.3,
+          "health": 16.8,
+          "gov": 4.9,
+          "total": 56.5
+        }
+      },
+      "total": 56.5,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.494,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 1.0753,
+          "gmi": 1.0026,
+          "aqi": 1.099,
+          "sgi": 0.9522,
+          "tata": -0.0298,
+          "lvgi": 1.0
+        },
+        "flags": [],
+        "missing_data": false
+      }
+    },
+    "002847": {
+      "code": "002847",
+      "name": "盐津铺子",
+      "industry_sw": "消费",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 10,
+            "roe_5y": 0.329,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1299,
+              "asset_turnover": 1.4116,
+              "equity_multiplier": 1.89,
+              "roe_reconstructed": 0.3464
+            },
+            "roe_trend": 0.0266,
+            "trend_adj": 1.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.392,
+            "years_available": 4,
+            "roic_trend": 0.0409,
+            "trend_adj": 2.0
+          },
+          "cfo": {
+            "score": 7.5,
+            "cfo_quality": 1.4932
+          },
+          "gm": {
+            "score": 6.7,
+            "gm_median": 0.308,
+            "gm_stability": 0.9381
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 3.3,
+            "debt_ratio": 0.4707
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 39.21
+          },
+          "asset_q": {
+            "score": 8.2,
+            "ar_ratio": 0.0395,
+            "inv_ratio": 0.1799,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 9.2,
+              "inv": 5.5,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.676,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.7979,
+            "gmi": 0.9965,
+            "aqi": 1.1025,
+            "sgi": 1.0864,
+            "tata": -0.0393,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "AQI=1.10 (非流动资产占比上升)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 35.8,
+          "value": 0.0,
+          "health": 13.7,
+          "gov": 4.9,
+          "total": 54.5
+        }
+      },
+      "total": 54.5,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.676,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.7979,
+          "gmi": 0.9965,
+          "aqi": 1.1025,
+          "sgi": 1.0864,
+          "tata": -0.0393,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "AQI=1.10 (非流动资产占比上升)"
+        ],
+        "missing_data": false
+      }
+    },
+    "603929": {
+      "code": "603929",
+      "name": "亚翔集成",
+      "industry_sw": "建筑装饰",
+      "industry_group": "地产",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 10,
+            "roe_5y": 0.2633,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1818,
+              "asset_turnover": 0.91,
+              "equity_multiplier": 2.33,
+              "roe_reconstructed": 0.3849
+            },
+            "roe_trend": 0.092,
+            "trend_adj": 2.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.3307,
+            "years_available": 4,
+            "roic_trend": 0.1101,
+            "trend_adj": 2.0
+          },
+          "cfo": {
+            "score": 10.0,
+            "cfo_quality": 2.193
+          },
+          "gm": {
+            "score": 4.4,
+            "gm_median": 0.1417,
+            "gm_stability": 0.6189
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 1.9,
+            "debt_ratio": 0.5701
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 82.9
+          },
+          "asset_q": {
+            "score": 9.4,
+            "ar_ratio": 0.0931,
+            "inv_ratio": 0.0011,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 8.1,
+              "inv": 10.0,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -3.573,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.8247,
+            "gmi": 0.5516,
+            "aqi": 0.9958,
+            "sgi": 0.9119,
+            "tata": -0.1435,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=-0.144 (大幅负应计)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 23.0,
+          "value": 0.0,
+          "health": 16.5,
+          "gov": 4.9,
+          "total": 44.4
+        }
+      },
+      "total": 44.4,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -3.573,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.8247,
+          "gmi": 0.5516,
+          "aqi": 0.9958,
+          "sgi": 0.9119,
+          "tata": -0.1435,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=-0.144 (大幅负应计)"
+        ],
+        "missing_data": false
+      }
+    },
+    "301668": {
+      "code": "301668",
+      "name": "昊创瑞通",
+      "industry_sw": "",
+      "industry_group": "其他",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 5.7,
+            "roe_5y": 0.2312,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1173,
+              "asset_turnover": 0.7072,
+              "equity_multiplier": 1.26,
+              "roe_reconstructed": 0.1046
+            },
+            "roe_trend": -0.0585,
+            "trend_adj": -2.0
+          },
+          "roic": {
+            "score": 7.1,
+            "roic_5y": 0.273,
+            "years_available": 4,
+            "roic_trend": -0.0688,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": 4.6,
+            "cfo_quality": 0.919
+          },
+          "gm": {
+            "score": 6.7,
+            "gm_median": 0.2567,
+            "gm_stability": 0.9519
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 7.0,
+            "debt_ratio": 0.207
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 48.92
+          },
+          "asset_q": {
+            "score": 7.8,
+            "ar_ratio": 0.2393,
+            "inv_ratio": 0.0666,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 5.2,
+              "inv": 8.3,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.295,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 1.2491,
+            "gmi": 1.0438,
+            "aqi": 0.5925,
+            "sgi": 1.0325,
+            "tata": 0.0025,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "DSRI=1.25 (应收账款增速异常)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 18.0,
+          "value": 0.0,
+          "health": 20.6,
+          "gov": 4.9,
+          "total": 43.5
+        }
+      },
+      "total": 43.5,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -2.295,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 1.2491,
+          "gmi": 1.0438,
+          "aqi": 0.5925,
+          "sgi": 1.0325,
+          "tata": 0.0025,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "DSRI=1.25 (应收账款增速异常)"
+        ],
+        "missing_data": false
+      }
+    },
+    "300795": {
+      "code": "300795",
+      "name": "米奥会展",
+      "industry_sw": "消费",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 7.9,
+            "roe_5y": 0.2072,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1742,
+              "asset_turnover": 0.8977,
+              "equity_multiplier": 1.28,
+              "roe_reconstructed": 0.2007
+            },
+            "roe_trend": 0.0237,
+            "trend_adj": 1.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.2781,
+            "years_available": 4,
+            "roic_trend": 0.0398,
+            "trend_adj": 2.0
+          },
+          "cfo": {
+            "score": 4.5,
+            "cfo_quality": 0.9073
+          },
+          "gm": {
+            "score": 8.4,
+            "gm_median": 0.497,
+            "gm_stability": 0.9823
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.8,
+            "debt_ratio": 0.2209
+          },
+          "ic": {
+            "score": 8.4,
+            "ic": 16.83
+          },
+          "asset_q": {
+            "score": 9.6,
+            "ar_ratio": 0.0618,
+            "inv_ratio": 0.0043,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 8.8,
+              "inv": 9.9,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": 5.81,
+          "likely_manipulator": true,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 9.4964,
+            "gmi": 1.0428,
+            "aqi": 1.3836,
+            "sgi": 1.0445,
+            "tata": 0.0425,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "DSRI=9.50 (应收账款增速异常)",
+            "AQI=1.38 (非流动资产占比上升)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "likely_manipulator",
+        "weighted": {
+          "quality": 31.2,
+          "value": 0.0,
+          "health": 16.1,
+          "gov": 3.0,
+          "total": 50.3
+        }
+      },
+      "total": 50.3,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": 5.81,
+        "likely_manipulator": true,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 9.4964,
+          "gmi": 1.0428,
+          "aqi": 1.3836,
+          "sgi": 1.0445,
+          "tata": 0.0425,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "DSRI=9.50 (应收账款增速异常)",
+          "AQI=1.38 (非流动资产占比上升)"
+        ],
+        "missing_data": false
+      }
+    },
+    "301617": {
+      "code": "301617",
+      "name": "博苑股份",
+      "industry_sw": "",
+      "industry_group": "其他",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 4.1,
+            "roe_5y": 0.1836,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1176,
+              "asset_turnover": 0.7593,
+              "equity_multiplier": 1.12,
+              "roe_reconstructed": 0.0997
+            },
+            "roe_trend": -0.0641,
+            "trend_adj": -2.0
+          },
+          "roic": {
+            "score": 5.1,
+            "roic_5y": 0.2129,
+            "years_available": 4,
+            "roic_trend": -0.0745,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": 1.9,
+            "cfo_quality": 0.3714
+          },
+          "gm": {
+            "score": 4.7,
+            "gm_median": 0.2476,
+            "gm_stability": 0.768
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 8.5,
+            "debt_ratio": 0.1039
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 127.59
+          },
+          "asset_q": {
+            "score": 8.0,
+            "ar_ratio": 0.0955,
+            "inv_ratio": 0.1669,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 8.1,
+              "inv": 5.8,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -1.4,
+          "likely_manipulator": true,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 1.0504,
+            "gmi": 1.2249,
+            "aqi": 1.8427,
+            "sgi": 1.103,
+            "tata": 0.0909,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "GMI=1.22 (毛利率恶化)",
+            "AQI=1.84 (非流动资产占比上升)",
+            "TATA=0.091 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "likely_manipulator",
+        "weighted": {
+          "quality": 11.9,
+          "value": 0.0,
+          "health": 22.3,
+          "gov": 3.0,
+          "total": 37.2
+        }
+      },
+      "total": 37.2,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -1.4,
+        "likely_manipulator": true,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 1.0504,
+          "gmi": 1.2249,
+          "aqi": 1.8427,
+          "sgi": 1.103,
+          "tata": 0.0909,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "GMI=1.22 (毛利率恶化)",
+          "AQI=1.84 (非流动资产占比上升)",
+          "TATA=0.091 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "300979": {
+      "code": "300979",
+      "name": "华利集团",
+      "industry_sw": "鞋帽",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 6.3,
+            "roe_5y": 0.2185,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1284,
+              "asset_turnover": 1.1134,
+              "equity_multiplier": 1.38,
+              "roe_reconstructed": 0.1973
+            },
+            "roe_trend": -0.0133,
+            "trend_adj": -1.0
+          },
+          "roic": {
+            "score": 8.5,
+            "roic_5y": 0.285,
+            "years_available": 4,
+            "roic_trend": -0.0151,
+            "trend_adj": -1.0
+          },
+          "cfo": {
+            "score": 5.9,
+            "cfo_quality": 1.1848
+          },
+          "gm": {
+            "score": 6.6,
+            "gm_median": 0.2559,
+            "gm_stability": 0.914
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 2.9,
+            "ev_oe": 10.58
+          },
+          "fcf_yield": {
+            "score": 2.8,
+            "fcf_yield": 0.0421
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 2.73,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.1,
+            "debt_ratio": 0.2757
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 72.48
+          },
+          "asset_q": {
+            "score": 7.9,
+            "ar_ratio": 0.1619,
+            "inv_ratio": 0.1283,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 6.8,
+              "inv": 6.8,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.477,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.8875,
+            "gmi": 1.2246,
+            "aqi": 1.0167,
+            "sgi": 1.0406,
+            "tata": -0.0239,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "GMI=1.22 (毛利率恶化)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 27.5,
+          "value": 6.0,
+          "health": 15.8,
+          "gov": 4.9,
+          "total": 54.2
+        }
+      },
+      "total": 54.2,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.477,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.8875,
+          "gmi": 1.2246,
+          "aqi": 1.0167,
+          "sgi": 1.0406,
+          "tata": -0.0239,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "GMI=1.22 (毛利率恶化)"
+        ],
+        "missing_data": false
+      }
+    },
+    "601958": {
+      "code": "601958",
+      "name": "金钼股份",
+      "industry_sw": "其他稀有小金属",
+      "industry_group": "周期",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 6.1,
+            "roe_5y": 0.1524,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.228,
+              "asset_turnover": 0.6074,
+              "equity_multiplier": 1.13,
+              "roe_reconstructed": 0.1565
+            },
+            "roe_trend": 0.015,
+            "trend_adj": 1.0
+          },
+          "roic": {
+            "score": 7.9,
+            "roic_5y": 0.2067,
+            "years_available": 4,
+            "roic_trend": 0.0171,
+            "trend_adj": 1.0
+          },
+          "cfo": {
+            "score": 4.4,
+            "cfo_quality": 0.8812
+          },
+          "gm": {
+            "score": 8.1,
+            "gm_median": 0.4113,
+            "gm_stability": 0.8692
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 15.39
+          },
+          "fcf_yield": {
+            "score": 1.0,
+            "fcf_yield": 0.015
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 3.38,
+            "industry_median_pb": 1.9
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 8.4,
+            "debt_ratio": 0.115
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 86.75
+          },
+          "asset_q": {
+            "score": 9.8,
+            "ar_ratio": 0.0082,
+            "inv_ratio": 0.022,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 9.8,
+              "inv": 9.4,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.174,
+          "likely_manipulator": false,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 0.9263,
+            "gmi": 0.9895,
+            "aqi": 0.9787,
+            "sgi": 1.0194,
+            "tata": 0.067,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=0.067 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "possible_manipulator",
+        "weighted": {
+          "quality": 19.5,
+          "value": 0.8,
+          "health": 23.3,
+          "gov": 4.9,
+          "total": 48.5
+        }
+      },
+      "total": 48.5,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -2.174,
+        "likely_manipulator": false,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 0.9263,
+          "gmi": 0.9895,
+          "aqi": 0.9787,
+          "sgi": 1.0194,
+          "tata": 0.067,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=0.067 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "000596": {
+      "code": "000596",
+      "name": "古井贡酒",
+      "industry_sw": "白酒",
+      "industry_group": "消费",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 6.0,
+            "roe_5y": 0.1795,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.1885,
+              "asset_turnover": 0.493,
+              "equity_multiplier": 1.46,
+              "roe_reconstructed": 0.136
+            },
+            "roe_trend": -0.007,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 8.8,
+            "roic_5y": 0.2644,
+            "years_available": 4,
+            "roic_trend": -0.0057,
+            "trend_adj": 0
+          },
+          "cfo": {
+            "score": 3.5,
+            "cfo_quality": 0.7028
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.7926,
+            "gm_stability": 0.9851
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 4.1,
+            "ev_oe": 8.83
+          },
+          "fcf_yield": {
+            "score": 0.3,
+            "fcf_yield": 0.0038
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 1.96,
+            "industry_median_pb": 1.65
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 5.5,
+            "debt_ratio": 0.3166
+          },
+          "ic": {
+            "score": 5.3,
+            "ic": 10.61
+          },
+          "asset_q": {
+            "score": 7.6,
+            "ar_ratio": 0.0029,
+            "inv_ratio": 0.2812,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 9.9,
+              "inv": 3.0,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.465,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.9683,
+            "gmi": 1.0082,
+            "aqi": 0.9167,
+            "sgi": 0.7987,
+            "tata": 0.0419,
+            "lvgi": 1.0
+          },
+          "flags": [],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 27.2,
+          "value": 4.7,
+          "health": 11.9,
+          "gov": 4.9,
+          "total": 48.7
+        }
+      },
+      "total": 48.7,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -2.465,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.9683,
+          "gmi": 1.0082,
+          "aqi": 0.9167,
+          "sgi": 0.7987,
+          "tata": 0.0419,
+          "lvgi": 1.0
+        },
+        "flags": [],
+        "missing_data": false
+      }
+    },
+    "300641": {
+      "code": "300641",
+      "name": "正丹股份",
+      "industry_sw": "其他化学制品",
+      "industry_group": "周期",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 7.7,
+            "roe_5y": 0.1725,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.3118,
+              "asset_turnover": 0.6853,
+              "equity_multiplier": 1.04,
+              "roe_reconstructed": 0.2224
+            },
+            "roe_trend": 0.0977,
+            "trend_adj": 2.0
+          },
+          "roic": {
+            "score": 9.0,
+            "roic_5y": 0.2113,
+            "years_available": 4,
+            "roic_trend": 0.1135,
+            "trend_adj": 2.0
+          },
+          "cfo": {
+            "score": 5.8,
+            "cfo_quality": 1.1519
+          },
+          "gm": {
+            "score": 5.0,
+            "gm_median": 0.381,
+            "gm_stability": 0.1045
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 9.4,
+            "debt_ratio": 0.0392
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 37.14
+          },
+          "asset_q": {
+            "score": 9.1,
+            "ar_ratio": 0.0686,
+            "inv_ratio": 0.0487,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 8.6,
+              "inv": 8.8,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -3.664,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.6103,
+            "gmi": 1.0891,
+            "aqi": 0.8253,
+            "sgi": 0.6581,
+            "tata": -0.1185,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "TATA=-0.118 (大幅负应计)"
+          ],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 21.8,
+          "value": 0.0,
+          "health": 23.8,
+          "gov": 4.9,
+          "total": 50.5
+        }
+      },
+      "total": 50.5,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -3.664,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.6103,
+          "gmi": 1.0891,
+          "aqi": 0.8253,
+          "sgi": 0.6581,
+          "tata": -0.1185,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "TATA=-0.118 (大幅负应计)"
+        ],
+        "missing_data": false
+      }
+    },
+    "301680": {
+      "code": "301680",
+      "name": "固德电材",
+      "industry_sw": "其他化学制品",
+      "industry_group": "周期",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 7.2,
+            "roe_5y": 0.2159,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.162,
+              "asset_turnover": 0.8601,
+              "equity_multiplier": 1.42,
+              "roe_reconstructed": 0.198
+            },
+            "roe_trend": 0.005,
+            "trend_adj": 0
+          },
+          "roic": {
+            "score": 8.4,
+            "roic_5y": 0.2517,
+            "years_available": 4,
+            "roic_trend": 0.0067,
+            "trend_adj": 0
+          },
+          "cfo": {
+            "score": 4.1,
+            "cfo_quality": 0.8113
+          },
+          "gm": {
+            "score": 6.6,
+            "gm_median": 0.3331,
+            "gm_stability": 0.8832
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 5.8,
+            "debt_ratio": 0.2961
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 49.63
+          },
+          "asset_q": {
+            "score": 7.6,
+            "ar_ratio": 0.2228,
+            "inv_ratio": 0.1131,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 5.5,
+              "inv": 7.2,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -1.872,
+          "likely_manipulator": false,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 0.8841,
+            "gmi": 1.2242,
+            "aqi": 1.1204,
+            "sgi": 1.2179,
+            "tata": 0.0633,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "GMI=1.22 (毛利率恶化)",
+            "AQI=1.12 (非流动资产占比上升)",
+            "TATA=0.063 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "possible_manipulator",
+        "weighted": {
+          "quality": 20.2,
+          "value": 0.0,
+          "health": 19.3,
+          "gov": 4.9,
+          "total": 44.4
+        }
+      },
+      "total": 44.4,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -1.872,
+        "likely_manipulator": false,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 0.8841,
+          "gmi": 1.2242,
+          "aqi": 1.1204,
+          "sgi": 1.2179,
+          "tata": 0.0633,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "GMI=1.22 (毛利率恶化)",
+          "AQI=1.12 (非流动资产占比上升)",
+          "TATA=0.063 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "301590": {
+      "code": "301590",
+      "name": "优优绿能",
+      "industry_sw": "",
+      "industry_group": "其他",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 6.6,
+            "roe_5y": 0.2574,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.081,
+              "asset_turnover": 0.4999,
+              "equity_multiplier": 1.37,
+              "roe_reconstructed": 0.0555
+            },
+            "roe_trend": -0.1053,
+            "trend_adj": -2.0
+          },
+          "roic": {
+            "score": 7.9,
+            "roic_5y": 0.2965,
+            "years_available": 4,
+            "roic_trend": -0.1274,
+            "trend_adj": -2.0
+          },
+          "cfo": {
+            "score": -2.8,
+            "cfo_quality": -0.5566
+          },
+          "gm": {
+            "score": 6.5,
+            "gm_median": 0.3146,
+            "gm_stability": 0.8633
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 6.1,
+            "debt_ratio": 0.2705
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 49.24
+          },
+          "asset_q": {
+            "score": 5.9,
+            "ar_ratio": 0.628,
+            "inv_ratio": 0.0933,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 0,
+              "inv": 7.7,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -0.451,
+          "likely_manipulator": true,
+          "possible_manipulator": true,
+          "ratios": {
+            "dsri": 1.4522,
+            "gmi": 1.3155,
+            "aqi": 3.4949,
+            "sgi": 0.8844,
+            "tata": 0.1035,
+            "lvgi": 1.0
+          },
+          "flags": [
+            "DSRI=1.45 (应收账款增速异常)",
+            "GMI=1.32 (毛利率恶化)",
+            "AQI=3.49 (非流动资产占比上升)",
+            "TATA=0.103 (应计利润过高)"
+          ],
+          "missing_data": false
+        },
+        "beneish_penalty": "likely_manipulator",
+        "weighted": {
+          "quality": 14.4,
+          "value": 0.0,
+          "health": 18.5,
+          "gov": 3.0,
+          "total": 36.0
+        }
+      },
+      "total": 36.0,
+      "rating": "⭐",
+      "rating_label": "不合格",
+      "rating_advice": "回避",
+      "beneish": {
+        "m_score": -0.451,
+        "likely_manipulator": true,
+        "possible_manipulator": true,
+        "ratios": {
+          "dsri": 1.4522,
+          "gmi": 1.3155,
+          "aqi": 3.4949,
+          "sgi": 0.8844,
+          "tata": 0.1035,
+          "lvgi": 1.0
+        },
+        "flags": [
+          "DSRI=1.45 (应收账款增速异常)",
+          "GMI=1.32 (毛利率恶化)",
+          "AQI=3.49 (非流动资产占比上升)",
+          "TATA=0.103 (应计利润过高)"
+        ],
+        "missing_data": false
+      }
+    },
+    "688617": {
+      "code": "688617",
+      "name": "XD惠泰医",
+      "industry_sw": "医药",
+      "industry_group": "医药",
+      "passed_blacklist": true,
+      "blacklist_checks": {
+        "st_flag": "",
+        "listing_days": "",
+        "market_cap": "",
+        "avg_volume": "",
+        "net_loss_3y": "",
+        "ocf_negative_3y": "",
+        "audit_opinion": "标准无保留",
+        "goodwill_bomb": "",
+        "pledge_ratio": "",
+        "financial_fraud": "",
+        "restatement": ""
+      },
+      "scores": {
+        "quality": {
+          "roe": {
+            "score": 9.3,
+            "roe_5y": 0.2494,
+            "years_available": 4,
+            "dupont": {
+              "net_margin": 0.3176,
+              "asset_turnover": 0.7076,
+              "equity_multiplier": 1.17,
+              "roe_reconstructed": 0.2622
+            },
+            "roe_trend": 0.0178,
+            "trend_adj": 1.0
+          },
+          "roic": {
+            "score": 10,
+            "roic_5y": 0.2836,
+            "years_available": 4,
+            "roic_trend": 0.0234,
+            "trend_adj": 1.0
+          },
+          "cfo": {
+            "score": 5.7,
+            "cfo_quality": 1.1418
+          },
+          "gm": {
+            "score": 10.0,
+            "gm_median": 0.7231,
+            "gm_stability": 0.9886
+          }
+        },
+        "value": {
+          "ev_oe": {
+            "score": 0,
+            "ev_oe": 999,
+            "missing_data": true
+          },
+          "fcf_yield": {
+            "score": 0,
+            "fcf_yield": 0,
+            "missing_data": true
+          },
+          "pb_adj": {
+            "score": 0,
+            "pb": 0.0,
+            "missing_data": true
+          }
+        },
+        "health": {
+          "leverage": {
+            "score": 8.0,
+            "debt_ratio": 0.1428
+          },
+          "ic": {
+            "score": 10.0,
+            "ic": 146.13
+          },
+          "asset_q": {
+            "score": 8.7,
+            "ar_ratio": 0.0303,
+            "inv_ratio": 0.1347,
+            "gw_ratio": 0.0,
+            "sub_scores": {
+              "ar": 9.4,
+              "inv": 6.6,
+              "gw": 10.0
+            }
+          }
+        },
+        "gov": {
+          "dividend": {
+            "score": 0,
+            "dividend_yield": 0.0,
+            "no_dividend": true
+          },
+          "audit": {
+            "score": 7,
+            "details": {
+              "audit": "标准无保留"
+            }
+          }
+        },
+        "beneish": {
+          "m_score": -2.602,
+          "likely_manipulator": false,
+          "possible_manipulator": false,
+          "ratios": {
+            "dsri": 0.7508,
+            "gmi": 0.9923,
+            "aqi": 1.0468,
+            "sgi": 1.2508,
+            "tata": -0.0403,
+            "lvgi": 1.0
+          },
+          "flags": [],
+          "missing_data": false
+        },
+        "weighted": {
+          "quality": 35.1,
+          "value": 0.0,
+          "health": 17.8,
+          "gov": 4.9,
+          "total": 57.8
+        }
+      },
+      "total": 57.8,
+      "rating": "⭐⭐",
+      "rating_label": "一般",
+      "rating_advice": "等更好价格",
+      "beneish": {
+        "m_score": -2.602,
+        "likely_manipulator": false,
+        "possible_manipulator": false,
+        "ratios": {
+          "dsri": 0.7508,
+          "gmi": 0.9923,
+          "aqi": 1.0468,
+          "sgi": 1.2508,
+          "tata": -0.0403,
+          "lvgi": 1.0
+        },
+        "flags": [],
+        "missing_data": false
+      }
+    }
+  }
 }
