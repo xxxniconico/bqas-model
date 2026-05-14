@@ -1,74 +1,104 @@
 #!/usr/bin/env python3
-"""BQAS — Streamlit Cloud 看板 (原生版)"""
-import sys, json
+"""BQAS — Streamlit Cloud 看板 (静态预计算版)
+akshare 在 Cloud 上不可用，使用本地预计算的 JSON 数据。
+"""
+import json
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent))
 
 import streamlit as st
 import pandas as pd
 
-from bqas.data.fetcher import fetch_financials
-from bqas.engine.scorer import score_stock
-
 st.set_page_config(page_title="BQAS 巴菲特量化", page_icon="📊", layout="wide")
 st.title("📊 BQAS 巴菲特量化评分系统")
 
+# ── Load pre-computed data ──
+DATA_FILE = Path(__file__).parent / "dashboard_data.json"
+
+@st.cache_data
+def load_data():
+    if DATA_FILE.exists():
+        with open(DATA_FILE) as f:
+            return json.load(f)
+    return None
+
+data = load_data()
+
 # ── Sidebar ──
 with st.sidebar:
-    st.header("🔍 股票评分")
-    code = st.text_input("输入股票代码", placeholder="600519", max_chars=6)
-    if st.button("评分", type="primary") and code:
-        with st.spinner(f"正在分析 {code}..."):
-            try:
-                result = score_stock(code)
-                st.session_state["score_result"] = result
-                st.session_state["score_code"] = code
-            except Exception as e:
-                st.error(f"评分失败: {e}")
-
-    st.divider()
-    st.caption("BQAS V2.3 — 纯年报多因子模型")
-    st.caption("[GitHub](https://github.com/xxxniconico/bqas-model)")
-
-# ── Main ──
-tab1, tab2, tab3 = st.tabs(["📈 个股评分", "🏆 Top 30", "📋 行业概览"])
-
-# Tab 1: Score
-with tab1:
-    if "score_result" in st.session_state:
-        r = st.session_state["score_result"]
-        code = st.session_state["score_code"]
-        
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            st.metric("总评分", f"{r.get('total_score', 0):.0f}", help="满分100")
-        with col2:
-            st.metric("质量", f"{r.get('quality_score', 0):.0f}")
-        with col3:
-            st.metric("价值", f"{r.get('value_score', 0):.0f}")
-        with col4:
-            st.metric("健康度", f"{r.get('health_score', 0):.0f}")
-        
-        if "factors" in r:
-            st.subheader("因子明细")
-            factors = r["factors"]
-            df = pd.DataFrame([
-                {"因子": k, "数值": f"{v:.2f}" if isinstance(v, float) else str(v)}
-                for k, v in factors.items()
-            ])
-            st.dataframe(df, use_container_width=True, hide_index=True)
-        
-        if "annual_data" in r:
-            st.subheader("年度数据")
-            st.dataframe(pd.DataFrame(r["annual_data"]), use_container_width=True)
+    st.header("📊 关于 BQAS")
+    st.markdown("""
+    **V2.3 纯年报多因子模型**
+    
+    - 质量 / 价值 / 健康度 / 治理 四维评分
+    - Spearman 稳定性 0.81
+    - 全 A 股 5500+ 标的覆盖
+    
+    [📖 GitHub](https://github.com/xxxniconico/bqas-model)
+    """)
+    if data:
+        st.metric("覆盖股票", f"{data.get('total_stocks', 0):,}")
+        st.metric("数据日期", data.get("date", "N/A"))
     else:
-        st.info("👈 在左侧输入股票代码，点击「评分」开始")
+        st.warning("暂无预计算数据")
 
-# Tab 2: Top 30
+# ── Main Tabs ──
+tab1, tab2, tab3 = st.tabs(["🏆 Top 30", "📋 行业概览", "📈 模型说明"])
+
+with tab1:
+    if data and "top30" in data:
+        top = pd.DataFrame(data["top30"])
+        cols = ["rank", "code", "name", "industry", "total_score", "quality", "value", "health", "governance"]
+        display_cols = ["排名", "代码", "名称", "行业", "总分", "质量", "价值", "健康度", "治理"]
+        available = [c for c in cols if c in top.columns]
+        
+        df = top[available].copy()
+        df.columns = [display_cols[cols.index(c)] for c in available]
+        
+        st.dataframe(df, use_container_width=True, hide_index=True, height=900)
+        
+        # Score distribution
+        if "total_score" in top.columns:
+            st.subheader("评分分布")
+            st.bar_chart(top.set_index("name")["total_score"].head(20))
+    else:
+        st.info("""
+        🏗️ **数据未生成** — 需要在本地运行预计算脚本：
+        
+        ```bash
+        cd ~/bqas-model
+        python batch_rank3.py --top 30 --output dashboard_data.json
+        ```
+        
+        然后将 `dashboard_data.json` 提交到仓库即可。
+        """)
+
 with tab2:
-    st.info("🏗️ Top 30 排行需要本地跑 batch_rank3.py 生成数据。Streamlit Cloud 暂不支持实时全市场扫描（需 2.5 分钟 + 数据库）。")
-    st.markdown("本地使用: `python batch_rank3.py`")
+    if data and "industries" in data:
+        ind = pd.DataFrame(data["industries"])
+        st.dataframe(ind, use_container_width=True, hide_index=True)
+    else:
+        st.info("行业数据同上，需本地生成。")
 
-# Tab 3: Industry
 with tab3:
-    st.info("🏗️ 行业概览同上，需本地运行 `batch_rank3.py --industry`")
+    st.markdown("""
+    ### 评分体系
+    
+    | 维度 | 权重 | 核心指标 |
+    |------|------|----------|
+    | 质量 | 35% | ROE, ROIC, 毛利率, 营收增速 |
+    | 价值 | 30% | FCF收益率, EV/EBIT, P/B |
+    | 健康度 | 20% | 杠杆率, 利息覆盖, 流动比率 |
+    | 治理 | 15% | 审计意见, 质押率, 分红, 处罚 |
+    
+    ### 回测表现
+    
+    | 指标 | 结果 |
+    |------|------|
+    | 单年 Spearman | 0.59–0.70 |
+    | 多年稳定性 | 0.81 |
+    | 2024→2025 超额收益 | +2.6% |
+    
+    ### 黑名单过滤
+    
+    11 项检查：审计意见、ST、处罚、质押率>50%、分红异常、商誉/营收>30% 等
+    """)
