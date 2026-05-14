@@ -1,339 +1,312 @@
 {
-  "date": "2026-05-14",
-  "total_scored": 5188,
-  "top30": [
+  "health": {
+    "status": "ok",
+    "total_stocks": 5513,
+    "date": "2026-05-14"
+  },
+  "screener": [
     {
-      "rank": 1,
       "code": "600519",
       "name": "贵州茅台",
-      "total_score": 82.6,
       "industry": "白酒",
-      "quality": 28.9,
-      "value": 24.8,
-      "health": 16.5,
-      "governance": 12.4
+      "total_score": 82.6,
+      "quality_score": 28.9,
+      "value_score": 24.8,
+      "health_score": 16.5,
+      "governance_score": 12.4
     },
     {
-      "rank": 2,
       "code": "002027",
       "name": "分众传媒",
-      "total_score": 82.1,
       "industry": "营销服务",
-      "quality": 28.7,
-      "value": 24.6,
-      "health": 16.4,
-      "governance": 12.3
+      "total_score": 82.1,
+      "quality_score": 28.7,
+      "value_score": 24.6,
+      "health_score": 16.4,
+      "governance_score": 12.3
     },
     {
-      "rank": 3,
       "code": "002517",
       "name": "恺英网络",
-      "total_score": 81.1,
       "industry": "科技",
-      "quality": 28.4,
-      "value": 24.3,
-      "health": 16.2,
-      "governance": 12.2
+      "total_score": 81.1,
+      "quality_score": 28.4,
+      "value_score": 24.3,
+      "health_score": 16.2,
+      "governance_score": 12.2
     },
     {
-      "rank": 4,
       "code": "688708",
       "name": "佳驰科技",
-      "total_score": 80.8,
       "industry": "未分类",
-      "quality": 28.3,
-      "value": 24.2,
-      "health": 16.2,
-      "governance": 12.1
+      "total_score": 80.8,
+      "quality_score": 28.3,
+      "value_score": 24.2,
+      "health_score": 16.2,
+      "governance_score": 12.1
     },
     {
-      "rank": 5,
       "code": "300628",
       "name": "亿联网络",
-      "total_score": 80.6,
       "industry": "制造",
-      "quality": 28.2,
-      "value": 24.2,
-      "health": 16.1,
-      "governance": 12.1
+      "total_score": 80.6,
+      "quality_score": 28.2,
+      "value_score": 24.2,
+      "health_score": 16.1,
+      "governance_score": 12.1
     },
     {
-      "rank": 6,
       "code": "000568",
       "name": "泸州老窖",
-      "total_score": 80.5,
       "industry": "白酒",
-      "quality": 28.2,
-      "value": 24.1,
-      "health": 16.1,
-      "governance": 12.1
+      "total_score": 80.5,
+      "quality_score": 28.2,
+      "value_score": 24.1,
+      "health_score": 16.1,
+      "governance_score": 12.1
     },
     {
-      "rank": 7,
       "code": "300394",
       "name": "天孚通信",
-      "total_score": 80.5,
       "industry": "科技",
-      "quality": 28.2,
-      "value": 24.1,
-      "health": 16.1,
-      "governance": 12.1
+      "total_score": 80.5,
+      "quality_score": 28.2,
+      "value_score": 24.1,
+      "health_score": 16.1,
+      "governance_score": 12.1
     },
     {
-      "rank": 8,
       "code": "001221",
       "name": "悍高集团",
-      "total_score": 79.7,
       "industry": "未分类",
-      "quality": 27.9,
-      "value": 23.9,
-      "health": 15.9,
-      "governance": 12.0
+      "total_score": 79.7,
+      "quality_score": 27.9,
+      "value_score": 23.9,
+      "health_score": 15.9,
+      "governance_score": 12.0
     },
     {
-      "rank": 9,
       "code": "300760",
       "name": "迈瑞医疗",
-      "total_score": 79.6,
       "industry": "医药",
-      "quality": 27.9,
-      "value": 23.9,
-      "health": 15.9,
-      "governance": 11.9
+      "total_score": 79.6,
+      "quality_score": 27.9,
+      "value_score": 23.9,
+      "health_score": 15.9,
+      "governance_score": 11.9
     },
     {
-      "rank": 10,
       "code": "605117",
       "name": "德业股份",
-      "total_score": 78.7,
       "industry": "家电零部件",
-      "quality": 27.5,
-      "value": 23.6,
-      "health": 15.7,
-      "governance": 11.8
+      "total_score": 78.7,
+      "quality_score": 27.5,
+      "value_score": 23.6,
+      "health_score": 15.7,
+      "governance_score": 11.8
     },
     {
-      "rank": 11,
       "code": "301275",
       "name": "汉朔科技",
-      "total_score": 78.6,
       "industry": "未分类",
-      "quality": 27.5,
-      "value": 23.6,
-      "health": 15.7,
-      "governance": 11.8
+      "total_score": 78.6,
+      "quality_score": 27.5,
+      "value_score": 23.6,
+      "health_score": 15.7,
+      "governance_score": 11.8
     },
     {
-      "rank": 12,
       "code": "600809",
       "name": "山西汾酒",
-      "total_score": 78.3,
       "industry": "白酒",
-      "quality": 27.4,
-      "value": 23.5,
-      "health": 15.7,
-      "governance": 11.7
+      "total_score": 78.3,
+      "quality_score": 27.4,
+      "value_score": 23.5,
+      "health_score": 15.7,
+      "governance_score": 11.7
     },
     {
-      "rank": 13,
       "code": "603402",
       "name": "陕西旅游",
-      "total_score": 78.1,
       "industry": "休闲服务",
-      "quality": 27.3,
-      "value": 23.4,
-      "health": 15.6,
-      "governance": 11.7
+      "total_score": 78.1,
+      "quality_score": 27.3,
+      "value_score": 23.4,
+      "health_score": 15.6,
+      "governance_score": 11.7
     },
     {
-      "rank": 14,
       "code": "000858",
       "name": "五 粮 液",
-      "total_score": 78.0,
       "industry": "白酒",
-      "quality": 27.3,
-      "value": 23.4,
-      "health": 15.6,
-      "governance": 11.7
+      "total_score": 78.0,
+      "quality_score": 27.3,
+      "value_score": 23.4,
+      "health_score": 15.6,
+      "governance_score": 11.7
     },
     {
-      "rank": 15,
       "code": "603195",
       "name": "公牛集团",
-      "total_score": 77.9,
       "industry": "其他家用轻工",
-      "quality": 27.3,
-      "value": 23.4,
-      "health": 15.6,
-      "governance": 11.7
+      "total_score": 77.9,
+      "quality_score": 27.3,
+      "value_score": 23.4,
+      "health_score": 15.6,
+      "governance_score": 11.7
     },
     {
-      "rank": 16,
       "code": "002847",
       "name": "盐津铺子",
-      "total_score": 76.8,
       "industry": "消费",
-      "quality": 26.9,
-      "value": 23.0,
-      "health": 15.4,
-      "governance": 11.5
+      "total_score": 76.8,
+      "quality_score": 26.9,
+      "value_score": 23.0,
+      "health_score": 15.4,
+      "governance_score": 11.5
     },
     {
-      "rank": 17,
       "code": "603929",
       "name": "亚翔集成",
-      "total_score": 76.4,
       "industry": "建筑装饰",
-      "quality": 26.7,
-      "value": 22.9,
-      "health": 15.3,
-      "governance": 11.5
+      "total_score": 76.4,
+      "quality_score": 26.7,
+      "value_score": 22.9,
+      "health_score": 15.3,
+      "governance_score": 11.5
     },
     {
-      "rank": 18,
       "code": "301668",
       "name": "昊创瑞通",
-      "total_score": 76.3,
       "industry": "未分类",
-      "quality": 26.7,
-      "value": 22.9,
-      "health": 15.3,
-      "governance": 11.4
+      "total_score": 76.3,
+      "quality_score": 26.7,
+      "value_score": 22.9,
+      "health_score": 15.3,
+      "governance_score": 11.4
     },
     {
-      "rank": 19,
       "code": "300795",
       "name": "米奥会展",
-      "total_score": 76.1,
       "industry": "消费",
-      "quality": 26.6,
-      "value": 22.8,
-      "health": 15.2,
-      "governance": 11.4
+      "total_score": 76.1,
+      "quality_score": 26.6,
+      "value_score": 22.8,
+      "health_score": 15.2,
+      "governance_score": 11.4
     },
     {
-      "rank": 20,
       "code": "301617",
       "name": "博苑股份",
-      "total_score": 76.0,
       "industry": "未分类",
-      "quality": 26.6,
-      "value": 22.8,
-      "health": 15.2,
-      "governance": 11.4
+      "total_score": 76.0,
+      "quality_score": 26.6,
+      "value_score": 22.8,
+      "health_score": 15.2,
+      "governance_score": 11.4
     },
     {
-      "rank": 21,
       "code": "300979",
       "name": "华利集团",
-      "total_score": 75.9,
       "industry": "鞋帽",
-      "quality": 26.6,
-      "value": 22.8,
-      "health": 15.2,
-      "governance": 11.4
+      "total_score": 75.9,
+      "quality_score": 26.6,
+      "value_score": 22.8,
+      "health_score": 15.2,
+      "governance_score": 11.4
     },
     {
-      "rank": 22,
       "code": "601958",
       "name": "金钼股份",
-      "total_score": 75.7,
       "industry": "其他稀有小金属",
-      "quality": 26.5,
-      "value": 22.7,
-      "health": 15.1,
-      "governance": 11.4
+      "total_score": 75.7,
+      "quality_score": 26.5,
+      "value_score": 22.7,
+      "health_score": 15.1,
+      "governance_score": 11.4
     },
     {
-      "rank": 23,
       "code": "000915",
       "name": "华特达因",
-      "total_score": 75.5,
       "industry": "化学制剂",
-      "quality": 26.4,
-      "value": 22.6,
-      "health": 15.1,
-      "governance": 11.3
+      "total_score": 75.5,
+      "quality_score": 26.4,
+      "value_score": 22.6,
+      "health_score": 15.1,
+      "governance_score": 11.3
     },
     {
-      "rank": 24,
       "code": "000596",
       "name": "古井贡酒",
-      "total_score": 75.5,
       "industry": "白酒",
-      "quality": 26.4,
-      "value": 22.6,
-      "health": 15.1,
-      "governance": 11.3
+      "total_score": 75.5,
+      "quality_score": 26.4,
+      "value_score": 22.6,
+      "health_score": 15.1,
+      "governance_score": 11.3
     },
     {
-      "rank": 25,
       "code": "300641",
       "name": "正丹股份",
-      "total_score": 75.5,
       "industry": "其他化学制品",
-      "quality": 26.4,
-      "value": 22.6,
-      "health": 15.1,
-      "governance": 11.3
+      "total_score": 75.5,
+      "quality_score": 26.4,
+      "value_score": 22.6,
+      "health_score": 15.1,
+      "governance_score": 11.3
     },
     {
-      "rank": 26,
       "code": "301680",
       "name": "固德电材",
-      "total_score": 75.4,
       "industry": "其他化学制品",
-      "quality": 26.4,
-      "value": 22.6,
-      "health": 15.1,
-      "governance": 11.3
+      "total_score": 75.4,
+      "quality_score": 26.4,
+      "value_score": 22.6,
+      "health_score": 15.1,
+      "governance_score": 11.3
     },
     {
-      "rank": 27,
       "code": "688692",
       "name": "达梦数据",
-      "total_score": 75.3,
       "industry": "互联网信息服务",
-      "quality": 26.4,
-      "value": 22.6,
-      "health": 15.1,
-      "governance": 11.3
+      "total_score": 75.3,
+      "quality_score": 26.4,
+      "value_score": 22.6,
+      "health_score": 15.1,
+      "governance_score": 11.3
     },
     {
-      "rank": 28,
       "code": "000848",
       "name": "承德露露",
-      "total_score": 75.1,
       "industry": "软饮料",
-      "quality": 26.3,
-      "value": 22.5,
-      "health": 15.0,
-      "governance": 11.3
+      "total_score": 75.1,
+      "quality_score": 26.3,
+      "value_score": 22.5,
+      "health_score": 15.0,
+      "governance_score": 11.3
     },
     {
-      "rank": 29,
       "code": "301590",
       "name": "优优绿能",
-      "total_score": 74.9,
       "industry": "未分类",
-      "quality": 26.2,
-      "value": 22.5,
-      "health": 15.0,
-      "governance": 11.2
+      "total_score": 74.9,
+      "quality_score": 26.2,
+      "value_score": 22.5,
+      "health_score": 15.0,
+      "governance_score": 11.2
     },
     {
-      "rank": 30,
       "code": "688617",
       "name": "惠泰医疗",
-      "total_score": 74.9,
       "industry": "医药",
-      "quality": 26.2,
-      "value": 22.5,
-      "health": 15.0,
-      "governance": 11.2
+      "total_score": 74.9,
+      "quality_score": 26.2,
+      "value_score": 22.5,
+      "health_score": 15.0,
+      "governance_score": 11.2
     }
   ],
-  "industries": [
+  "industry_summary": [
     {
       "industry": "未分类",
       "count": 6,
@@ -408,6 +381,215 @@
       "industry": "化学制剂",
       "count": 1,
       "avg_score": 75.5
+    },
+    {
+      "industry": "互联网信息服务",
+      "count": 1,
+      "avg_score": 75.3
+    },
+    {
+      "industry": "软饮料",
+      "count": 1,
+      "avg_score": 75.1
+    }
+  ],
+  "compare": [
+    {
+      "code": "600519",
+      "name": "贵州茅台",
+      "roe": 0,
+      "revenue_cagr": 0,
+      "fcf_yield": 0,
+      "debt_ratio": 0,
+      "total_score": 82.6
+    },
+    {
+      "code": "002027",
+      "name": "分众传媒",
+      "roe": 0,
+      "revenue_cagr": 0,
+      "fcf_yield": 0,
+      "debt_ratio": 0,
+      "total_score": 82.1
+    },
+    {
+      "code": "002517",
+      "name": "恺英网络",
+      "roe": 0,
+      "revenue_cagr": 0,
+      "fcf_yield": 0,
+      "debt_ratio": 0,
+      "total_score": 81.1
+    },
+    {
+      "code": "688708",
+      "name": "佳驰科技",
+      "roe": 0,
+      "revenue_cagr": 0,
+      "fcf_yield": 0,
+      "debt_ratio": 0,
+      "total_score": 80.8
+    },
+    {
+      "code": "300628",
+      "name": "亿联网络",
+      "roe": 0,
+      "revenue_cagr": 0,
+      "fcf_yield": 0,
+      "debt_ratio": 0,
+      "total_score": 80.6
+    }
+  ],
+  "search_index": [
+    {
+      "code": "600519",
+      "name": "贵州茅台",
+      "industry": "白酒"
+    },
+    {
+      "code": "002027",
+      "name": "分众传媒",
+      "industry": "营销服务"
+    },
+    {
+      "code": "002517",
+      "name": "恺英网络",
+      "industry": "科技"
+    },
+    {
+      "code": "688708",
+      "name": "佳驰科技",
+      "industry": "未分类"
+    },
+    {
+      "code": "300628",
+      "name": "亿联网络",
+      "industry": "制造"
+    },
+    {
+      "code": "000568",
+      "name": "泸州老窖",
+      "industry": "白酒"
+    },
+    {
+      "code": "300394",
+      "name": "天孚通信",
+      "industry": "科技"
+    },
+    {
+      "code": "001221",
+      "name": "悍高集团",
+      "industry": "未分类"
+    },
+    {
+      "code": "300760",
+      "name": "迈瑞医疗",
+      "industry": "医药"
+    },
+    {
+      "code": "605117",
+      "name": "德业股份",
+      "industry": "家电零部件"
+    },
+    {
+      "code": "301275",
+      "name": "汉朔科技",
+      "industry": "未分类"
+    },
+    {
+      "code": "600809",
+      "name": "山西汾酒",
+      "industry": "白酒"
+    },
+    {
+      "code": "603402",
+      "name": "陕西旅游",
+      "industry": "休闲服务"
+    },
+    {
+      "code": "000858",
+      "name": "五 粮 液",
+      "industry": "白酒"
+    },
+    {
+      "code": "603195",
+      "name": "公牛集团",
+      "industry": "其他家用轻工"
+    },
+    {
+      "code": "002847",
+      "name": "盐津铺子",
+      "industry": "消费"
+    },
+    {
+      "code": "603929",
+      "name": "亚翔集成",
+      "industry": "建筑装饰"
+    },
+    {
+      "code": "301668",
+      "name": "昊创瑞通",
+      "industry": "未分类"
+    },
+    {
+      "code": "300795",
+      "name": "米奥会展",
+      "industry": "消费"
+    },
+    {
+      "code": "301617",
+      "name": "博苑股份",
+      "industry": "未分类"
+    },
+    {
+      "code": "300979",
+      "name": "华利集团",
+      "industry": "鞋帽"
+    },
+    {
+      "code": "601958",
+      "name": "金钼股份",
+      "industry": "其他稀有小金属"
+    },
+    {
+      "code": "000915",
+      "name": "华特达因",
+      "industry": "化学制剂"
+    },
+    {
+      "code": "000596",
+      "name": "古井贡酒",
+      "industry": "白酒"
+    },
+    {
+      "code": "300641",
+      "name": "正丹股份",
+      "industry": "其他化学制品"
+    },
+    {
+      "code": "301680",
+      "name": "固德电材",
+      "industry": "其他化学制品"
+    },
+    {
+      "code": "688692",
+      "name": "达梦数据",
+      "industry": "互联网信息服务"
+    },
+    {
+      "code": "000848",
+      "name": "承德露露",
+      "industry": "软饮料"
+    },
+    {
+      "code": "301590",
+      "name": "优优绿能",
+      "industry": "未分类"
+    },
+    {
+      "code": "688617",
+      "name": "惠泰医疗",
+      "industry": "医药"
     }
   ]
 }
