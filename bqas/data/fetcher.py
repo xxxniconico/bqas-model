@@ -82,6 +82,19 @@ def _init_db():
             dividend_yield REAL,
             last_updated TEXT
         );
+        CREATE TABLE IF NOT EXISTS restatement_blacklist (
+            code TEXT PRIMARY KEY,
+            name TEXT,
+            reason TEXT,
+            notice_date TEXT,
+            detected_at TEXT DEFAULT (datetime('now'))
+        );
+        CREATE TABLE IF NOT EXISTS financial_fraud (
+            code TEXT PRIMARY KEY,
+            penalty_type TEXT,
+            penalty_date TEXT,
+            source TEXT
+        );
     """)
     conn.commit()
     conn.close()
@@ -152,12 +165,13 @@ def _bulk_insert_income(period: str, df: pd.DataFrame):
         try:
             code = str(r[code_col]).zfill(6)
             conn.execute(
-                "INSERT OR REPLACE INTO income VALUES(?,?,?,?,?,?)",
+                "INSERT OR REPLACE INTO income(code, report_period, revenue, operating_profit, net_income, interest_expense, op_cost) VALUES(?,?,?,?,?,?,?)",
                 (code, period,
                  float(r.get("营业总收入", 0) or 0),
                  float(r.get("营业利润", 0) or 0),
                  float(r.get("净利润", 0) or 0),
-                 abs(float(r.get("营业总支出-财务费用", 0) or 0)))
+                 abs(float(r.get("营业总支出-财务费用", 0) or 0)),
+                 float(r.get("营业总支出-营业支出", 0) or 0))
             )
         except Exception:
             continue
@@ -215,18 +229,46 @@ def _bulk_insert_cashflow(period: str, df: pd.DataFrame):
     conn.close()
 
 
-def build_full_cache(years: int = 5, force: bool = False):
-    """构建全市场财报缓存（一次性拉取）"""
+def build_full_cache(years: int = 5, force: bool = False, quarterly: bool = True):
+    """构建全市场财报缓存（一次性拉取）
+
+    Args:
+        years: 年报年份数（默认5年）
+        force: 清空重建
+        quarterly: 是否同时拉取最近4个季度的季报（用于TTM计算）
+    """
     if force:
         _clear_cache()
 
     current_year = datetime.now().year
     current_month = datetime.now().month
     periods = []
+    # 年报
     for y in range(current_year - years, current_year + 1):
         if y == current_year and current_month < 4:
             continue
         periods.append(f"{y}1231")
+
+    # 季报（最近4个季度，用于TTM新鲜度）
+    if quarterly:
+        # 最近完成的季度末月份: 3/6/9/12
+        latest_q_month = (current_month - 1) // 3 * 3  # 上一个完整季度
+        if latest_q_month == 0:
+            latest_q_month = 12
+            latest_q_year = current_year - 1
+        else:
+            latest_q_year = current_year
+        # Map month to quarter-end day
+        q_days = {3: '0331', 6: '0630', 9: '0930', 12: '1231'}
+        for i in range(5):  # 5个季度=4个可用+1个减法基准
+            m = latest_q_month - i * 3
+            y = latest_q_year
+            if m <= 0:
+                m += 12
+                y -= 1
+            qp = f"{y}{q_days[m]}"
+            if qp not in periods:
+                periods.append(qp)
 
     print(f"📦 将缓存 {len(periods)} 个报告期的全 A 股财报 ({periods[0]} ~ {periods[-1]})")
     print(f"   每个报告期拉取 3 张表（利润/负债/现金流），预计 3-5 分钟\n")
@@ -410,6 +452,7 @@ def fetch_financials(code: str, years: int = 5) -> FinancialData:
                 net_income=float(row["net_income"] or 0),
                 interest_expense=float(row["interest_expense"] or 0),
                 ebit=float(row["operating_profit"] or 0) + float(row["interest_expense"] or 0),
+                op_cost=float(row["op_cost"] or 0),
             ))
         else:
             income_list.append(IncomeStatement(code=code, report_year=int(period[:4])))
@@ -445,6 +488,135 @@ def fetch_financials(code: str, years: int = 5) -> FinancialData:
 
     conn.close()
 
+    # ══ TTM 覆盖：如果有季报数据，用最近4个季度求和替代最新年报 ══
+    # 季报是累计值（akshare stock_lrb_em），需要减去上一期得到单季
+    ttm_conn = _get_conn()
+    q_periods = [p[0] for p in ttm_conn.execute("""
+        SELECT DISTINCT report_period FROM income 
+        WHERE code=? AND report_period NOT LIKE '%1231'
+        ORDER BY report_period DESC LIMIT 5
+    """, (code,)).fetchall()]
+    
+    if len(q_periods) >= 4:
+        # 取季度数据，包含年报(1231)作为减法基准
+        all_qp = q_periods.copy()
+        for y in sorted(set(p[:4] for p in q_periods)):
+            yp = f"{y}1231"
+            if yp not in all_qp:
+                all_qp.append(yp)
+        all_qp.sort(reverse=True)
+        
+        def _get_quarterly(code, fields, table, periods):
+            """获取各期数据并计算单季值"""
+            placeholders = ','.join(['?']*len(periods))
+            rows = {r[0]: r[1:] for r in ttm_conn.execute(
+                f"SELECT report_period, {fields} FROM {table} WHERE code=? AND report_period IN ({placeholders}) ORDER BY report_period DESC",
+                [code] + periods
+            ).fetchall()}
+            # 单季 = 本期累计 - 上期累计；Q1就是Q1
+            standalone = {}
+            sorted_p = sorted(periods, reverse=True)
+            for i, p in enumerate(sorted_p):
+                val = rows.get(p)
+                if val is None:
+                    continue
+                # 判断是否为Q1（0331结尾）或无需减法
+                if p.endswith('0331'):
+                    standalone[p] = val
+                else:
+                    # 找上一期：如果是0630→0331, 0930→0630, 1231→0930
+                    prev_map = {'0630': '0331', '0930': '0630', '1231': '0930'}
+                    suffix = p[4:]
+                    prev_suffix = prev_map.get(suffix)
+                    if prev_suffix:
+                        prev_p = p[:4] + prev_suffix
+                        prev_val = rows.get(prev_p)
+                        if prev_val is not None:
+                            standalone[p] = tuple(a - b for a, b in zip(val, prev_val))
+                        else:
+                            standalone[p] = val  # 无前值，直接用累计
+                    else:
+                        standalone[p] = val
+            return standalone
+        
+        # 取最近5个季度+年报
+        periods_to_get = q_periods[:5]
+        inc_standalone = _get_quarterly(code, "revenue, operating_profit, net_income, interest_expense, op_cost", "income", periods_to_get)
+        cf_standalone = _get_quarterly(code, "operating_cf, capex", "cashflow", periods_to_get)
+        
+        # TTM = 最近4个单季度求和
+        ttm_qs = sorted([p for p in inc_standalone if not p.endswith('1231')], reverse=True)[:4]
+        if len(ttm_qs) >= 4:
+            rev = sum(inc_standalone[p][0] for p in ttm_qs)
+            op = sum(inc_standalone[p][1] for p in ttm_qs)
+            ni = sum(inc_standalone[p][2] for p in ttm_qs)
+            ie = sum(abs(inc_standalone[p][3]) for p in ttm_qs)
+            op_cost = sum(inc_standalone[p][4] for p in ttm_qs)  # index 4 = op_cost
+            
+            ocf = sum(cf_standalone.get(p, (0,0))[0] for p in ttm_qs if p in cf_standalone)
+            capex = sum(abs(cf_standalone.get(p, (0,0))[1]) for p in ttm_qs if p in cf_standalone)
+            
+            # 资产负债表：取最新季度
+            latest_q = ttm_qs[0]
+            bal = ttm_conn.execute("""
+                SELECT total_assets, total_liabilities, equity, goodwill, inventory,
+                       accounts_receivable, cash_equiv, long_term_invest,
+                       short_term_debt, long_term_debt
+                FROM balance WHERE code=? AND report_period=?
+            """, (code, latest_q)).fetchone()
+            
+            ttm_conn.close()
+            
+            if rev > 0:
+                ttm_year = int(latest_q[:4])
+                ttm_income = IncomeStatement(
+                    code=code, report_year=ttm_year,
+                    revenue=rev, operating_profit=op, net_income=ni,
+                    interest_expense=ie, ebit=op+ie, op_cost=op_cost,
+                )
+                ttm_cashflow = CashFlowStatement(
+                    code=code, report_year=ttm_year,
+                    operating_cf=ocf, capex=capex,
+                )
+                ttm_balance = BalanceSheet(
+                    code=code, report_year=ttm_year,
+                    total_assets=float(bal[0] or 0), total_liabilities=float(bal[1] or 0),
+                    equity=float(bal[2] or 0), goodwill=float(bal[3] or 0),
+                    inventory=float(bal[4] or 0), accounts_receivable=float(bal[5] or 0),
+                    cash=float(bal[6] or 0), long_term_invest=float(bal[7] or 0),
+                    short_term_debt=float(bal[8] or 0), long_term_debt=float(bal[9] or 0),
+                )
+                # 替换或追加
+                for lst, item in [(income_list, ttm_income), (balance_list, ttm_balance), (cashflow_list, ttm_cashflow)]:
+                    replaced = False
+                    for i, old in enumerate(lst):
+                        if old.report_year == ttm_year:
+                            lst[i] = item
+                            replaced = True
+                            break
+                    if not replaced:
+                        lst.append(item)
+        else:
+            ttm_conn.close()
+    else:
+        ttm_conn.close()
+
+    # ── 检查会计重述黑名单（舆情监控）──
+    restatement_risk = False
+    restatement_detail = ""
+    try:
+        rs_conn = _get_conn()
+        rs_row = rs_conn.execute(
+            "SELECT reason, notice_date FROM restatement_blacklist WHERE code=?",
+            (code,)
+        ).fetchone()
+        if rs_row:
+            restatement_risk = True
+            restatement_detail = f"{rs_row['notice_date'][:10]}: {rs_row['reason']}"
+        rs_conn.close()
+    except Exception as e:
+        logger.warning(f"Restatement blacklist check failed for {code}: {e}")
+
     # Check financial fraud penalty table
     fraud_conn = _get_conn()
     fraud_row = fraud_conn.execute(
@@ -453,9 +625,22 @@ def fetch_financials(code: str, years: int = 5) -> FinancialData:
     has_fraud = fraud_row is not None
     fraud_conn.close()
 
+    # Read audit/pledge/dividend from meta table
+    meta_conn = _get_conn()
+    meta_row = meta_conn.execute(
+        "SELECT audit_opinion, pledge_ratio, dividend_yield FROM meta WHERE code=?",
+        (code,)
+    ).fetchone()
+    meta_conn.close()
+
     return FinancialData(
         info=info, income=income_list, balance=balance_list, cashflow=cashflow_list,
         has_financial_fraud_penalty=has_fraud,
+        audit_opinion=meta_row["audit_opinion"] if meta_row else "",
+        pledge_ratio=float(meta_row["pledge_ratio"] or 0) if meta_row else 0.0,
+        dividend_yield=float(meta_row["dividend_yield"] or 0) if meta_row else 0.0,
+        restatement_risk=restatement_risk,
+        restatement_detail=restatement_detail,
     )
 
 

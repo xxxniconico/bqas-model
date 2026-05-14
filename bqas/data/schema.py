@@ -27,6 +27,7 @@ class IncomeStatement(BaseModel):
     net_income: float = 0.0         # 净利润
     interest_expense: float = 0.0   # 利息支出
     ebit: float = 0.0               # 息税前利润
+    op_cost: float = 0.0            # 营业成本（营业总支出-营业支出）
 
 
 class BalanceSheet(BaseModel):
@@ -75,6 +76,8 @@ class FinancialData(BaseModel):
     pledge_ratio: float = 0.0       # 大股东质押比例
     dividend_yield: float = 0.0     # 股息率
     has_financial_fraud_penalty: bool = False  # 5年内财务造假处罚
+    restatement_risk: bool = False           # 疑似财务重述（季度数据被后续报告覆盖）
+    restatement_detail: str = ""             # 重述说明
 
 
 class BlacklistResult(BaseModel):

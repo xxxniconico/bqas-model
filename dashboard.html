@@ -3,443 +3,614 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>BQAS · 巴菲特量化选股系统</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #08090a; --bg2: #0f1011; --bg3: #191a1b; --bg4: #1e1f21;
-  --text: #f7f8f8; --text2: #a1a5b0; --text3: #6b6f7b;
-  --accent: #5e6ad2; --accent2: #7170ff;
-  --green: #10b981; --amber: #f59e0b; --red: #ef4444; --pink: #ec4899;
-  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.10);
-  --radius: 6px; --radius-lg: 10px;
-  --font: 'Inter',system-ui,sans-serif; --mono: 'JetBrains Mono',monospace;
+  --bg: #1f1633; --bg2: #2a1d47; --bg3: #34255a; --bg4: #3f2d6d;
+  --text: #e9e2f5; --text2: #b8a9d4; --text3: #7b6b9e;
+  --accent: #c2ef4e; --accent2: #a1d836;
+  --green: #4ade80; --amber: #fbbf24; --red: #f87171; --pink: #f472b6; --blue: #60a5fa;
+  --border: rgba(194,239,78,0.10); --border2: rgba(194,239,78,0.18);
+  --radius: 10px; --radius-sm: 6px;
+  --font: -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
+  --mono: 'Cascadia Code','Fira Code','SF Mono','JetBrains Mono',Menlo,monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
-a{color:var(--accent2);text-decoration:none}
-::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-track{background:transparent}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
-/* ═══ Sidebar ═══ */
-.sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;padding:8px}
-.sidebar-logo{padding:12px 8px 16px;font-weight:700;font-size:1.1rem;display:flex;align-items:center;gap:8px;color:var(--accent2)}
-.sidebar-logo span{font-weight:400;color:var(--text3);font-size:0.7rem;margin-left:auto}
-.sidebar-section{margin-bottom:4px}
-.sidebar-title{padding:8px;font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-weight:600}
-.sidebar-item{padding:8px 10px;font-size:0.82rem;cursor:pointer;border-radius:4px;color:var(--text2);display:flex;align-items:center;gap:8px;transition:all 0.15s}
-.sidebar-item:hover{background:rgba(255,255,255,0.04);color:var(--text)}
-.sidebar-item.active{background:rgba(94,106,210,0.12);color:var(--accent2)}
-.sidebar-item .icon{font-size:1.1rem;width:20px;text-align:center}
-.sidebar-item .badge{font-size:0.65rem;background:var(--accent);color:#fff;padding:1px 6px;border-radius:8px;margin-left:auto}
-.watchlist-item{font-size:0.78rem;padding:5px 10px;cursor:pointer;display:flex;justify-content:space-between;color:var(--text2)}
-.watchlist-item:hover{color:var(--text)}
-.watchlist-item .score{font-family:var(--mono);font-size:0.7rem}
+/* ═══ Layout ═══ */
+.app{max-width:960px;margin:0 auto;padding:24px 20px 60px}
 
-/* ═══ Main ═══ */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.header{height:40px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;flex-shrink:0}
-.header-title{font-weight:600;font-size:0.85rem;margin-right:16px}
-.header-nav{display:flex;gap:4px;margin-right:auto}
-.header-nav button{padding:4px 12px;border-radius:4px;border:none;background:transparent;color:var(--text2);cursor:pointer;font-family:var(--font);font-size:0.78rem;transition:all 0.15s}
-.header-nav button:hover{background:rgba(255,255,255,0.04);color:var(--text)}
-.header-nav button.active{background:rgba(94,106,210,0.12);color:var(--accent2)}
-.header-search{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);padding:4px 10px;font-size:0.78rem;color:var(--text3);cursor:pointer;min-width:200px}
-.header-search kbd{background:var(--bg4);border:1px solid var(--border2);border-radius:3px;padding:1px 5px;font-family:var(--mono);font-size:0.65rem;color:var(--text3)}
-.content{padding:20px;overflow-y:auto;flex:1}
-.content-inner{max-width:1200px;margin:0 auto}
+/* ═══ Header ═══ */
+.header{display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.logo{font-size:1.3rem;font-weight:700;color:var(--accent);white-space:nowrap}
+.logo-sub{font-size:0.7rem;color:var(--text3);margin-left:4px;font-weight:400}
+.header-right{margin-left:auto;display:flex;gap:8px}
+.pill{padding:6px 16px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:0.78rem;cursor:pointer;font-family:var(--font);transition:all 0.2s}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.pill.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600}
 
-/* ═══ Score Header ═══ */
-.score-header{display:flex;gap:24px;align-items:center;margin-bottom:20px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg)}
-.score-ring-wrap{flex-shrink:0}
-.score-ring-wrap svg{width:120px;height:120px}
-.score-info{flex:1}
-.score-name{font-size:1.5rem;font-weight:600}
-.score-meta{color:var(--text2);font-size:0.8rem;margin-top:4px}
-.score-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.tag{padding:3px 10px;border-radius:12px;font-size:0.7rem;font-weight:600}
-.tag-pass{background:rgba(16,185,129,0.12);color:var(--green)}
-.tag-warn{background:rgba(245,158,11,0.12);color:var(--amber)}
-.tag-fail{background:rgba(239,68,68,0.12);color:var(--red)}
-.score-key-metrics{display:flex;gap:24px;margin-top:8px}
-.metric{text-align:center}
-.metric .val{font-family:var(--mono);font-size:1.2rem;font-weight:600}
-.metric .lab{font-size:0.65rem;color:var(--text3);text-transform:uppercase}
+/* ═══ Search ═══ */
+.search-wrap{position:relative;margin-bottom:24px}
+.search-wrap input{width:100%;padding:14px 18px;background:var(--bg2);border:2px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:1rem;font-family:var(--font);outline:none;transition:border-color 0.2s}
+.search-wrap input:focus{border-color:var(--accent)}
+.search-wrap input::placeholder{color:var(--text3)}
+.search-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:0 0 var(--radius) var(--radius);max-height:300px;overflow-y:auto;z-index:100;margin-top:2px;display:none}
+.search-dropdown.show{display:block}
+.search-item{padding:10px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);font-size:0.9rem;transition:background 0.15s}
+.search-item:hover{background:rgba(194,239,78,0.06)}
+.search-item .si-code{color:var(--accent);font-weight:600;font-family:var(--mono);min-width:70px}
+.search-item .si-name{color:var(--text)}
+.search-item .si-industry{color:var(--text3);font-size:0.75rem}
 
-/* ═══ Grid ═══ */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
-.card h3{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px;font-weight:600}
-.card-sm{padding:12px}
+/* ═══ Score Hero ═══ */
+.hero{display:flex;gap:28px;align-items:center;padding:28px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px}
+.hero-ring{flex-shrink:0}
+.hero-ring svg{width:140px;height:140px}
+.hero-info{flex:1}
+.hero-name{font-size:1.6rem;font-weight:700}
+.hero-code{font-family:var(--mono);color:var(--text3);font-size:0.85rem;margin-left:8px}
+.hero-meta{color:var(--text2);font-size:0.82rem;margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.hero-meta .dot{width:6px;height:6px;border-radius:50%;background:var(--text3)}
+.tag{padding:3px 10px;border-radius:12px;font-size:0.72rem;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.tag-ok{background:rgba(74,222,128,0.12);color:var(--green)}
+.tag-warn{background:rgba(251,191,36,0.12);color:var(--amber)}
+.tag-bad{background:rgba(248,113,113,0.12);color:var(--red)}
+.hero-dims{display:flex;gap:20px;margin-top:12px}
+.hero-dim{text-align:center}
+.hero-dim .hd-val{font-family:var(--mono);font-size:1.3rem;font-weight:700}
+.hero-dim .hd-max{font-size:0.6rem;color:var(--text3)}
+.hero-dim .hd-label{font-size:0.7rem;color:var(--text3);margin-top:2px}
 
-/* ═══ Dim Cards ═══ */
-.dim-card{text-align:center}
-.dim-card .dim-val{font-size:1.8rem;font-weight:700;font-family:var(--mono)}
-.dim-card .dim-max{font-size:0.7rem;color:var(--text3);display:block}
-.dim-card .dim-bar-wrap{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:6px;overflow:hidden}
-.dim-card .dim-bar{height:100%;border-radius:2px;transition:width 0.6s}
-.c-q{color:var(--green)} .c-v{color:var(--accent2)} .c-h{color:var(--amber)} .c-g{color:var(--pink)}
-.bg-q{background:var(--green)} .bg-v{background:var(--accent2)} .bg-h{background:var(--amber)} .bg-g{background:var(--pink)}
+/* ═══ Section ═══ */
+.section{margin-bottom:20px}
+.section-title{font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:12px;font-weight:600;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* ═══ Factor Bars ═══ */
-.factor-row{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid var(--border);font-size:0.8rem}
+/* ═══ Cards Grid ═══ */
+.grid{display:grid;gap:16px}
+.grid2{grid-template-columns:1fr 1fr}
+.grid4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+
+/* ═══ Factor List ═══ */
+.factor-group{margin-bottom:14px}
+.factor-group:last-child{margin-bottom:0}
+.factor-group-title{font-size:0.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.factor-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
 .factor-row:last-child{border:none}
-.factor-label{width:100px;color:var(--text2)}
-.factor-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
-.factor-bar{height:100%;border-radius:3px;transition:width 0.5s}
-.factor-score{width:50px;text-align:right;font-family:var(--mono);font-size:0.85rem;font-weight:500}
+.factor-label{width:100px;font-size:0.82rem;color:var(--text2);flex-shrink:0}
+.factor-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.factor-bar{height:100%;border-radius:3px;transition:width 0.6s}
+.factor-val{width:40px;text-align:right;font-family:var(--mono);font-size:0.85rem;font-weight:500}
+
+/* ═══ Blacklist ═══ */
+.bl-row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.03)}
+.bl-row:last-child{border:none}
+.bl-icon{width:18px;text-align:center;font-size:0.85rem;flex-shrink:0}
+.bl-reason{font-size:0.72rem;color:var(--red);margin-left:auto}
 
 /* ═══ DuPont ═══ */
-.dupont-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px 0}
-.dupont-box{text-align:center;padding:10px 14px;background:var(--bg3);border-radius:6px;min-width:70px}
-.dupont-box .dv{font-family:var(--mono);font-size:1.1rem;font-weight:600}
+.dupont{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 0}
+.dupont-box{text-align:center;padding:10px 14px;background:var(--bg3);border-radius:var(--radius-sm);min-width:64px}
+.dupont-box .dv{font-family:var(--mono);font-size:1.15rem;font-weight:600}
 .dupont-box .dl{font-size:0.6rem;color:var(--text3);text-transform:uppercase}
-.dupont-op{color:var(--text3);font-size:1.2rem}
+.dupont-op{color:var(--text3);font-size:1.1rem;font-weight:700}
 
-/* ═══ M-Score ═══ */
-.mscore-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-weight:600;font-size:0.85rem}
-.mscore-dot{width:8px;height:8px;border-radius:50%}
+/* ═══ Beneish ═══ */
+.mscore-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;font-weight:700;font-size:0.9rem}
+.mscore-dot{width:10px;height:10px;border-radius:50%}
+.mscore-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.mscore-item{font-size:0.72rem;padding:6px 10px;background:var(--bg3);border-radius:var(--radius-sm)}
+.mscore-item b{color:var(--text);display:block;font-family:var(--mono)}
+
+/* ═══ Index Dashboard ═══ */
+.idx-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.idx-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;text-align:center}
+.idx-card .val{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--accent)}
+.idx-card .label{font-size:0.7rem;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+.idx-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.idx-table th{text-align:left;padding:10px 8px;color:var(--text3);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--border2)}
+.idx-table td{padding:10px 8px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:0.78rem}
+.idx-table .name-cell{font-family:var(--font);font-size:0.82rem;color:var(--text)}
+.idx-table .best{color:var(--accent);font-weight:600}
+.idx-table .good{color:var(--green)}
+.idx-table .mid{color:var(--amber)}
+.idx-table .low{color:var(--red)}
+.idx-table tr:hover{background:rgba(194,239,78,0.03)}
+.idx-table .bar-cell{position:relative}
+.idx-table .bar-bg{position:absolute;left:0;top:2px;bottom:2px;background:rgba(194,239,78,0.12);border-radius:2px;z-index:0}
+.idx-table .bar-val{position:relative;z-index:1}
 
 /* ═══ Screener Table ═══ */
-.screener-table{width:100%;border-collapse:collapse;font-size:0.82rem}
-.screener-table th{text-align:left;padding:10px 12px;color:var(--text3);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border2);font-weight:600;cursor:pointer;user-select:none}
-.screener-table th:hover{color:var(--text)}
-.screener-table td{padding:8px 12px;border-bottom:1px solid var(--border);font-family:var(--mono)}
-.screener-table tbody tr{cursor:pointer;transition:background 0.1s}
-.screener-table tbody tr:hover{background:rgba(94,106,210,0.06)}
-.screener-table .name-cell{font-family:var(--font)}
-.screener-table .rank{color:var(--text3);font-size:0.7rem}
+.stable{width:100%;border-collapse:collapse;font-size:0.82rem}
+.stable th{text-align:left;padding:10px 12px;color:var(--text3);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border2);font-weight:600;cursor:pointer}
+.stable th:hover{color:var(--accent)}
+.stable td{padding:9px 12px;border-bottom:1px solid var(--border);font-family:var(--mono)}
+.stable tbody tr{cursor:pointer;transition:background 0.1s}
+.stable tbody tr:hover{background:rgba(194,239,78,0.04)}
+.stable .td-name{font-family:var(--font)}
+.stable .td-rank{color:var(--text3);font-size:0.75rem;text-align:center}
 
-/* ═══ Modal ═══ */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);width:520px;max-height:60vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
-.modal-input{padding:16px;border-bottom:1px solid var(--border)}
-.modal-input input{width:100%;background:transparent;border:none;color:var(--text);font-size:1rem;font-family:var(--font);outline:none}
-.modal-results .modal-item{padding:10px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:0.85rem;border-bottom:1px solid var(--border)}
-.modal-results .modal-item:hover{background:rgba(94,106,210,0.08)}
-.modal-results .modal-item.selected{background:rgba(94,106,210,0.15)}
-.modal-item .shortcut{font-size:0.65rem;color:var(--text3);background:var(--bg3);padding:2px 6px;border-radius:3px}
-.hidden{display:none!important}
+/* ═══ Compare ═══ */
+.cmp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.cmp-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.cmp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.cmp-score{font-family:var(--mono);font-size:1.6rem;font-weight:700;color:var(--accent)}
+.cmp-dims{display:flex;flex-direction:column;gap:5px;margin:10px 0}
+.cmp-dim{display:flex;align-items:center;gap:8px;font-size:0.75rem}
+.cmp-dim-bar{flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.cmp-dim-fill{height:100%;border-radius:2px}
 
-/* ═══ Comparison ═══ */
-.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
-.compare-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
-.compare-card .stock-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.compare-card .stock-score{font-family:var(--mono);font-size:1.5rem;font-weight:700}
-.compare-card .stock-name{font-weight:500}
-.compare-dims{display:flex;flex-direction:column;gap:4px;margin:8px 0}
-.compare-dim{display:flex;align-items:center;gap:8px;font-size:0.75rem}
-.compare-dim .cd-bar{flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
-.compare-dim .cd-fill{height:100%;border-radius:2px}
+/* ═══ Empty ═══ */
+.empty{text-align:center;padding:80px 20px;color:var(--text3)}
+.empty-icon{font-size:3.5rem;margin-bottom:12px}
+.empty-title{font-size:1.1rem;color:var(--text2);margin-bottom:6px}
+.empty-sub{font-size:0.85rem}
+.empty-sub kbd{background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size:0.8rem;color:var(--accent)}
 
-@media(max-width:768px){
-  .sidebar{display:none}
+/* ═══ Spinner ═══ */
+.spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ═══ Footer ═══ */
+.footer{text-align:center;padding:30px;color:var(--text3);font-size:0.7rem;border-top:1px solid var(--border);margin-top:40px}
+
+/* ═══ Responsive ═══ */
+@media(max-width:700px){
+  .hero{flex-direction:column;text-align:center}
+  .hero-dims{justify-content:center}
+  .hero-meta{justify-content:center}
   .grid2,.grid4{grid-template-columns:1fr}
-  .score-header{flex-direction:column;text-align:center}
-  .score-key-metrics{justify-content:center}
-  .dupont-flow{font-size:0.8rem}
+  .mscore-grid{grid-template-columns:repeat(2,1fr)}
+  .header{flex-wrap:wrap}
+  .header-right{width:100%;margin-top:8px}
 }
 </style>
 </head>
 <body>
 
-<!-- ═══ Sidebar ═══ -->
-<aside class="sidebar">
-  <div class="sidebar-logo">📊 BQAS<span>v2</span></div>
-  <div class="sidebar-section">
-    <div class="sidebar-item active" data-view="stock"><span class="icon">🔍</span>股票分析</div>
-    <div class="sidebar-item" data-view="screener"><span class="icon">📋</span>排行榜<span class="badge">Top 50</span></div>
-    <div class="sidebar-item" data-view="compare"><span class="icon">⚖️</span>多股对比</div>
-  </div>
-  <div class="sidebar-section">
-    <div class="sidebar-title">自选股</div>
-    <div id="watchlist" style="font-size:0.75rem;color:var(--text3);padding:8px 10px">点击 ☆ 添加</div>
-  </div>
-  <div style="margin-top:auto;padding:8px;font-size:0.65rem;color:var(--text3);border-top:1px solid var(--border)">
-    10年财报 · 8年回测 · Spearman 0.87-0.91
-  </div>
-</aside>
-
-<!-- ═══ Main ═══ -->
-<main class="main">
-  <header class="header">
-    <div class="header-nav">
-      <button class="active" data-view="stock">评分</button>
-      <button data-view="screener">排行榜</button>
-      <button data-view="compare">对比</button>
-    </div>
-    <div class="header-search" style="position:relative">
-      <input type="text" id="headerInput" placeholder="搜索代码或名称..." 
-             style="background:transparent;border:none;color:var(--text);font-size:0.8rem;font-family:var(--font);width:100%;outline:none;cursor:text"
-             oninput="headerSearch()"
-             onkeydown="if(event.key==='Enter'){const v=this.value.trim().replace(/[^0-9]/g,'').slice(0,6);if(v.length===6){score(v);hideDropdown()}}"
-             onfocus="headerSearch()">
-      <div id="searchDropdown" class="hidden" style="position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--border2);border-radius:0 0 var(--radius) var(--radius);max-height:240px;overflow-y:auto;z-index:100;margin-top:4px;box-shadow:0 12px 32px rgba(0,0,0,0.5)"></div>
-    </div>
-  </header>
-
-  <div class="content" id="content">
-    <div class="content-inner" id="contentInner">
-      <!-- 默认：空白提示 -->
-      <div style="text-align:center;padding:80px 20px;color:var(--text3)">
-        <div style="font-size:4rem;margin-bottom:16px">📊</div>
-        <div style="font-size:1.1rem;font-weight:500;color:var(--text2);margin-bottom:8px">BQAS · 巴菲特量化选股系统</div>
-        <div style="font-size:0.85rem">按下 <kbd style="background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:0.75rem">⌘K</kbd> 搜索股票开始分析</div>
-      </div>
+<div class="app">
+  <!-- ═══ Header ═══ -->
+  <div class="header">
+    <span class="logo">📊 BQAS<span class="logo-sub">v2.0</span></span>
+    <select id="marketSelect" onchange="switchMarket(this.value)" style="margin-left:12px;padding:6px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--bg2);color:var(--accent);font-size:0.78rem;font-family:var(--font);cursor:pointer;outline:none">
+      <option value="cn">🇨🇳 A股</option>
+      <option value="us">🇺🇸 美股</option>
+      <option value="hk">🇭🇰 港股</option>
+    </select>
+    <div class="header-right">
+      <button class="pill active" data-tab="score">📈 评分</button>
+      <button class="pill" data-tab="screener">📋 排行榜</button>
+      <button class="pill" data-tab="compare">⚖️ 对比</button>
+      <button class="pill" data-tab="index">📊 市场指数</button>
     </div>
   </div>
-</main>
 
-<!-- ═══ End body ═══ -->
+  <!-- ═══ Search Bar ═══ -->
+  <div class="search-wrap" id="searchWrap">
+    <input type="text" id="searchInput" placeholder="输入股票代码或名称搜索…  例如：600519 / 茅台"
+           autocomplete="off"
+           oninput="handleSearch()"
+           onkeydown="if(event.key==='Enter'){const v=this.value.trim().replace(/[^0-9]/g,'').slice(0,6);if(v.length===6){loadScore(v);hideDropdown()}}">
+    <div class="search-dropdown" id="searchDropdown"></div>
+  </div>
+
+  <!-- ═══ Content ═══ -->
+  <div id="content">
+    <div class="empty" id="emptyState">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">BQAS · 巴菲特量化选股系统</div>
+      <div class="empty-sub">10年财报 · 8年回测 · Spearman 0.87–0.91<br>输入 <kbd>代码</kbd> 或 <kbd>名称</kbd> 开始分析</div>
+    </div>
+  </div>
+
+  <div class="footer" id="footer">5,515 只A股 · 61,324 条行情数据 · 2016–2025 十年财报</div>
+</div>
 
 <script>
+// ═══ State ═══
 const API = '';
+let currentView = 'score';
+let currentMarket = 'cn';
+let watchlist = JSON.parse(localStorage.getItem('bqas_wl')||'[]');
 let currentStock = null;
-let watchlist = JSON.parse(localStorage.getItem('bqas_watchlist')||'[]');
 
-// ═══ Search Dropdown ═══
-function hideDropdown(){document.getElementById('searchDropdown').classList.add('hidden')}
-async function headerSearch(){
-  const q=document.getElementById('headerInput').value.trim();
-  const dd=document.getElementById('searchDropdown');
-  if(q.length<1){dd.classList.add('hidden');return}
-  const r=await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
-  const data=await r.json();
-  if(!data.length){dd.classList.add('hidden');return}
-  dd.innerHTML=data.map(s=>`
-    <div onclick="selectAndScore('${s.code}')" style="padding:8px 12px;cursor:pointer;font-size:0.82rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between">
-      <span><b style="color:var(--accent2)">${s.code}</b> ${s.name}</span>
-      <span style="color:var(--text3);font-size:0.7rem">${s.industry||''}</span>
-    </div>
-  `).join('');
-  dd.classList.remove('hidden');
-}
-async function selectAndScore(code){hideDropdown();document.getElementById('headerInput').value='';await score(code)}
-document.addEventListener('click',e=>{if(!e.target.closest('.header-search'))hideDropdown()});
-
-// ═══ Navigation ═══
-document.querySelectorAll('[data-view]').forEach(el => {
-  el.addEventListener('click', () => {
-    document.querySelectorAll('[data-view]').forEach(e=>e.classList.remove('active'));
-    el.classList.add('active');
-  });
-});
-document.querySelectorAll('.sidebar-item[data-view]').forEach(el => {
-  el.addEventListener('click', function(){
-    document.querySelectorAll('.sidebar-item[data-view]').forEach(e=>e.classList.remove('active'));
-    this.classList.add('active');
-    if(this.dataset.view==='stock' && currentStock) renderStock(currentStock);
-    else if(this.dataset.view==='screener') loadScreener();
-    else if(this.dataset.view==='compare') showCompare();
-  });
-});
-document.querySelectorAll('.header-nav button[data-view]').forEach(el => {
-  el.addEventListener('click', function(){
-    document.querySelectorAll('.header-nav button[data-view]').forEach(e=>e.classList.remove('active'));
-    this.classList.add('active');
-    if(this.dataset.view==='stock' && currentStock) renderStock(currentStock);
-    else if(this.dataset.view==='screener') loadScreener();
-    else if(this.dataset.view==='compare') showCompare();
-  });
-});
-
-// ═══ Score ═══
-async function score(code){
-  document.getElementById('contentInner').innerHTML='<div style="text-align:center;padding:60px;color:var(--text3)"><div class="spinner" style="display:inline-block;width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.6s linear infinite"></div><p style="margin-top:12px">分析中…</p></div>';
-  const r=await fetch(`${API}/api/score/${code}`);const d=await r.json();
-  if(d.error){document.getElementById('contentInner').innerHTML=`<div style="color:var(--red);text-align:center;padding:40px">❌ ${d.error}</div>`;return}
-  currentStock=d;renderStock(d);
-  // Add to watchlist
-  if(!watchlist.find(w=>w.code===d.code)){watchlist.push({code:d.code,name:d.name});saveWatchlist()}
+function switchMarket(market) {
+  currentMarket = market;
+  // Reset and reload
+  currentStock = null;
+  if (currentView === 'screener') loadScreener();
+  else if (currentView === 'index') loadIndex();
+  else if (currentView === 'score') {
+    document.getElementById('emptyState')?.remove();
+    document.getElementById('content').innerHTML = `<div class="empty">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">${market==='cn'?'A股':market==='us'?'美股':'港股'} · 巴菲特量化选股</div>
+      <div class="empty-sub">输入代码搜索开始分析</div>
+    </div>`;
+  }
+  // Update search placeholder
+  const ph = market==='cn'?'600519 / 茅台':market==='us'?'AAPL / 苹果':'0700.HK / 腾讯';
+  document.getElementById('searchInput').placeholder = `输入代码搜索… 例如：${ph}`;
 }
 
-function renderStock(d){
-  const w=d.scores?.weighted||{};
-  const beneish=d.beneish||{};
-  const dupont=d.scores?.quality?.roe?.dupont||{};
-  const checks=d.blacklist_checks||{};
-  const max={quality:35,value:30,health:20,gov:15};
-  const labels={quality:'企业质量',value:'估值水平',health:'财务健康',gov:'治理安全'};
-  const colors={quality:'c-q bg-q',value:'c-v bg-v',health:'c-h bg-h',gov:'c-g bg-g'};
-  const failedChecks=Object.entries(checks).filter(([,v])=>v===false||(typeof v==='string'&&v)).length;
-  
-  // Score ring SVG
-  const cx=60,cy=60,r=50,circ=2*Math.PI*r;
-  const segments=[
-    {pct:(w.quality||0)/max.quality*100,color:'#10b981'},
-    {pct:(w.value||0)/max.value*100,color:'#5e6ad2'},
-    {pct:(w.health||0)/max.health*100,color:'#f59e0b'},
-    {pct:(w.gov||0)/max.gov*100,color:'#ec4899'},
+// ═══ Footer: load cache freshness ═══
+(async function updateFooter(){
+  try{
+    const r=await fetch(API+'/api/health');
+    const d=await r.json();
+    const ft=document.getElementById('footer');
+    if(d.cache?.built_at){
+      const t=new Date(d.cache.built_at);
+      const ago=Math.round((Date.now()-t.getTime())/3600000);
+      ft.textContent=`因子缓存: ${d.cache.cached_stocks}只 · 更新于 ${ago}小时前 · ${d.stocks}只A股`;
+    }
+  }catch(e){}
+})();
+
+// ═══ Tabs ═══
+document.querySelectorAll('.pill[data-tab]').forEach(el => {
+  el.addEventListener('click', function(){
+    document.querySelectorAll('.pill[data-tab]').forEach(e=>e.classList.remove('active'));
+    this.classList.add('active');
+    currentView = this.dataset.tab;
+    if(currentView==='screener') loadScreener();
+    else if(currentView==='compare') loadCompare();
+    else if(currentView==='index') loadIndex();
+    else if(currentStock) renderScore(currentStock);
+  });
+});
+
+// ═══ Search ═══
+let searchTimer;
+function hideDropdown(){document.getElementById('searchDropdown').classList.remove('show')}
+async function handleSearch(){
+  clearTimeout(searchTimer);
+  const q = document.getElementById('searchInput').value.trim();
+  const dd = document.getElementById('searchDropdown');
+  if(q.length<1){dd.classList.remove('show');return}
+  searchTimer = setTimeout(async()=>{
+    try{
+      const r = await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
+      const data = await r.json();
+      if(!data.length){dd.classList.remove('show');return}
+      dd.innerHTML = data.map(s=>{
+        const mkt = s.market || 'cn';
+        const flag = mkt==='hk'?'🇭🇰':mkt==='us'?'🇺🇸':'';
+        return `
+        <div class="search-item" onclick="selectStock('${s.code}','${mkt}')">
+          <span><span class="si-code">${flag} ${s.code}</span> <span class="si-name">${s.name}</span></span>
+          <span class="si-industry">${s.industry||''}</span>
+        </div>`;
+      }).join('');
+      dd.classList.add('show');
+    }catch(e){}
+  },200);
+}
+function selectStock(code, market){
+  hideDropdown();
+  document.getElementById('searchInput').value = '';
+  if (market && market !== currentMarket) {
+    switchMarket(market);
+  }
+  loadScore(code);
+}
+document.addEventListener('click',e=>{if(!e.target.closest('#searchWrap')) hideDropdown()});
+
+// ═══ Load Score ═══
+async function loadScore(code){
+  document.getElementById('emptyState')?.remove();
+  const ct = document.getElementById('content');
+  ct.innerHTML = '<div class="empty"><div class="spinner"></div><div class="empty-sub" style="margin-top:14px">分析中…</div></div>';
+
+  try{
+    const scoreUrl = currentMarket === 'cn'
+      ? `${API}/api/score/${code}`
+      : `${API}/api/score-global/${code}?market=${currentMarket}`;
+    const [r, rp] = await Promise.all([
+      fetch(scoreUrl),
+      fetch(`${API}/api/stock-profile/${code}`).catch(()=>null)
+    ]);
+    const d = await r.json();
+    const profile = rp ? await rp.json() : null;
+    if(d.error){ct.innerHTML=`<div class="empty"><div style="color:var(--red);font-size:1.2rem">❌</div><div class="empty-sub">${d.error}</div></div>`;return}
+    currentStock = d;
+    renderScore(d, profile);
+    // Add to watchlist
+    if(!watchlist.find(w=>w.code===d.code)){watchlist.push({code:d.code,name:d.name});saveWL()}
+    // Switch to score tab
+    document.querySelectorAll('.pill[data-tab]').forEach(e=>e.classList.remove('active'));
+    document.querySelector('.pill[data-tab="score"]').classList.add('active');
+    currentView='score';
+  }catch(e){
+    ct.innerHTML=`<div class="empty"><div style="color:var(--red);font-size:1.2rem">❌</div><div class="empty-sub">网络错误</div></div>`;
+  }
+}
+
+// ═══ Render Score ═══
+function renderScore(d, profile){
+  const w = d.scores?.weighted||{};
+  const beneish = d.beneish||{};
+  const dupont = d.scores?.quality?.roe?.dupont||{};
+  const checks = d.blacklist_checks||{};
+  const max = {quality:35,value:30,health:20,gov:15};
+  const labels = {quality:'企业质量',value:'估值水平',health:'财务健康',gov:'治理安全'};
+  const colors = {'quality':'#4ade80','value':'#60a5fa','health':'#fbbf24','gov':'#f472b6'};
+
+  // SVG Ring
+  const cx=75,cy=75,r=62,circ=2*Math.PI*r;
+  const segs = [
+    {pct:(w.quality||0)/max.quality,color:'#4ade80'},
+    {pct:(w.value||0)/max.value,color:'#60a5fa'},
+    {pct:(w.health||0)/max.health,color:'#fbbf24'},
+    {pct:(w.gov||0)/max.gov,color:'#f472b6'},
   ].filter(s=>s.pct>0);
-  let offset=0;
-  let arcs='';
-  segments.forEach(s=>{
-    const len=s.pct/100*circ;
-    arcs+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="8" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})" stroke-linecap="round"/>`;
-    offset+=len;
+  let off=0,arcs='';
+  segs.forEach(s=>{
+    const len=s.pct*circ;
+    arcs+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="8" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-off}" transform="rotate(-90 ${cx} ${cy})" stroke-linecap="round"/>`;
+    off+=len;
   });
-  const ringSvg=`<svg viewBox="0 0 120 120" width="120" height="120">
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
+  const ring=`<svg viewBox="0 0 150 150" width="140" height="140">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(194,239,78,0.08)" stroke-width="8"/>
     ${arcs}
-    <text x="${cx}" y="${cy-4}" text-anchor="middle" fill="#f7f8f8" font-family="JetBrains Mono" font-size="22" font-weight="700">${(d.total||0).toFixed(0)}</text>
-    <text x="${cx}" y="${cy+14}" text-anchor="middle" fill="#6b6f7b" font-family="Inter" font-size="10">${d.rating||''}</text>
+    <text x="${cx}" y="${cy-8}" text-anchor="middle" fill="#c2ef4e" font-family="'Cascadia Code',monospace" font-size="26" font-weight="700">${(d.total||0).toFixed(0)}</text>
+    <text x="${cx}" y="${cy+14}" text-anchor="middle" fill="#7b6b9e" font-size="10">${d.rating||''} ${d.rating_label||''}</text>
   </svg>`;
 
-  const statusTag=d.passed_blacklist?'<span class="tag tag-pass">✓ 通过一票否决</span>':'<span class="tag tag-fail">⛔ '+d.blacklist_reason+'</span>';
-  const bStatus=beneish.likely_manipulator?['🔴 高度嫌疑','tag-fail','#ef4444']:beneish.possible_manipulator?['🟡 可能操纵','tag-warn','#f59e0b']:['🟢 无嫌疑','tag-pass','#10b981'];
+  const passTag = d.passed_blacklist
+    ? '<span class="tag tag-ok">✓ 通过否决</span>'
+    : `<span class="tag tag-bad">⛔ ${d.blacklist_reason||''}</span>`;
 
-  document.getElementById('contentInner').innerHTML=`
-  <div class="score-header">
-    <div class="score-ring-wrap">${ringSvg}</div>
-    <div class="score-info">
-      <div class="score-name">${d.name||d.code} <span style="font-family:var(--mono);color:var(--text3);font-size:0.9rem">${d.code}</span></div>
-      <div class="score-meta">${d.industry_group||'?'} · ${d.rating_label||''} · ${d.rating_advice||''}</div>
-      <div class="score-tags">${statusTag} <span class="tag ${bStatus[1]}">${bStatus[0]} M=${beneish.m_score?.toFixed(3)||'?'}</span></div>
-      <div class="score-key-metrics">
+  let bTag,bBadgeBg,bBadgeColor;
+  if(beneish.likely_manipulator){bTag=['🔴 高度嫌疑','tag-bad'];bBadgeBg='rgba(248,113,113,0.15)';bBadgeColor='#f87171'}
+  else if(beneish.possible_manipulator){bTag=['🟡 可能操纵','tag-warn'];bBadgeBg='rgba(251,191,36,0.15)';bBadgeColor='#fbbf24'}
+  else{bTag=['🟢 无嫌疑','tag-ok'];bBadgeBg='rgba(74,222,128,0.12)';bBadgeColor='#4ade80'}
+
+  document.getElementById('content').innerHTML = `
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-ring">${ring}</div>
+    <div class="hero-info">
+      <div>
+        <span class="hero-name">${d.name||d.code}</span>
+        <span class="hero-code">${d.code}</span>
+      </div>
+      <div class="hero-meta">
+        <span>${d.industry_group||'?'} / ${d.industry_sw||'?'}</span>
+        <span class="dot"></span>
+        <span>${d.rating_advice||''}</span>
+        <span class="dot"></span>
+        ${passTag}
+        <span class="tag ${bTag[1]}">${bTag[0]} M=${beneish.m_score?.toFixed(3)||'?'}</span>
+      </div>
+      <div class="hero-dims">
         ${['quality','value','health','gov'].map(dim=>`
-          <div class="metric"><div class="val ${colors[dim].split(' ')[0]}">${(w[dim]||0).toFixed(0)}<span style="font-size:0.6em;color:var(--text3)">/${max[dim]}</span></div><div class="lab">${labels[dim]}</div></div>
+          <div class="hero-dim">
+            <div class="hd-val" style="color:${colors[dim]}">${(w[dim]||0).toFixed(0)}<span class="hd-max">/${max[dim]}</span></div>
+            <div class="hd-label">${labels[dim]}</div>
+          </div>
         `).join('')}
       </div>
     </div>
   </div>
 
-  <div class="grid2" style="margin-bottom:16px">
-    <div class="card">
-      <h3>杜邦拆解 (最新年)</h3>
-      ${dupont.net_margin!==undefined?`
-        <div class="dupont-flow">
-          <div class="dupont-box"><div class="dv" style="color:var(--green)">${(dupont.net_margin*100).toFixed(1)}%</div><div class="dl">净利率</div></div>
-          <div class="dupont-op">×</div>
-          <div class="dupont-box"><div class="dv" style="color:var(--accent2)">${dupont.asset_turnover.toFixed(2)}</div><div class="dl">周转率</div></div>
-          <div class="dupont-op">×</div>
-          <div class="dupont-box"><div class="dv" style="color:var(--amber)">${dupont.equity_multiplier.toFixed(1)}x</div><div class="dl">杠杆</div></div>
-          <div class="dupont-op">=</div>
-          <div class="dupont-box"><div class="dv" style="color:var(--text)">${(dupont.roe_reconstructed*100).toFixed(1)}%</div><div class="dl">ROE</div></div>
-        </div>
-      `:'<p style="color:var(--text3);padding:8px">数据不足</p>'}
-    </div>
-    <div class="card">
-      <h3>Beneish M-Score 造假检测</h3>
-      <div style="display:flex;align-items:center;gap:12px;padding:8px 0">
-        <span class="mscore-badge" style="background:${bStatus[2]}22;color:${bStatus[2]}">
-          <span class="mscore-dot" style="background:${bStatus[2]}"></span>
-          ${beneish.m_score?.toFixed(3)||'?'}
-        </span>
-        <span style="font-size:0.85rem">${beneish.likely_manipulator?'高度盈利操纵嫌疑':beneish.possible_manipulator?'可能盈利操纵':'财务数据无明显操纵迹象'}</span>
-      </div>
-      ${beneish.flags?.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">${beneish.flags.map(f=>`<span class="tag tag-warn">⚠ ${f}</span>`).join('')}</div>`:''}
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:10px;font-size:0.7rem;color:var(--text3)">
-        ${Object.entries(beneish.ratios||{}).map(([k,v])=>`<div><b>${k.toUpperCase()}</b>: ${v?.toFixed(2)||'?'}</div>`).join('')}
-      </div>
+  <!-- Factors + Blacklist -->
+  <div class="section">
+    <div class="section-title">因子明细</div>
+    <div class="grid grid2">
+      <div class="card">${renderFactors(d)}</div>
+      <div class="card">${renderBlacklist(checks)}</div>
     </div>
   </div>
 
-  <div class="grid2" style="margin-bottom:16px">
-    <div class="card">
-      <h3>因子明细</h3>
-      ${renderFactors(d)}
+  <!-- DuPont + Beneish -->
+  <div class="section">
+    <div class="section-title">深度分析</div>
+    <div class="grid grid2">
+      <div class="card">
+        <div class="factor-group-title" style="margin-bottom:8px">杜邦拆解（最新年）</div>
+        ${dupont.net_margin!==undefined?`
+          <div class="dupont">
+            <div class="dupont-box"><div class="dv" style="color:var(--green)">${(dupont.net_margin*100).toFixed(1)}%</div><div class="dl">净利率</div></div>
+            <div class="dupont-op">×</div>
+            <div class="dupont-box"><div class="dv" style="color:var(--blue)">${dupont.asset_turnover.toFixed(2)}</div><div class="dl">周转率</div></div>
+            <div class="dupont-op">×</div>
+            <div class="dupont-box"><div class="dv" style="color:var(--amber)">${dupont.equity_multiplier.toFixed(1)}x</div><div class="dl">杠杆</div></div>
+            <div class="dupont-op">=</div>
+            <div class="dupont-box"><div class="dv" style="color:var(--accent)">${(dupont.roe_reconstructed*100).toFixed(1)}%</div><div class="dl">ROE</div></div>
+          </div>
+        `:'<div style="color:var(--text3);padding:10px;text-align:center">数据不足</div>'}
+      </div>
+      <div class="card">
+        <div class="factor-group-title" style="margin-bottom:8px">Beneish M-Score 造假检测</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="mscore-badge" style="background:${bBadgeBg};color:${bBadgeColor}">
+            <span class="mscore-dot" style="background:${bBadgeColor}"></span>
+            ${beneish.m_score?.toFixed(3)||'?'}
+          </span>
+          <span style="font-size:0.85rem;color:var(--text2)">
+            ${beneish.likely_manipulator?'⚠ 高度盈利操纵嫌疑':beneish.possible_manipulator?'⚠ 可能存在盈利操纵':'✓ 财务数据无明显操纵迹象'}
+          </span>
+        </div>
+        ${beneish.flags?.length?`<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">${beneish.flags.map(f=>`<span class="tag tag-warn">⚠ ${f}</span>`).join('')}</div>`:''}
+        <div class="mscore-grid">
+          ${Object.entries(beneish.ratios||{}).map(([k,v])=>`<div class="mscore-item"><b>${v?.toFixed(2)||'?'}</b>${k.toUpperCase()}</div>`).join('')}
+        </div>
+      </div>
     </div>
-    <div class="card">
-      <h3>一票否决清单</h3>
-      ${renderBlacklist(checks)}
+    ${profile?.kline_stats?.high_52w ? `
+    <!-- ═══ 52-Week Profile ═══ -->
+    <div class="section"><div class="section-title">📈 52周股价 & 公司概况</div></div>
+    <div class="grid grid2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="factor-group-title" style="margin-bottom:10px">52周价格区间</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><div style="font-size:0.65rem;color:var(--text3)">当前价格</div>
+            <div style="font-family:var(--mono);font-size:1.2rem;font-weight:600;color:var(--accent)">¥${profile.kline_stats.latest_price}</div></div>
+          <div><div style="font-size:0.65rem;color:var(--text3)">52周最高</div>
+            <div style="font-family:var(--mono);font-size:1rem;color:var(--green)">¥${profile.kline_stats.high_52w}</div></div>
+          <div><div style="font-size:0.65rem;color:var(--text3)">52周最低</div>
+            <div style="font-family:var(--mono);font-size:1rem;color:var(--red)">¥${profile.kline_stats.low_52w}</div></div>
+          <div><div style="font-size:0.65rem;color:var(--text3)">52周涨跌</div>
+            <div style="font-family:var(--mono);font-size:1rem;color:${profile.kline_stats.change_52w_pct>=0?'var(--green)':'var(--red)'}">${profile.kline_stats.change_52w_pct>0?'+':''}${profile.kline_stats.change_52w_pct}%</div></div>
+          <div><div style="font-size:0.65rem;color:var(--text3)">近1月涨跌</div>
+            <div style="font-family:var(--mono);font-size:1rem;color:${profile.kline_stats.change_1m_pct>=0?'var(--green)':'var(--red)'}">${profile.kline_stats.change_1m_pct>0?'+':''}${profile.kline_stats.change_1m_pct}%</div></div>
+          <div><div style="font-size:0.65rem;color:var(--text3)">20日波动率</div>
+            <div style="font-family:var(--mono);font-size:1rem;color:var(--amber)">${profile.kline_stats.volatility_20d_pct}%</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="factor-group-title" style="margin-bottom:10px">公司概况</div>
+        <div style="font-size:0.8rem;line-height:1.8;color:var(--text2)">
+          ${profile.company?.full_name?`<div><span style="color:var(--text3)">全称：</span>${profile.company.full_name}</div>`:''}
+          ${profile.company?.industry?`<div><span style="color:var(--text3)">行业：</span>${profile.company.industry}</div>`:''}
+          ${profile.company?.listing_date?`<div><span style="color:var(--text3)">上市：</span>${profile.company.listing_date}</div>`:''}
+          ${profile.company?.total_shares_e8?`<div><span style="color:var(--text3)">股本：</span>${profile.company.total_shares_e8}亿股</div>`:''}
+          ${profile.company?.chairman?`<div><span style="color:var(--text3)">董事长：</span>${profile.company.chairman}</div>`:''}
+          ${profile.company?.employees?`<div><span style="color:var(--text3)">员工：</span>${profile.company.employees}</div>`:''}
+          ${profile.company?.website?`<div><span style="color:var(--text3)">官网：</span><a href="${profile.company.website}" target="_blank" style="color:var(--accent)">${profile.company.website}</a></div>`:''}
+        </div>
+      </div>
     </div>
+    ${profile.company?.description ? `
+    <div class="card" style="margin-bottom:20px">
+      <div class="factor-group-title" style="margin-bottom:8px">📋 公司简介</div>
+      <div style="font-size:0.82rem;line-height:1.8;color:var(--text2)">${profile.company.description}</div>
+      ${profile.company?.main_business?`<div style="margin-top:8px"><span style="color:var(--text3)">主营业务：</span>${profile.company.main_business}</div>`:''}
+    </div>`:''}
+    ${profile.company?.description ? '':''}
+    `:''}
   </div>`;
-
-  document.querySelectorAll('.sidebar-item[data-view="stock"]').forEach(e=>e.classList.add('active'));
-  document.querySelectorAll('.header-nav button[data-view="stock"]').forEach(e=>e.classList.add('active'));
-  document.querySelectorAll('[data-view]').forEach(e=>{if(e.dataset.view!=='stock')e.classList.remove('active')});
 }
 
 function renderFactors(d){
-  const s=d.scores||{};
-  const map={'quality':{roe:'ROE稳定性',roic:'ROIC超额',cfo:'CFO质量',gm:'毛利护城河'},'value':{ev_oe:'EV/OpE',fcf_yield:'FCF Yield',pb_adj:'PB调整'},'health':{leverage:'杠杆率',ic:'利息覆盖',asset_q:'资产质量'},'gov':{dividend:'股东回报',audit:'审计治理'}};
-  const cols={quality:'bg-q',value:'bg-v',health:'bg-h',gov:'bg-g'};
+  const s = d.scores||{};
+  const map = {
+    quality:{roe:'ROE稳定性',roic:'ROIC超额',cfo:'CFO质量',gm:'毛利护城河'},
+    value:{ev_oe:'EV/OpE',fcf_yield:'FCF Yield',pb_adj:'PB调整'},
+    health:{leverage:'杠杆率',ic:'利息覆盖',asset_q:'资产质量'},
+    gov:{dividend:'股东回报',audit:'审计治理'},
+  };
+  const cols={quality:'#4ade80',value:'#60a5fa',health:'#fbbf24',gov:'#f472b6'};
+  const dimNames={quality:'企业质量',value:'估值水平',health:'财务健康',gov:'治理安全'};
   let h='';
   for(const[dim,factors]of Object.entries(map)){
-    h+=`<div style="font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin:8px 0 4px">${dim}</div>`;
+    h+=`<div class="factor-group"><div class="factor-group-title">${dimNames[dim]}</div>`;
     for(const[key,label]of Object.entries(factors)){
       const f=s[dim]?.[key]||{};
       const sc=f.score||0;
-      h+=`<div class="factor-row"><div class="factor-label">${label}</div><div class="factor-bar-wrap"><div class="factor-bar ${cols[dim]}" style="width:${sc*10}%"></div></div><div class="factor-score">${sc.toFixed(1)}</div></div>`;
+      h+=`<div class="factor-row">
+        <div class="factor-label">${label}</div>
+        <div class="factor-bar-wrap"><div class="factor-bar" style="width:${sc*10}%;background:${cols[dim]}"></div></div>
+        <div class="factor-val">${sc.toFixed(1)}</div>
+      </div>`;
     }
+    h+=`</div>`;
   }
   return h;
 }
 
 function renderBlacklist(checks){
-  const map={st_flag:'ST/*ST',listing_days:'上市≥3年',market_cap:'市值≥30亿',avg_volume:'日均成交≥2000万',net_loss_3y:'无连续亏损',ocf_negative_3y:'OCF正常',audit_opinion:'标准审计',goodwill_bomb:'商誉安全',pledge_ratio:'质押<70%',financial_fraud:'无造假处罚'};
-  return Object.entries(map).map(([k,label])=>{
-    const v=checks[k];
-    const ok=v===true||(typeof v==='string'&&!v)||(Array.isArray(v)&&v[0]);
-    return`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;font-size:0.8rem;border-bottom:1px solid var(--border)">
-      <span style="color:${ok?'var(--green)':'var(--red)'}">${ok?'✓':'✗'}</span>
-      <span>${label}</span>
-      ${!ok?`<span style="color:var(--red);font-size:0.7rem;margin-left:auto">${typeof v==='string'?v:v?.[1]||''}</span>`:''}
-    </div>`;
-  }).join('');
+  const map = {
+    st_flag:'ST / *ST',listing_days:'上市 ≥ 3年',market_cap:'市值 ≥ 30亿',avg_volume:'日均成交 ≥ 2000万',
+    net_loss_3y:'无连续3年亏损',ocf_negative_3y:'经营现金流正常',audit_opinion:'标准无保留审计意见',
+    goodwill_bomb:'商誉安全(≤50%)',pledge_ratio:'质押率 < 70%',financial_fraud:'无造假处罚',
+  };
+  return `<div class="factor-group-title" style="margin-bottom:8px">一票否决清单</div>`+
+    Object.entries(map).map(([k,label])=>{
+      const v=checks[k];
+      const ok=v===true||(typeof v==='string'&&!v)||(Array.isArray(v)&&v[0]);
+      return`<div class="bl-row">
+        <span class="bl-icon" style="color:${ok?'var(--green)':'var(--red)'}">${ok?'✓':'✗'}</span>
+        <span>${label}</span>
+        ${!ok?`<span class="bl-reason">${typeof v==='string'?v:v?.[1]||''}</span>`:''}
+      </div>`;
+    }).join('');
 }
 
 // ═══ Screener ═══
 async function loadScreener(){
-  document.getElementById('contentInner').innerHTML='<div style="text-align:center;padding:60px;color:var(--text3)"><div class="spinner" style="display:inline-block;width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.6s linear infinite"></div><p style="margin-top:12px">加载排行榜…</p></div>';
-  const r=await fetch(`${API}/api/screener`);const data=await r.json();
-  if(data.error){document.getElementById('contentInner').innerHTML=`<div style="color:var(--red);text-align:center;padding:40px">❌ ${data.error}</div>`;return}
-  renderScreener(data);
-  document.querySelectorAll('[data-view]').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('[data-view="screener"]').forEach(e=>e.classList.add('active'));
-}
-
-function renderScreener(data){
-  document.getElementById('contentInner').innerHTML=`
-    <div style="font-size:1.2rem;font-weight:600;margin-bottom:16px">📋 排行榜 Top 50</div>
-    <table class="screener-table"><thead><tr>
-      <th>#</th><th style="width:80px">代码</th><th>名称</th><th>总分</th><th>质量</th><th>估值</th><th>健康</th><th>治理</th><th>ROE%</th>
-    </tr></thead><tbody>
-    ${data.map((s,i)=>`
-      <tr onclick="score('${s.code}')">
-        <td class="rank">${i+1}</td>
-        <td><b>${s.code}</b></td>
-        <td class="name-cell">${s.name||''}</td>
-        <td style="color:var(--accent2);font-weight:600">${s.total}</td>
-        <td style="color:var(--green)">${s.q_score}</td>
-        <td style="color:var(--accent2)">${s.v_score}</td>
-        <td style="color:var(--amber)">${s.h_score}</td>
-        <td>${s.g_score}</td>
-        <td>${s.roe_pct}%</td>
-      </tr>
-    `).join('')}
-    </tbody></table>`;
+  const ct = document.getElementById('content');
+  ct.innerHTML = '<div class="empty"><div class="spinner"></div><div class="empty-sub" style="margin-top:14px">加载排行榜…</div></div>';
+  try{
+    const url = currentMarket === 'cn'
+      ? `${API}/api/screener`
+      : `${API}/api/screener-global?market=${currentMarket}`;
+    const r = await fetch(url);
+    const data = await r.json();
+    if(data.error){ct.innerHTML=`<div class="empty"><div style="color:var(--red)">❌ ${data.error}</div></div>`;return}
+    ct.innerHTML = `
+      <div class="section"><div class="section-title">📋 排行榜 Top 50</div></div>
+      <div class="card" style="overflow-x:auto">
+      <table class="stable"><thead><tr>
+        <th>#</th><th>代码</th><th>名称</th><th style="color:var(--accent)">总分</th><th style="color:var(--green)">质量</th><th style="color:var(--blue)">估值</th><th style="color:var(--amber)">健康</th><th>治理</th><th>ROE%</th>
+      </tr></thead><tbody>
+      ${data.map((s,i)=>`
+        <tr onclick="loadScore('${s.code}')">
+          <td class="td-rank">${i+1}</td>
+          <td><b style="color:var(--accent)">${s.code}</b></td>
+          <td class="td-name">${s.name||''}</td>
+          <td style="color:var(--accent);font-weight:600">${s.total}</td>
+          <td style="color:var(--green)">${s.q_score}</td>
+          <td style="color:var(--blue)">${s.v_score}</td>
+          <td style="color:var(--amber)">${s.h_score}</td>
+          <td>${s.g_score}</td>
+          <td>${s.roe_pct}%</td>
+        </tr>
+      `).join('')}
+      </tbody></table>
+      </div>`;
+  }catch(e){
+    ct.innerHTML=`<div class="empty"><div style="color:var(--red)">网络错误</div></div>`;
+  }
 }
 
 // ═══ Compare ═══
-function showCompare(){
-  const codes=watchlist.map(w=>w.code).slice(0,5);
+function loadCompare(){
+  const codes = watchlist.map(w=>w.code).slice(0,5);
+  const ct = document.getElementById('content');
   if(codes.length<2){
-    document.getElementById('contentInner').innerHTML=`<div style="text-align:center;padding:60px;color:var(--text3)">需要至少2只自选股才能对比。在股票分析页搜索后会自动加入自选股。</div>`;
+    ct.innerHTML=`<div class="empty"><div class="empty-icon">⭐</div><div class="empty-title">需要至少 2 只自选股</div><div class="empty-sub">搜索评分后会自动加入自选列表</div></div>`;
     return;
   }
-  document.getElementById('contentInner').innerHTML='<div style="text-align:center;padding:60px;color:var(--text3)"><div class="spinner" style="display:inline-block;width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.6s linear infinite"></div></div>';
-  fetch(`${API}/api/compare?codes=${codes.join(',')}`).then(r=>r.json()).then(data=>renderCompare(data));
+  ct.innerHTML='<div class="empty"><div class="spinner"></div><div class="empty-sub" style="margin-top:14px">对比中…</div></div>';
+  fetch(`${API}/api/compare?codes=${codes.join(',')}`).then(r=>r.json()).then(data=>{
+    if(Array.isArray(data)) renderCompare(data);
+    else ct.innerHTML='<div class="empty"><div style="color:var(--red)">对比失败</div></div>';
+  }).catch(()=>ct.innerHTML='<div class="empty"><div style="color:var(--red)">网络错误</div></div>');
 }
 
 function renderCompare(data){
   const max={quality:35,value:30,health:20,gov:15};
-  document.getElementById('contentInner').innerHTML=`
-    <div style="font-size:1.2rem;font-weight:600;margin-bottom:16px">⚖️ 多股对比</div>
-    <div class="compare-grid">
+  document.getElementById('content').innerHTML = `
+    <div class="section"><div class="section-title">⚖️ 多股对比</div></div>
+    <div class="cmp-grid">
     ${data.map(d=>{
       const w=d.scores?.weighted||{};
-      return`<div class="compare-card">
-        <div class="stock-header"><span class="stock-name">${d.code}<br><small style="color:var(--text3)">${d.name||''}</small></span><span class="stock-score" style="color:${d.total>=80?'var(--green)':d.total>=60?'var(--accent2)':d.total>=40?'var(--amber)':'var(--red)'}">${(d.total||0).toFixed(1)}</span></div>
-        <div class="compare-dims">
+      const b=d.beneish||{};
+      const scoreColor=d.total>=80?'var(--green)':d.total>=60?'var(--blue)':d.total>=40?'var(--amber)':'var(--red)';
+      return`<div class="cmp-card">
+        <div class="cmp-header">
+          <div><b style="color:var(--accent)">${d.code}</b><br><small style="color:var(--text3)">${d.name||''}</small></div>
+          <div class="cmp-score" style="color:${scoreColor}">${(d.total||0).toFixed(1)}</div>
+        </div>
+        <div class="cmp-dims">
         ${Object.entries(max).map(([dim,mx])=>{
-          const v=w[dim]||0;const pct=v/mx*100;
-          return`<div class="compare-dim"><span style="width:28px;font-size:0.7rem;color:var(--text3)">${dim[0].toUpperCase()}</span><div class="cd-bar"><div class="cd-fill" style="width:${pct}%;background:${dim==='quality'?'var(--green)':dim==='value'?'var(--accent2)':dim==='health'?'var(--amber)':'var(--pink)'}"></div></div><span style="font-family:var(--mono);font-size:0.7rem">${v.toFixed(0)}</span></div>`;
+          const v=w[dim]||0,pct=Math.min(v/mx*100,100);
+          const dc=dim==='quality'?'#4ade80':dim==='value'?'#60a5fa':dim==='health'?'#fbbf24':'#f472b6';
+          return`<div class="cmp-dim">
+            <span style="width:24px;font-size:0.7rem;color:var(--text3)">${dim[0].toUpperCase()}</span>
+            <div class="cmp-dim-bar"><div class="cmp-dim-fill" style="width:${pct}%;background:${dc}"></div></div>
+            <span style="font-family:var(--mono);font-size:0.7rem;color:${dc}">${v.toFixed(0)}</span>
+          </div>`;
         }).join('')}
         </div>
-        <div style="font-size:0.7rem;color:var(--text3);margin-top:4px">
-          M-Score: <b>${d.beneish?.m_score?.toFixed(3)||'?'}</b> ·
-          ${d.passed_blacklist?'<span style="color:var(--green)">✓</span>':'<span style="color:var(--red)">⛔</span>'}
+        <div style="font-size:0.7rem;color:var(--text3);margin-top:6px;display:flex;gap:10px">
+          <span>M: <b style="color:${b.likely_manipulator?'var(--red)':b.possible_manipulator?'var(--amber)':'var(--green)'}">${b.m_score?.toFixed(3)||'?'}</b></span>
+          <span>${d.passed_blacklist?'<span style="color:var(--green)">✓ 通过</span>':'<span style="color:var(--red)">⛔ 否决</span>'}</span>
         </div>
       </div>`;
     }).join('')}
@@ -447,19 +618,142 @@ function renderCompare(data){
 }
 
 // ═══ Watchlist ═══
-function saveWatchlist(){
-  localStorage.setItem('bqas_watchlist',JSON.stringify(watchlist));
-  const el=document.getElementById('watchlist');
-  el.innerHTML=watchlist.map((w,i)=>`
-    <div class="watchlist-item" onclick="score('${w.code}')">
-      <span>${w.code} ${w.name}</span>
-      <span style="cursor:pointer;color:var(--text3)" onclick="event.stopPropagation();watchlist.splice(${i},1);saveWatchlist()">✕</span>
-    </div>
-  `).join('')||'<span style="color:var(--text3)">点击 ☆ 添加</span>';
+function saveWL(){
+  localStorage.setItem('bqas_wl',JSON.stringify(watchlist));
 }
-saveWatchlist();
 
-@keyframes spin{to{transform:rotate(360deg)}}
+// ═══ Market Index ═══
+async function loadIndex(){
+  const ct = document.getElementById('content');
+  ct.innerHTML = '<div class="empty"><div class="spinner"></div><div class="empty-sub" style="margin-top:14px">计算市场指数…</div></div>';
+  try{
+    const url = currentMarket === 'cn'
+      ? `${API}/api/industry-summary`
+      : `${API}/api/industry-summary-global?market=${currentMarket}`;
+    const r = await fetch(url);
+    const d = await r.json();
+    if(d.error){ct.innerHTML=`<div class="empty"><div style="color:var(--red);font-size:1.2rem">❌</div><div class="empty-sub">${d.error}</div></div>`;return}
+
+    const o = d.overall;
+    const inds = d.industries;
+
+    // Color helper: score >= 55 best, >= 48 good, >= 40 mid, else low
+    function sc(n){return n>=55?'best':n>=48?'good':n>=40?'mid':'low'}
+
+    // Bar helper: score / 70 * 100 (70 as benchmark for "excellent")
+    function bar(v){return Math.min(v/70*100,100)}
+
+    ct.innerHTML = `
+      <div class="section">
+        <div class="section-title">A股巴菲特模型指数</div>
+
+        <!-- Overall stats -->
+        <div class="idx-cards">
+          <div class="idx-card">
+            <div class="val">${o.total_qualified}</div>
+            <div class="label">入选股票</div>
+          </div>
+          <div class="idx-card">
+            <div class="val">${o.avg_score}</div>
+            <div class="label">平均得分</div>
+          </div>
+          <div class="idx-card">
+            <div class="val">${o.median_score}</div>
+            <div class="label">中位数得分</div>
+          </div>
+          <div class="idx-card">
+            <div class="val">${o.stocks_above_60}</div>
+            <div class="label">≥60分（优秀）</div>
+          </div>
+        </div>
+
+        <!-- Industry breakdown -->
+        <div class="section-title" style="margin-top:24px">分行业表现 <span style="font-size:0.68rem;color:var(--text3);font-weight:400">（点击展开行业 Top 10）</span></div>
+        <table class="idx-table">
+          <thead>
+            <tr>
+              <th style="width:24px"></th>
+              <th>行业</th>
+              <th>数量</th>
+              <th>平均总分</th>
+              <th>Q质量</th>
+              <th>V估值</th>
+              <th>H健康</th>
+              <th>G治理</th>
+              <th>平均ROE</th>
+              <th>Top股票</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${inds.map((ind,idx)=>`
+              <tr class="idx-row" style="cursor:pointer" onclick="toggleIndustry(${idx})">
+                <td style="color:var(--text3);font-size:0.7rem"><span class="idx-arrow" id="arrow${idx}">▶</span></td>
+                <td class="name-cell">${ind.group}</td>
+                <td>${ind.count}</td>
+                <td class="bar-cell ${sc(ind.avg_total)}">
+                  <div class="bar-bg" style="width:${bar(ind.avg_total)}%"></div>
+                  <span class="bar-val">${ind.avg_total}</span>
+                </td>
+                <td style="color:var(--green)">${ind.avg_q}</td>
+                <td style="color:var(--blue)">${ind.avg_v}</td>
+                <td style="color:var(--amber)">${ind.avg_h}</td>
+                <td style="color:var(--pink)">${ind.avg_g}</td>
+                <td>${ind.avg_roe}%</td>
+                <td class="name-cell"><span style="color:var(--accent);font-family:var(--mono)">${ind.top_code}</span> ${ind.top_name} <span style="color:var(--accent)">${ind.top_score}分</span></td>
+              </tr>
+              <tr class="idx-detail" id="detail${idx}" style="display:none">
+                <td colspan="10" style="padding:0">
+                  <div style="padding:8px 16px 12px 40px;background:var(--bg3);border-bottom:1px solid var(--border)">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.78rem">
+                      <thead><tr style="color:var(--text3);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px">
+                        <th style="text-align:left;padding:4px 8px">#</th>
+                        <th style="text-align:left;padding:4px 8px">代码</th>
+                        <th style="text-align:left;padding:4px 8px">名称</th>
+                        <th style="text-align:right;padding:4px 8px">总分</th>
+                        <th style="text-align:right;padding:4px 8px">Q</th>
+                        <th style="text-align:right;padding:4px 8px">V</th>
+                        <th style="text-align:right;padding:4px 8px">H</th>
+                        <th style="text-align:right;padding:4px 8px">G</th>
+                      </tr></thead>
+                      <tbody>
+                        ${ind.top_10.map((s,i)=>`
+                          <tr style="cursor:pointer;font-family:var(--mono)" onclick="event.stopPropagation();selectStock('${s.code}')">
+                            <td style="padding:5px 8px;color:var(--text3)">${i+1}</td>
+                            <td style="padding:5px 8px;color:var(--accent)">${s.code}</td>
+                            <td style="padding:5px 8px;font-family:var(--font);color:var(--text)">${s.name}</td>
+                            <td style="padding:5px 8px;text-align:right;font-weight:600;color:var(--accent)">${s.total}</td>
+                            <td style="padding:5px 8px;text-align:right;color:var(--green)">${s.q}</td>
+                            <td style="padding:5px 8px;text-align:right;color:var(--blue)">${s.v}</td>
+                            <td style="padding:5px 8px;text-align:right;color:var(--amber)">${s.h}</td>
+                            <td style="padding:5px 8px;text-align:right;color:var(--pink)">${s.g}</td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>`;
+
+  }catch(e){
+    ct.innerHTML=`<div class="empty"><div style="color:var(--red);font-size:1.2rem">❌</div><div class="empty-sub">网络错误: ${e.message}</div></div>`;
+  }
+}
+
+function toggleIndustry(idx){
+  const row = document.getElementById('detail'+idx);
+  const arrow = document.getElementById('arrow'+idx);
+  if(row.style.display==='none'){
+    row.style.display='';
+    arrow.textContent='▼';
+  }else{
+    row.style.display='none';
+    arrow.textContent='▶';
+  }
+}
 </script>
 </body>
 </html>

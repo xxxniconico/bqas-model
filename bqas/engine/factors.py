@@ -95,8 +95,29 @@ def factor_roe_stability(income: list[IncomeStatement], balance: list[BalanceShe
                     "equity_multiplier": round(equity_mult, 2),
                     "roe_reconstructed": round(net_margin * asset_turnover * equity_mult, 4),
                 }
+    # ROE 趋势斜率（线性回归 β）— 区分"改善中"与"恶化中"
+    if len(pairs) >= 3:
+        n = len(pairs)
+        x_mean = (n - 1) / 2
+        y_mean = roe_5y
+        num = sum((i - x_mean) * (pairs[i] - y_mean) for i in range(n))
+        den = sum((i - x_mean) ** 2 for i in range(n))
+        slope = num / den if den != 0 else 0  # ROE change per year
+        # Trend adjustment: ±2 points on the ROE sub-score
+        if slope > 0.03:       trend_adj = 2.0   # strongly improving (>3%/yr)
+        elif slope > 0.01:     trend_adj = 1.0   # improving
+        elif slope > -0.01:    trend_adj = 0     # stable
+        elif slope > -0.03:    trend_adj = -1.0  # declining
+        else:                  trend_adj = -2.0  # strongly declining
+    else:
+        slope, trend_adj = 0, 0
+
+    # Base score + trend adjustment, capped 0-10
+    score = max(0, min(10, score + trend_adj))
+
     return {"score": round(score, 1), "roe_5y": round(roe_5y, 4),
-            "years_available": len(pairs), "dupont": dupont}
+            "years_available": len(pairs), "dupont": dupont,
+            "roe_trend": round(slope, 4), "trend_adj": trend_adj}
 
 
 def factor_roic(income: list[IncomeStatement], balance: list[BalanceSheet], years: int = 5) -> dict:
@@ -121,7 +142,26 @@ def factor_roic(income: list[IncomeStatement], balance: list[BalanceSheet], year
 
     roic_5y = mean(pairs)
     score = min(roic_5y, 0.30) / 0.30 * 10
-    return {"score": round(score, 1), "roic_5y": round(roic_5y, 4), "years_available": len(pairs)}
+
+    # ROIC 趋势斜率
+    if len(pairs) >= 3:
+        n = len(pairs)
+        x_mean = (n - 1) / 2
+        y_mean = roic_5y
+        num = sum((i - x_mean) * (pairs[i] - y_mean) for i in range(n))
+        den = sum((i - x_mean) ** 2 for i in range(n))
+        slope = num / den if den != 0 else 0
+        if slope > 0.03:       trend_adj = 2.0
+        elif slope > 0.01:     trend_adj = 1.0
+        elif slope > -0.01:    trend_adj = 0
+        elif slope > -0.03:    trend_adj = -1.0
+        else:                  trend_adj = -2.0
+    else:
+        slope, trend_adj = 0, 0
+
+    score = max(0, min(10, score + trend_adj))
+    return {"score": round(score, 1), "roic_5y": round(roic_5y, 4),
+            "years_available": len(pairs), "roic_trend": round(slope, 4), "trend_adj": trend_adj}
 
 
 def factor_cfo_quality(income: list[IncomeStatement], cashflow: list[CashFlowStatement], years: int = 3) -> dict:
@@ -154,6 +194,8 @@ def factor_cfo_quality(income: list[IncomeStatement], cashflow: list[CashFlowSta
 def factor_gross_margin_moat(income: list[IncomeStatement], years: int = 5) -> dict:
     """Q4: 毛利率护城河（5%）
 
+    GM = (revenue - op_cost) / revenue  — 真实营业成本
+    回退：若无 op_cost 数据，用 operating_profit / revenue 近似
     GM_median = median(gm[-3:])
     GM_stability = 1 - stdev(gm[-5:]) / mean(gm[-5:])
     得分 = GM_rank × 8 + GM_stability × 2
@@ -162,13 +204,13 @@ def factor_gross_margin_moat(income: list[IncomeStatement], years: int = 5) -> d
     if not income:
         return {"score": 0, "gm_median": 0, "missing_data": True}
 
-    # 毛利率 = (revenue - cost) / revenue
-    # 由于 akshare 财报不一定有 COGS，用 (revenue - (revenue - operating_profit - interest_expense)) 近似
-    # 简化：当无 COGS 数据时，用 operating_profit / revenue 作为毛利近似
     gms = []
     for inc in income[-years:]:
         if inc.revenue > 0:
-            gm = inc.operating_profit / inc.revenue
+            if inc.op_cost > 0:
+                gm = (inc.revenue - inc.op_cost) / inc.revenue  # 真实毛利率
+            else:
+                gm = inc.operating_profit / inc.revenue  # fallback
             gms.append(max(-1, min(gm, 1)))
 
     if not gms:
@@ -213,9 +255,15 @@ def factor_ev_operating_earnings(
     if not quotes or not balance or not income:
         return {"score": 0, "ev_oe": 999, "missing_data": True}
 
+    # Filter empty future-year data (revenue > 0 guard)
+    real_income = [i for i in income if i.revenue > 0]
+    real_balance = [b for b in balance if b.total_assets > 0]
+    if not real_income or not real_balance:
+        return {"score": 0, "ev_oe": 999, "missing_data": True}
+
     latest_quote = quotes[-1]
-    latest_balance = sorted(balance, key=lambda x: x.report_year, reverse=True)[0]
-    latest_income = sorted(income, key=lambda x: x.report_year, reverse=True)[0]
+    latest_balance = sorted(real_balance, key=lambda x: x.report_year, reverse=True)[0]
+    latest_income = sorted(real_income, key=lambda x: x.report_year, reverse=True)[0]
 
     mcap = latest_quote.market_cap
     if mcap <= 0:
@@ -244,7 +292,12 @@ def factor_fcf_yield(quotes: list[DailyQuote], cashflow: list[CashFlowStatement]
     if not quotes or not cashflow:
         return {"score": 0, "fcf_yield": 0, "missing_data": True}
 
-    latest_cf = sorted(cashflow, key=lambda x: x.report_year, reverse=True)[0]
+    # Filter empty future-year data (operating_cf != 0 guard)
+    real_cf = [c for c in cashflow if c.operating_cf != 0 or c.capex != 0]
+    if not real_cf:
+        return {"score": 0, "fcf_yield": 0, "missing_data": True}
+
+    latest_cf = sorted(real_cf, key=lambda x: x.report_year, reverse=True)[0]
     latest_quote = quotes[-1]
 
     fcf = latest_cf.operating_cf - abs(latest_cf.capex)
@@ -271,7 +324,7 @@ def factor_pb_industry_adj(
 
     pb = quotes[-1].pb
     if pb <= 0:
-        return {"score": 0, "pb": pb, "missing_data": True}
+        return {"score": 0, "pb": round(pb, 2), "missing_data": True}
 
     if industry_median_pb is None or industry_median_pb <= 0:
         # 无行业中位数时用绝对估值
@@ -280,11 +333,11 @@ def factor_pb_industry_adj(
         elif pb < 3.0: score = 5
         elif pb < 5.0: score = 3
         else:          score = 1
-        return {"score": score, "pb": pb, "no_industry_median": True}
+        return {"score": score, "pb": round(pb, 2), "no_industry_median": True}
 
     factor_val = pb / industry_median_pb
     score = max(0, 1 - factor_val) * 10
-    return {"score": round(score, 1), "pb": pb, "industry_median_pb": industry_median_pb}
+    return {"score": round(score, 1), "pb": round(pb, 2), "industry_median_pb": round(industry_median_pb, 2)}
 
 
 # ═══════════════════════════════════════════════════════════
@@ -304,7 +357,12 @@ def factor_leverage(balance: list[BalanceSheet], is_financial: bool = False) -> 
     if not balance:
         return {"score": 0, "missing_data": True}
 
-    latest = sorted(balance, key=lambda x: x.report_year, reverse=True)[0]
+    # Filter empty future-year data (total_assets > 0 guard)
+    real_balance = [b for b in balance if b.total_assets > 0]
+    if not real_balance:
+        return {"score": 0, "missing_data": True}
+
+    latest = sorted(real_balance, key=lambda x: x.report_year, reverse=True)[0]
     if latest.total_assets <= 0:
         return {"score": 0, "missing_data": True}
 
@@ -313,16 +371,25 @@ def factor_leverage(balance: list[BalanceSheet], is_financial: bool = False) -> 
     return {"score": round(score, 1), "debt_ratio": round(debt_ratio, 4)}
 
 
-def factor_interest_coverage(income: list[IncomeStatement]) -> dict:
+def factor_interest_coverage(income: list[IncomeStatement], is_financial: bool = False) -> dict:
     """H2: 利息覆盖倍数（7%）
 
     IC = (营业利润 + 财务费用) / 利息支出
     得分 = min(IC, 20) / 20 × 10
+    金融行业跳过（利息支出是主营成本，非风险指标）
     """
+    if is_financial:
+        return {"score": 5, "skipped_financial": True}
+
     if not income:
         return {"score": 0, "missing_data": True}
 
-    latest = sorted(income, key=lambda x: x.report_year, reverse=True)[0]
+    # Filter empty future-year data (revenue > 0 guard)
+    real_income = [i for i in income if i.revenue > 0]
+    if not real_income:
+        return {"score": 0, "missing_data": True}
+
+    latest = sorted(real_income, key=lambda x: x.report_year, reverse=True)[0]
     if latest.interest_expense <= 0:
         # 无利息支出 = 无有息负债 = 安全
         return {"score": 10, "ic": 999, "no_interest_expense": True}
@@ -341,8 +408,14 @@ def factor_asset_quality(income: list[IncomeStatement], balance: list[BalanceShe
     if not income or not balance:
         return {"score": 0, "missing_data": True}
 
-    latest_inc = sorted(income, key=lambda x: x.report_year, reverse=True)[0]
-    latest_bal = sorted(balance, key=lambda x: x.report_year, reverse=True)[0]
+    # Filter empty future-year data (revenue > 0, total_assets > 0 guard)
+    real_income = [i for i in income if i.revenue > 0]
+    real_balance = [b for b in balance if b.total_assets > 0]
+    if not real_income or not real_balance:
+        return {"score": 0, "missing_data": True}
+
+    latest_inc = sorted(real_income, key=lambda x: x.report_year, reverse=True)[0]
+    latest_bal = sorted(real_balance, key=lambda x: x.report_year, reverse=True)[0]
 
     # 应收/营收
     if latest_inc.revenue > 0:
@@ -393,8 +466,9 @@ def factor_shareholder_return(data: FinancialData) -> dict:
 
     # 回购检测：equity 缩减 > 2%
     buyback = False
-    if len(data.balance) >= 2:
-        sorted_bal = sorted(data.balance, key=lambda x: x.report_year, reverse=True)
+    real_balance = [b for b in data.balance if b.total_assets > 0]
+    if len(real_balance) >= 2:
+        sorted_bal = sorted(real_balance, key=lambda x: x.report_year, reverse=True)
         if sorted_bal[1].equity > 0:
             if sorted_bal[0].equity < sorted_bal[1].equity * 0.98:
                 buyback = True
@@ -411,7 +485,8 @@ def factor_audit_governance(data: FinancialData) -> dict:
     score = 0
     details = {}
 
-    if data.audit_opinion == "standard":
+    opinion_normalized = data.audit_opinion.replace('\u3000','').strip() if data.audit_opinion else ""
+    if opinion_normalized in ("standard", "标准无保留意见", "标准无保留"):
         score += 5
         details["audit"] = "标准无保留"
     elif data.audit_opinion:
@@ -430,6 +505,46 @@ def factor_audit_governance(data: FinancialData) -> dict:
 # ═══════════════════════════════════════════════════════════
 #  综合因子计算入口
 # ═══════════════════════════════════════════════════════════
+
+def _weight_dimensions(
+    quality_raw: float, value_raw: float, health_raw: float, gov_raw: float,
+    weights: dict,
+    v_sub_weights: tuple = (0.15, 0.10, 0.05),
+    h_max: float = None,
+    g_max: float = None,
+) -> dict:
+    """共享权重归一化 — 单点维护，CLI 和 cache 共用。
+
+    Returns {"quality": N, "value": N, "health": N, "gov": N, "total": N}
+    每个维度上限：Q≤50, V≤50, H≤30, G≤25
+    v_sub_weights: (ev_w, fcf_w, pb_w) — 行业特殊规则可调整
+    h_max, g_max: override for industries with skipped factors (e.g., financial)
+    """
+    q_max = 0.12 * 10 + 0.10 * 10 + 0.08 * 10 + 0.05 * 10  # = 3.5
+    ev_w, fcf_w, pb_w = v_sub_weights
+    v_max = ev_w * 10 + fcf_w * 10 + pb_w * 10  # = 3.0 default
+    h_max = h_max if h_max is not None else 0.08 * 10 + 0.07 * 10 + 0.05 * 10  # = 2.0
+    g_max = g_max if g_max is not None else 0.08 * 10 + 0.07 * 10  # = 1.5
+
+    q_norm = quality_raw / q_max if q_max > 0 else 0
+    v_norm = value_raw / v_max if v_max > 0 else 0
+    h_norm = health_raw / h_max if h_max > 0 else 0
+    g_norm = gov_raw / g_max if g_max > 0 else 0
+
+    w = weights
+    q_score = min(q_norm * w["quality"] * 100, 50)
+    v_score = min(v_norm * w["value"] * 100, 50)
+    h_score = min(h_norm * w["health"] * 100, 30)
+    g_score = min(g_norm * w["gov"] * 100, 25)
+
+    return {
+        "quality": round(q_score, 1),
+        "value": round(v_score, 1),
+        "health": round(h_score, 1),
+        "gov": round(g_score, 1),
+        "total": round(q_score + v_score + h_score + g_score, 1),
+    }
+
 
 def compute_all_factors(data: FinancialData, industry_group: str = "其他") -> dict:
     """计算全部因子得分
@@ -473,15 +588,38 @@ def compute_all_factors(data: FinancialData, industry_group: str = "其他") -> 
     v_pb = factor_pb_industry_adj(data.quotes, industry_group, industry_pb_median)
     factors["value"] = {"ev_oe": v_ev_oe, "fcf_yield": v_fcf_y, "pb_adj": v_pb}
 
+    # ── V sub-factor weights (with industry special rules) ──
+    ev_w, fcf_w, pb_w = 0.15, 0.10, 0.05
+    ev_scale = rules.get("ev_weight_scale")
+    pb_scale = rules.get("pb_weight_scale")
+    if ev_scale is not None or pb_scale is not None:
+        if ev_scale == 0:          # Financial: PB replaces EV entirely
+            ev_w, pb_w = 0.0, 0.20
+        elif pb_scale:             # Tech: PB weight reduced, EV absorbs freed weight
+            pb_w = round(0.05 * pb_scale, 3)
+            ev_w = round(0.15 + 0.05 - pb_w, 3)
+
     value_raw = (
-        v_ev_oe.get("score", 0) * 0.15 +
-        v_fcf_y.get("score", 0) * 0.10 +
-        v_pb.get("score", 0) * 0.05
+        v_ev_oe.get("score", 0) * ev_w +
+        v_fcf_y.get("score", 0) * fcf_w +
+        v_pb.get("score", 0) * pb_w
     )
+
+    # ── 方案C：质量调整估值 ──
+    # V_有效 = V_raw × min(ROE_3y / 20%, 1)
+    # 平庸公司便宜不给全额估值分，连续不武断
+    roe_pairs_3y = []
+    for inc in data.income[-3:]:
+        bal = next((b for b in data.balance if b.report_year == inc.report_year), None)
+        if bal and bal.equity > 0:
+            roe_pairs_3y.append(inc.net_income / bal.equity)
+    roe_3y = mean(roe_pairs_3y) if roe_pairs_3y else 0
+    q_adj = min(roe_3y / 0.20, 1.0) if roe_3y > 0 else 0
+    value_raw = value_raw * q_adj
 
     # 维度 III：财务健康
     h_lev = factor_leverage(data.balance, is_financial)
-    h_ic = factor_interest_coverage(data.income)
+    h_ic = factor_interest_coverage(data.income, is_financial)
     h_aq = factor_asset_quality(data.income, data.balance)
     factors["health"] = {"leverage": h_lev, "ic": h_ic, "asset_q": h_aq}
 
@@ -497,7 +635,25 @@ def compute_all_factors(data: FinancialData, industry_group: str = "其他") -> 
     factors["gov"] = {"dividend": g_div, "audit": g_audit}
 
     # ── P3: Beneish M-Score 财务造假检测 ──
-    beneish = compute_beneish_m_score(data)
+    # Use pre-TTM data (exclude current year): TTM partial-year data
+    # corrupts YoY ratios like DSRI/GMI/AQI. Filter before computation.
+    from datetime import datetime as _dt
+    cur_year = _dt.now().year
+    beneish_income = [i for i in data.income if i.report_year < cur_year]
+    beneish_balance = [b for b in data.balance if b.report_year < cur_year]
+    beneish_cf = [c for c in data.cashflow if c.report_year < cur_year]
+    beneish_data = FinancialData(
+        info=data.info,
+        income=beneish_income,
+        balance=beneish_balance,
+        cashflow=beneish_cf,
+        quotes=data.quotes,
+        audit_opinion=data.audit_opinion,
+        dividend_yield=data.dividend_yield,
+        pledge_ratio=data.pledge_ratio,
+        has_financial_fraud_penalty=data.has_financial_fraud_penalty,
+    )
+    beneish = compute_beneish_m_score(beneish_data)
     factors["beneish"] = beneish
 
     gov_raw = (
@@ -517,30 +673,16 @@ def compute_all_factors(data: FinancialData, industry_group: str = "其他") -> 
     # 各维度满分为：quality=35, value=30, health=20, gov=15
     # 行业权重调整这4个维度的占比
     # formula: dim_score = dim_raw/max_raw * weight * 100
-    q_max = 0.12 * 10 + 0.10 * 10 + 0.08 * 10 + 0.05 * 10  # = 3.5
-    v_max = 0.15 * 10 + 0.10 * 10 + 0.05 * 10  # = 3.0
-    h_max = 0.08 * 10 + 0.07 * 10 + 0.05 * 10  # = 2.0
-    g_max = 0.08 * 10 + 0.07 * 10  # = 1.5
-
-    q_norm = quality_raw / q_max if q_max > 0 else 0
-    v_norm = value_raw / v_max if v_max > 0 else 0
-    h_norm = health_raw / h_max if h_max > 0 else 0
-    g_norm = gov_raw / g_max if g_max > 0 else 0
-
-    w = weights
-    quality_score = min(q_norm * w["quality"] * 100, 50)
-    value_score = min(v_norm * w["value"] * 100, 50)
-    health_score = min(h_norm * w["health"] * 100, 30)
-    gov_score = min(g_norm * w["gov"] * 100, 25)
-
-    total = quality_score + value_score + health_score + gov_score
+    # Financial stocks have skipped leverage+IC factors → adjust h_max
+    h_max_override = 0.08*5 + 0.07*5 + 0.05*10 if is_financial else None  # 1.25 vs default 2.0
+    weighted = _weight_dimensions(quality_raw, value_raw, health_raw, gov_raw, weights, v_sub_weights=(ev_w, fcf_w, pb_w), h_max=h_max_override)
 
     factors["weighted"] = {
-        "quality": round(quality_score, 1),
-        "value": round(value_score, 1),
-        "health": round(health_score, 1),
-        "gov": round(gov_score, 1),
-        "total": round(total, 1),
+        "quality": round(weighted["quality"], 1),
+        "value": round(weighted["value"], 1),
+        "health": round(weighted["health"], 1),
+        "gov": round(weighted["gov"], 1),
+        "total": round(weighted["total"], 1),
     }
 
     return factors

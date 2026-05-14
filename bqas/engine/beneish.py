@@ -81,8 +81,8 @@ def compute_beneish_m_score(data: FinancialData) -> dict:
 
     # ── 2. GMI: Gross Margin Index ──
     if t1.revenue > 0 and t.revenue > 0:
-        gm_t = t.operating_profit / t.revenue
-        gm_t1 = t1.operating_profit / t1.revenue
+        gm_t = (t.revenue - t.op_cost) / t.revenue if t.op_cost > 0 else t.operating_profit / t.revenue
+        gm_t1 = (t1.revenue - t1.op_cost) / t1.revenue if t1.op_cost > 0 else t1.operating_profit / t1.revenue
         if gm_t > 0:
             gmi = gm_t1 / gm_t
             ratios["gmi"] = round(gmi, 4)
