@@ -270,7 +270,7 @@ def _fetch_eastmoney_income(report_date: str) -> Optional[pd.DataFrame]:
     # Fetch all pages
     for page in range(1, total_pages + 1):
         if page > 1:
-            page_url = url + f"&pageIndex={page}"
+            page_url = url + f"&pageNumber={page}"
             try:
                 result = subprocess.run(
                     ["curl", "-s", "--max-time", "30", page_url],
