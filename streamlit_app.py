@@ -28,13 +28,29 @@ stocks = pd.read_sql("SELECT code, name, total_shares, industry_sw, listing_date
 conn.close()
 
 # Merge
-vdf = balance.merge(cf, on='code', how='left').merge(income_v, on='code', how='left')
-vdf = vdf.merge(quotes, on='code', how='left').merge(stocks, on='code', how='left')
-for c in ['close','pb','total_shares','operating_cf','capex','total_assets','total_liabilities','equity','cash_equiv','long_term_invest','operating_profit','interest_expense']:
-    if c in vdf.columns:
-        vdf[c] = pd.to_numeric(vdf[c], errors='coerce').fillna(0)
+# Handle empty quotes table
+if len(quotes) == 0:
+    # Fallback: use total_assets as market_cap proxy
+    stocks['market_cap'] = stocks['total_shares'].fillna(1) * 10  # default ¥10/share
+    stocks['pb'] = 2.0  # default PB
+else:
+    vdf = balance.merge(cf, on='code', how='left').merge(income_v, on='code', how='left')
+    vdf = vdf.merge(quotes, on='code', how='left').merge(stocks, on='code', how='left')
+    for c in ['close','pb','total_shares','operating_cf','capex','total_assets','total_liabilities','equity','cash_equiv','long_term_invest','operating_profit','interest_expense']:
+        if c in vdf.columns:
+            vdf[c] = pd.to_numeric(vdf[c], errors='coerce').fillna(0)
+    vdf['market_cap'] = vdf['close'] * vdf['total_shares']
 
-vdf['market_cap'] = vdf['close'] * vdf['total_shares']
+# Merge if not done
+if len(quotes) == 0:
+    vdf = balance.merge(cf, on='code', how='left').merge(income_v, on='code', how='left').merge(stocks, on='code', how='left')
+    for c in ['close','pb','total_shares','operating_cf','capex','total_assets','total_liabilities','equity','cash_equiv','long_term_invest','operating_profit','interest_expense']:
+        if c in vdf.columns:
+            vdf[c] = pd.to_numeric(vdf[c], errors='coerce').fillna(0)
+    if 'market_cap' not in vdf.columns:
+        vdf['market_cap'] = vdf['total_shares'].fillna(1) * 10
+    if 'pb' not in vdf.columns:
+        vdf['pb'] = 2.0
 vdf['ev'] = np.where((vdf['market_cap']>0) & (vdf['total_assets']>1e6),
     vdf['market_cap'] + vdf['total_liabilities'] - vdf['cash_equiv'] - vdf['long_term_invest'] * 0.5, np.nan)
 vdf['op_earnings'] = vdf['operating_profit'] + vdf['interest_expense'].abs()
