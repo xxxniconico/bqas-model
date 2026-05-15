@@ -11,6 +11,7 @@
 import json
 import sqlite3
 import subprocess
+import sys
 import time
 import logging
 from pathlib import Path
@@ -174,7 +175,8 @@ def _bulk_insert_income(period: str, df: pd.DataFrame):
                  abs(float(r.get("营业总支出-财务费用", 0) or 0)),
                  float(r.get("营业总支出-营业支出", 0) or 0))
             )
-        except Exception:
+        except Exception as e:
+            print(f"  ⚠ income insert row: {e}", file=sys.stderr)
             continue
     conn.commit()
     conn.close()
@@ -202,7 +204,8 @@ def _bulk_insert_balance(period: str, df: pd.DataFrame):
                  float(r.get("短期借款", 0) or 0),
                  float(r.get("长期借款", 0) or 0))
             )
-        except Exception:
+        except Exception as e:
+            print(f"  ⚠ balance insert row: {e}", file=sys.stderr)
             continue
     conn.commit()
     conn.close()
@@ -224,7 +227,8 @@ def _bulk_insert_cashflow(period: str, df: pd.DataFrame):
                  investing,
                  float(r.get("融资性现金流-现金流量净额", 0) or 0))
             )
-        except Exception:
+        except Exception as e:
+            print(f"  ⚠ cashflow insert row: {e}", file=sys.stderr)
             continue
     conn.commit()
     conn.close()
@@ -277,7 +281,8 @@ def _fetch_eastmoney_income(report_date: str) -> Optional[pd.DataFrame]:
                     capture_output=True, timeout=35, check=False)
                 page_data = json.loads(result.stdout.decode("utf-8", errors="replace"))
                 items = page_data["result"]["data"]
-            except Exception:
+            except Exception as e:
+                print(f"  ⚠ page {page} fetch: {e}", file=sys.stderr)
                 break
         else:
             items = data["result"]["data"]
