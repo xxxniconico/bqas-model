@@ -2,12 +2,13 @@
 
 数据源策略（WSL环境）：
 - 行情（价格）: 新浪 hq.sinajs.cn → curl subprocess
-- 财报缓存: akshare East Money Data Center → SQLite（首次 build_cache 一次性拉取）
+- 财报缓存: akshare East Money Data Center → SQLite（首次 build_cache 一次性拉取）；利润表 `stock_lrb_em` 异常时回退为 curl 直连 datacenter-web
 - 股票列表: akshare stock_info_a_code_name()
 
 ⚠️ 绝不使用 push2.eastmoney.com / stock_zh_a_hist / stock_zh_a_spot_em — WSL下全断
 """
 
+import json
 import sqlite3
 import subprocess
 import time
@@ -229,6 +230,72 @@ def _bulk_insert_cashflow(period: str, df: pd.DataFrame):
     conn.close()
 
 
+def _fetch_eastmoney_income(report_date: str) -> Optional[pd.DataFrame]:
+    """用 curl 直连东方财富 Data Center 拉利润表。
+
+    返回 DataFrame，列名与 akshare 保持一致：
+    股票代码, 股票简称, 营业总收入, 营业利润, 净利润, 营业总支出-财务费用, 营业总支出-营业支出
+    """
+    # Convert YYYYMMDD to YYYY-MM-DD for East Money API
+    if len(report_date) == 8 and report_date.isdigit():
+        api_date = f"{report_date[:4]}-{report_date[4:6]}-{report_date[6:]}"
+    else:
+        api_date = report_date
+    url = (
+        "https://datacenter-web.eastmoney.com/api/data/v1/get"
+        "?reportName=RPT_DMSK_FN_INCOME"
+        "&columns=SECURITY_CODE,SECURITY_NAME_ABBR,TOTAL_OPERATE_INCOME,"
+        "OPERATE_PROFIT,PARENT_NETPROFIT,FINANCE_EXPENSE,OPERATE_COST"
+        "&pageSize=6000&sortColumns=NOTICE_DATE&sortTypes=-1"
+        f"&filter=(REPORT_DATE='{api_date}')"
+    )
+    try:
+        result = subprocess.run(
+            ["curl", "-s", "--max-time", "30", url],
+            capture_output=True,
+            timeout=35,
+            check=False,
+        )
+        data = json.loads(result.stdout.decode("utf-8", errors="replace"))
+    except Exception as e:
+        print(f"  ⚠ _fetch_eastmoney_income({report_date}): {e}", file=__import__('sys').stderr)
+        return None
+
+    if data is None or not data.get("success") or not data.get("result", {}).get("data"):
+        return None
+
+    rows = []
+    total_pages = data["result"].get("pages", 1)
+
+    # Fetch all pages
+    for page in range(1, total_pages + 1):
+        if page > 1:
+            page_url = url + f"&pageIndex={page}"
+            try:
+                result = subprocess.run(
+                    ["curl", "-s", "--max-time", "30", page_url],
+                    capture_output=True, timeout=35, check=False)
+                page_data = json.loads(result.stdout.decode("utf-8", errors="replace"))
+                items = page_data["result"]["data"]
+            except Exception:
+                break
+        else:
+            items = data["result"]["data"]
+
+        for item in items:
+            rows.append({
+                "股票代码": str(item.get("SECURITY_CODE", "")).zfill(6),
+                "股票简称": item.get("SECURITY_NAME_ABBR", ""),
+                "营业总收入": float(item.get("TOTAL_OPERATE_INCOME", 0) or 0),
+                "营业利润": float(item.get("OPERATE_PROFIT", 0) or 0),
+                "净利润": float(item.get("PARENT_NETPROFIT", 0) or 0),
+                "营业总支出-财务费用": float(item.get("FINANCE_EXPENSE", 0) or 0),
+                "营业总支出-营业支出": float(item.get("OPERATE_COST", 0) or 0),
+            })
+
+    return pd.DataFrame(rows)
+
+
 def build_full_cache(years: int = 5, force: bool = False, quarterly: bool = True):
     """构建全市场财报缓存（一次性拉取）
 
@@ -275,14 +342,16 @@ def build_full_cache(years: int = 5, force: bool = False, quarterly: bool = True
 
     for period in periods:
         print(f"  📊 {period}...", end=" ", flush=True)
+        df_income = None
         try:
             time.sleep(RATE_LIMIT_SLEEP)
             df_income = ak.stock_lrb_em(date=period)
-            if df_income is not None and not df_income.empty:
-                _bulk_insert_income(period, df_income)
         except Exception as e:
-            print(f"利润表失败: {e}")
-            df_income = None
+            df_income = _fetch_eastmoney_income(period)
+            if df_income is None or df_income.empty:
+                print(f"利润表失败: {e}", end=" ", flush=True)
+        if df_income is not None and not df_income.empty:
+            _bulk_insert_income(period, df_income)
 
         try:
             time.sleep(RATE_LIMIT_SLEEP)
